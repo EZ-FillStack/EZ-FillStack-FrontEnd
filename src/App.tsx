@@ -1,3 +1,5 @@
+import api from '@/lib/axios';
+
 function App() {
   return (
     <div>
