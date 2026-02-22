@@ -1,12 +1,7 @@
-import api from '@/lib/axios';
+import RootRoutes from './RootRoutes';
 
 function App() {
-  return (
-    <div>
-      안녕하세요
-      <div>한번더 푸쉬</div>
-    </div>
-  );
+  return <RootRoutes />;
 }
 
 export default App;
