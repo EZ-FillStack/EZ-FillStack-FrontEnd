@@ -12,9 +12,9 @@ export default function LoginPage() {
   return (
     <div className="w-full max-w-md">
       <div className="rounded-2xl border bg-card p-6 shadow-sm">
-        {/* 상단 사이트 이름/로고 영역 */}
+        {/* 상단 로고 영역 */}
         <div className="mb-6 flex justify-center">
-          <div className="rounded-md bg-muted px-10 py-4 text-2xl font-bold">
+          <div className="rounded-md bg-muted px-10 py-4">
             <div className="flex justify-center scale-150">
               <Logo />
             </div>
@@ -70,7 +70,7 @@ export default function LoginPage() {
               <Button
                 type="button"
                 variant="outline"
-                className="h-11 justify-center gap-2 border-blue-300 border-2"
+                className="h-11 justify-center border-blue-300 border-2"
               >
                 <img
                   src={googleLogo}
@@ -84,7 +84,7 @@ export default function LoginPage() {
               <Button
                 type="button"
                 variant="outline"
-                className="h-11 justify-center gap-2 border-yellow-300 border-2"
+                className="h-11 justify-center border-yellow-300 border-2"
               >
                 <img src={kakaoLogo} alt="kakao" className="h-4 w-4 shrink-0" />
                 카톡
@@ -94,7 +94,7 @@ export default function LoginPage() {
               <Button
                 type="button"
                 variant="outline"
-                className="h-11 justify-center gap-2 border-green-400 border-2"
+                className="h-11 justify-center border-green-400 border-2"
               >
                 <img src={naverLogo} alt="naver" className="h-4 w-4 shrink-0" />
                 네이버
