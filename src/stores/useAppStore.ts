@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 // Zustand create
 
 //User 관련 설정
@@ -23,7 +24,9 @@ type AppState = {
 }
 
 // 메인 전역 스토어 설정
-const useAppStore = create<AppState>((set) => ({
+const useAppStore = create<AppState>()(
+    devtools((set) =>  ({
+
 
     //기본 설정
     user: null,
@@ -46,6 +49,10 @@ const useAppStore = create<AppState>((set) => ({
         isAuthenticated: false
     }),
 
-    }));
+
+
+    }), { name : 'E.GO project'})
+
+    );
 
 export default useAppStore;
