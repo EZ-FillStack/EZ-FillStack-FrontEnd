@@ -9,7 +9,7 @@ export default function CategoryPage() {
 
   const categoryName =
     categories.find((c) => c.id === cid)?.label ?? '카테고리';
-
+    // item은 우선 예시입니다
   const items = [
     {
       id: 1,
