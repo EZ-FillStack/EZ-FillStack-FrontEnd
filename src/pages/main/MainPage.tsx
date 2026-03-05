@@ -1,3 +1,70 @@
+import { categories } from '@/lib/categories';
+import { Link } from 'react-router';
+
 export default function MainPage() {
-  return <div>MainPage</div>;
+  return (
+    <div className="mx-auto max-w-7xl px-6 pt-2 pb-2">
+      <div className="p-4">
+        <div className="flex flex-col gap-8">
+          {/* 이벤트 배너 */}
+          <section className="rounded-xl bg-muted h-72 flex items-center justify-center">
+            이벤트 이미지
+          </section>
+
+          {/* 카테고리 아이콘 */}
+          <section className="flex items-center justify-center gap-12">
+            {categories.map((c) => (
+              <Link
+                key={c.id}
+                to={`/categories/${c.id}`}
+                className="flex flex-col items-center gap-2"
+              >
+                <div className="h-20 w-20 rounded-full bg-muted" />
+                <span className="text-sm text-muted-foreground">{c.label}</span>
+              </Link>
+            ))}
+          </section>
+
+          {/* 인기 체험 */}
+          <section className="flex flex-col gap-5">
+            <h2 className="text-xl font-semibold">인기 체험</h2>
+            <div className="flex gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="flex-1 rounded-xl border bg-card h-48"
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* 베스트 리뷰 */}
+          <section className="flex flex-col gap-5">
+            <h2 className="text-xl font-semibold">베스트 리뷰</h2>
+            <div className="flex gap-6">
+              {[1, 2, 3, 4].map((i) => (
+                <div
+                  key={i}
+                  className="flex-1 rounded-xl border bg-card h-28"
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* 오픈 예정 체험 */}
+          <section className="flex flex-col gap-5">
+            <h2 className="text-xl font-semibold">오픈 예정 체험</h2>
+            <div className="flex gap-6">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="flex-1 rounded-xl border bg-card h-52"
+                />
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  );
 }

@@ -16,12 +16,12 @@ const EventStatusBadge = ({ status, applyEndDateTime, eventStartDateTime }: Even
         const eventStart = new Date(eventStartDateTime);
         const comingDays = Math.ceil((eventStart.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         if (comingDays && comingDays > 0) {
-            return <Badge variant="">D-{comingDays}</Badge>;
+            return <Badge variant="default">D-{comingDays}</Badge>;
         }
     }
 
     if (status !== 'OPEN') {
-       return <Badge variant="default">마감</Badge>
+        return <Badge variant="default">마감</Badge>
     }
 
     if (diffHours <= 24 && diffHours > 0) {
