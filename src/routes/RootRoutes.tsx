@@ -1,11 +1,11 @@
 import { Navigate, useRoutes } from 'react-router';
 import type { RouteObject } from 'react-router';
 
-import { mainRoutes } from './main/mainRoutes';
-import { myPageRoutes } from './mypage/myPageRoutes';
-import { adminRoutes } from './admin/adminRoutes';
-import GlobalLayout from '../layouts/GlobalLayout';
-import { authRoutes } from './auth/authRoutes';
+import { mainRoutes } from '@/routes/main/mainRoutes';
+import { myPageRoutes } from '@/routes/mypage/myPageRoutes';
+import { adminRoutes } from '@/routes/admin/adminRoutes';
+import GlobalLayout from '@/layouts/GlobalLayout';
+import { authRoutes } from '@/routes/auth/authRoutes';
 
 export default function RootRoutes() {
   const routes: RouteObject[] = [

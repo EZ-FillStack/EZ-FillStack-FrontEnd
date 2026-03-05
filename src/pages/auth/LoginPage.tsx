@@ -1,12 +1,12 @@
-import { Input } from '../../components/ui/input';
+import { Input } from '@/components/ui/input';
 import { Link } from 'react-router';
-import { Button } from '../../components/ui/button';
-import { Checkbox } from '../../components/ui/checkbox';
-import { Separator } from '../../components/ui/separator';
-import Logo from '../../components/assets/Logo';
-import googleLogo from '../../assets/google.svg';
-import kakaoLogo from '../../assets/kakaotalk.svg';
-import naverLogo from '../../assets/naver.svg';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
+import Logo from '@/components/assets/Logo';
+import googleLogo from '@/assets/google.svg';
+import kakaoLogo from '@/assets/kakaotalk.svg';
+import naverLogo from '@/assets/naver.svg';
 
 export default function LoginPage() {
   return (

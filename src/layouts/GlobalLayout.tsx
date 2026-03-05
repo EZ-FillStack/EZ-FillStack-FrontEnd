@@ -1,14 +1,15 @@
 import { Link, Outlet } from 'react-router';
-import Logo from '../components/assets/Logo';
-import { Input } from '../components/ui/input';
-import { Button } from '../components/ui/button';
+import Logo from '@/components/assets/Logo';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 
 const categories = [
-  { label: '카테고리1', to: '/category/1' },
-  { label: '카테고리2', to: '/category/2' },
-  { label: '카테고리3', to: '/category/3' },
-  { label: '카테고리4', to: '/category/4' },
+  { label: '맛집', to: '/categories/1' },
+  { label: '뷰티', to: '/categories/2' },
+  { label: '여행', to: '/categories/3' },
+  { label: '문화', to: '/categories/4' },
+  { label: '식품', to: '/categories/5' },
 ];
 
 export default function GlobalLayout() {
@@ -43,7 +44,7 @@ export default function GlobalLayout() {
 
         {/* 하단 줄: 카테고리 */}
         <div className="border-t">
-          <nav className="mx-auto w-full max-w-6xl px-4 h-12 flex items-center gap-6 text-sm">
+          <nav className="mx-auto w-full max-w-6xl px-4 h-12 flex items-center gap-10">
             {categories.map((c) => (
               <Link
                 key={c.to}

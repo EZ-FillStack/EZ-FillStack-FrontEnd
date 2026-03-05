@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
-import Logo from '../../components/assets/Logo';
-import { Input } from '../../components/ui/input';
-import { Button } from '../../components/ui/button';
-import { Separator } from '../../components/ui/separator';
+import Logo from '@/components/assets/Logo';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 
 export default function SignUpPage() {
   return (

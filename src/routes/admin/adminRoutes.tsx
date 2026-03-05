@@ -1,6 +1,6 @@
 import type { RouteObject } from 'react-router';
-import AdminLayout from '../../layouts/AdminLayout';
-import AdminPage from '../../pages/admin/AdminPage';
+import AdminLayout from '@/layouts/AdminLayout';
+import AdminPage from '@/pages/admin/AdminPage';
 
 export const adminRoutes: RouteObject = {
   path: '/admin',
