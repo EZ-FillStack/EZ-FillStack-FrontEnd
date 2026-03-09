@@ -2,6 +2,8 @@ import EventStatusBadge from '@/components/events/EventStatusBadge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarDays, Users } from 'lucide-react';
+import KakaoMap from '@/components/map/KakaoMap';
+
 // 사용할 예정
 type EventRecruitInfo = {
   capacity: number; // 정원
@@ -11,13 +13,6 @@ type EventRecruitInfo = {
   eventDate: string; // "2026.03.15"
   eventStartTime: string; // "14:00"
   eventEndTime: string; // "17:00"
-};
-// 사용할 예정
-type EventLocation = {
-  address: string; // "서울특별시 강남구 테헤란로 123"
-  // 추후 지도 API 붙일 때:
-  // lat?: number;
-  // lng?: number;
 };
 
 // API 연결 후 다시 타입 적용
@@ -71,18 +66,6 @@ const EventImageHero = ({ imageUrl }: { imageUrl?: string }) => {
             행사 이미지
           </div>
         )}
-      </div>
-    </div>
-  );
-};
-
-const MapPlaceholder = () => {
-  return (
-    <div className="w-full overflow-hidden rounded-xl border bg-muted">
-      <div className="aspect-16/7 w-full">
-        <div className="flex h-full w-full items-center justify-center text-sm text-muted-foreground">
-          지도 영역
-        </div>
       </div>
     </div>
   );
@@ -143,7 +126,7 @@ export default function ExperienceDetailPage() {
 
           {/* 위치 정보 */}
           <Card>
-            <CardHeader className="pb-3">
+            <CardHeader>
               <CardTitle className="text-base">위치 정보</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -151,7 +134,7 @@ export default function ExperienceDetailPage() {
                 <span className="mt-0.5 text-muted-foreground">📍</span>
                 <span>{location.address}</span>
               </div>
-              <MapPlaceholder />
+              <KakaoMap address={location.address} />
             </CardContent>
           </Card>
         </div>
@@ -159,7 +142,7 @@ export default function ExperienceDetailPage() {
         {/* Right */}
         <div className="space-y-3">
           <Card>
-            <CardHeader className="pb-">
+            <CardHeader>
               <CardTitle className="text-xl font-semibold">모집 정보</CardTitle>
             </CardHeader>
 
