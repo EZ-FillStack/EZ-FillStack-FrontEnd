@@ -68,7 +68,7 @@ export default function CategoryPage() {
             key={event.id}
             className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
           >
-            <div className="aspect-[4/3] w-full bg-gray-200" />
+            <div className="aspect-4/3 w-full bg-gray-200" />
 
             <div className="p-4">
               <div className="flex items-center justify-between">

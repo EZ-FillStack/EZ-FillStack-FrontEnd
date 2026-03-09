@@ -1,5 +1,7 @@
 import { categories } from '@/lib/categories';
 import { Link } from 'react-router';
+import EventCard from '@/components/cards/EventCard';
+import EventStatusBadge from '@/components/events/EventStatusBadge';
 
 export default function MainPage() {
   return (
@@ -30,9 +32,20 @@ export default function MainPage() {
             <h2 className="text-xl font-semibold">인기 체험</h2>
             <div className="flex gap-6">
               {[1, 2, 3, 4].map((i) => (
-                <div
+                <EventCard
                   key={i}
-                  className="flex-1 rounded-xl border bg-card h-48"
+                  id={i}
+                  title={`체험 ${i}`}
+                  thumbnailUrl="/placeholder.png"
+                  placeName="서울 강남"
+                  eventStartDateTime="2026-03-10"
+                  applyEndDateTime="2026-03-09"
+                  status="OPEN"
+                  capacity={30}
+                  currentParticipants={10}
+                  isBookmarked={false}
+                  badgeType="default"
+                  size="sm"
                 />
               ))}
             </div>
@@ -53,7 +66,15 @@ export default function MainPage() {
 
           {/* 오픈 예정 체험 */}
           <section className="flex flex-col gap-5">
-            <h2 className="text-xl font-semibold">오픈 예정 체험</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-semibold">오픈 예정 체험</h2>
+
+              <EventStatusBadge
+                status="OPEN"
+                applyEndDateTime="2026-03-09"
+                eventStartDateTime="2026-03-10"
+              />
+            </div>
             <div className="flex gap-6">
               {[1, 2, 3].map((i) => (
                 <div
