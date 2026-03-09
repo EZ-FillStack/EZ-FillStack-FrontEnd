@@ -8,6 +8,7 @@ type User = {
     id: number;
     username: string;
     nickname: string;
+    profileImageUrl?: string;
 }
 
 // AppState type 정의
