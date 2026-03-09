@@ -1,16 +1,9 @@
 import { Link, Outlet } from 'react-router';
 import Logo from '@/components/assets/Logo';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-
-const categories = [
-  { label: '맛집', to: '/categories/1' },
-  { label: '뷰티', to: '/categories/2' },
-  { label: '여행', to: '/categories/3' },
-  { label: '문화', to: '/categories/4' },
-  { label: '식품', to: '/categories/5' },
-];
+import { categories } from '@/lib/categories';
+import HeaderAuthSection from '@/layouts/header/HeaderAuthSection';
 
 export default function GlobalLayout() {
   return (
@@ -31,27 +24,20 @@ export default function GlobalLayout() {
             </div>
           </div>
 
-          {/* Right: 로그인 & 회원가입 */}
-          <div className="shrink-0 flex items-center gap-2">
-            <Button variant="outline" size="sm" asChild>
-              <Link to="/login">로그인</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link to="/sign-up">회원가입</Link>
-            </Button>
-          </div>
+          {/* Right: 인증 영역 */}
+          <HeaderAuthSection />
         </div>
 
         {/* 하단 줄: 카테고리 */}
         <div className="border-t">
           <nav className="mx-auto w-full max-w-6xl px-4 h-12 flex items-center gap-10">
-            {categories.map((c) => (
+            {categories.map((category) => (
               <Link
-                key={c.to}
-                to={c.to}
+                key={category.id}
+                to={`/categories/${category.id}`}
                 className="font-medium text-foreground/80 hover:text-primary transition-colors"
               >
-                {c.label}
+                {category.label}
               </Link>
             ))}
           </nav>
