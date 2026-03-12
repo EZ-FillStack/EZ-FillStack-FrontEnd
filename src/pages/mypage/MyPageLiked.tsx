@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, HeartIcon, MapPin } from 'lucide-react';
+// 페이지네이션
+import Pagination from '@/components/nav/Pagination';
 
 type LikedExperience = {
   id: number;
@@ -33,15 +36,28 @@ const likedExperiences: LikedExperience[] = [
     placeName: '서울시 마포구',
     status: 'CLOSED',
   },
+  { id: 4, title: '천연 염색 체험', eventStartDateTime: '2026.04.01 13:00', placeName: '서울시 성동구', status: 'OPEN' },
+  { id: 5, title: '목공예 원데이 클래스', eventStartDateTime: '2026.04.05 10:00', placeName: '서울시 용산구', status: 'CLOSED' },
+  { id: 6, title: '캔들 만들기 체험', eventStartDateTime: '2026.04.10 14:00', placeName: '서울시 서대문구', status: 'OPEN' },
 ];
 
+// 더미: 총 3페이지, API 연결 시 교체
+const PAGE_SIZE = 2;
+const TOTAL_PAGES = Math.ceil(likedExperiences.length / PAGE_SIZE);
+
 export default function MyPageLiked() {
+  const [page, setPage] = useState(1);
+  const paginatedItems = likedExperiences.slice(
+      (page - 1) * PAGE_SIZE,
+      page * PAGE_SIZE,
+  );
+
   return (
     <div>
       <div className="text-xl font-semibold text-slate-900">관심 체험 목록</div>
 
       <div className="mt-6 space-y-4">
-        {likedExperiences.map((item) => (
+        {paginatedItems.map((item) => (
           <article
             key={item.id}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-4"
@@ -106,6 +122,8 @@ export default function MyPageLiked() {
           </article>
         ))}
       </div>
+
+      <Pagination page={page} totalPages={TOTAL_PAGES} onPageChange={setPage} />
     </div>
   );
 }

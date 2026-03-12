@@ -17,6 +17,8 @@ type EventCardProps = {
   isBookmarked?: boolean;
   size?: 'sm' | 'md' | 'lg';
   badgeType?: 'default' | 'upcoming';
+  // 카드 클릭 시 이동 경로 (events: 이벤트 상세, experiences: 체험 상세)
+  linkTo?: 'events' | 'experiences';
 };
 
 const EventCard = ({
@@ -32,18 +34,19 @@ const EventCard = ({
   isBookmarked,
   size,
   badgeType,
+  linkTo = 'events',
 }: EventCardProps) => {
   return (
-    <Link to={`/events/${id}`} className="block">
+    <Link to={`/${linkTo}/${id}`} className="block">
       <article
         className={cn(
           'flex flex-col overflow-hidden rounded-lg border bg-background',
-          size === 'sm' && 'p-3',
-          size === 'md' && 'p-4',
-          size === 'lg' && 'p-5',
+          size === 'sm',
+          size === 'md',
+          size === 'lg',
         )}
       >
-        <div className="relative">
+        <div className="relative bg-muted">
           <img
             src={thumbnailUrl}
             alt={title}
@@ -67,26 +70,28 @@ const EventCard = ({
             />
           </button>
         </div>
-        <div className="flex justify-between">
-          <h3 className="text-foreground font-medium">{title}</h3>
-          {badgeType === 'default' && (
-            <EventStatusBadge
-              status={status}
-              applyEndDateTime={applyEndDateTime}
-            />
-          )}
-          {badgeType === 'upcoming' && (
-            <EventStatusBadge
-              status={status}
-              applyEndDateTime={applyEndDateTime}
-              eventStartDateTime={eventStartDateTime}
-            />
-          )}
+        <div className="p-3">
+          <div className="flex justify-between">
+            <h3 className="text-foreground font-medium">{title}</h3>
+            {badgeType === 'default' && (
+              <EventStatusBadge
+                status={status}
+                applyEndDateTime={applyEndDateTime}
+              />
+            )}
+            {badgeType === 'upcoming' && (
+              <EventStatusBadge
+                status={status}
+                applyEndDateTime={applyEndDateTime}
+                eventStartDateTime={eventStartDateTime}
+              />
+            )}
+          </div>
+          <p className="mt-2 text-xs text-muted-foreground">{placeName}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            신청 {currentParticipants} / {capacity}명
+          </p>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">{placeName}</p>
-        <p className="mt-0.5 text-xs text-muted-foreground">
-          신청 {currentParticipants} / {capacity}명
-        </p>
       </article>
     </Link>
   );

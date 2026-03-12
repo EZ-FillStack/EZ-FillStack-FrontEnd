@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, MapPin, X } from 'lucide-react';
+// 페이지네이션
+import Pagination from '@/components/nav/Pagination';
 
 type AppliedExperience = {
   id: number;
@@ -32,9 +35,20 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 마포구',
     status: 'PENDING',
   },
+  { id: 4, title: '천연 염색 체험', eventStartDateTime: '2026.04.01 13:00', placeName: '서울시 성동구', status: 'APPROVED' },
+  { id: 5, title: '목공예 원데이 클래스', eventStartDateTime: '2026.04.05 10:00', placeName: '서울시 용산구', status: 'PENDING' },
+  { id: 6, title: '캔들 만들기 체험', eventStartDateTime: '2026.04.10 14:00', placeName: '서울시 서대문구', status: 'APPROVED' },  
 ];
 
+const PAGE_SIZE = 2; //임의 페이지 개수
+const TOTAL_PAGES = Math.ceil(appliedExperiences.length / PAGE_SIZE);
+
 export default function MyPageApplied() {
+  const [page, setPage] = useState(1);
+  const paginatedItems = appliedExperiences.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE,
+  );
   return (
     <div>
       <div className="text-xl font-semibold text-slate-900">
@@ -42,7 +56,7 @@ export default function MyPageApplied() {
       </div>
 
       <div className="mt-6 space-y-4">
-        {appliedExperiences.map((item) => (
+        {paginatedItems.map((item) => (
           <article
             key={item.id}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-4"
@@ -107,6 +121,8 @@ export default function MyPageApplied() {
           </article>
         ))}
       </div>
+
+      <Pagination page={page} totalPages={TOTAL_PAGES} onPageChange={setPage} />
     </div>
   );
 }
