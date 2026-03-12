@@ -1,6 +1,33 @@
 import { Link } from 'react-router';
-//리뷰 카드 타입 정리하려고 보니까 리뷰 관련 ERD가 없어서 요청을..??
+import EventCard from "@/components/cards/EventCard.tsx";
 
 type ReviewCardProps = {
+    //props 타입 설정, ERD와 맞춤
+    id: number;
+    memberId: string;
+    eventId: string;
+    rating: number;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+};
 
-}
+const ReviewCard = ({
+    id,
+    memberId,
+    eventId,
+    rating,
+    content,
+    createdAt,
+    updatedAt
+}: ReviewCardProps) => {
+    return(
+        <Link to={`/review/${id}`} className="block">
+        <div className="rounded-xl border bg-card h-28">
+            {content}
+        </div>
+        </Link>
+    );
+};
+
+export default ReviewCard;

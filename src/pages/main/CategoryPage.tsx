@@ -2,6 +2,43 @@ import { ArrowLeft } from 'lucide-react';
 import EventStatusBadge from '@/components/events/EventStatusBadge';
 import { useParams } from 'react-router';
 import { categories } from '@/lib/categories';
+import { useState, useCallback } from 'react';
+// 무한 스크롤
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+
+// item은 우선 예시입니다
+const items = [
+  {
+    id: 1,
+    title: '체험 1',
+    status: 'OPEN',
+    applyEndDateTime: '2026-03-10T23:59:00',
+  },
+  {
+    id: 2,
+    title: '체험 2',
+    status: 'OPEN',
+    applyEndDateTime: '2026-03-06T10:00:00',
+  },
+  {
+    id: 3,
+    title: '체험 3',
+    status: 'CLOSED',
+    applyEndDateTime: '2026-03-01T23:59:00',
+  },
+  {
+    id: 4,
+    title: '체험 4',
+    status: 'OPEN',
+    applyEndDateTime: '2026-03-20T23:59:00',
+  },
+  {
+    id: 5,
+    title: '체험 5',
+    status: 'OPEN',
+    applyEndDateTime: '2026-03-30T23:59:00',
+  },
+];
 
 export default function CategoryPage() {
   const { categoryId } = useParams();
@@ -9,39 +46,31 @@ export default function CategoryPage() {
 
   const categoryName =
     categories.find((c) => c.id === cid)?.label ?? '카테고리';
-    // item은 우선 예시입니다
-  const items = [
-    {
-      id: 1,
-      title: '체험 1',
-      status: 'OPEN',
-      applyEndDateTime: '2026-03-10T23:59:00',
-    },
-    {
-      id: 2,
-      title: '체험 2',
-      status: 'OPEN',
-      applyEndDateTime: '2026-03-06T10:00:00',
-    },
-    {
-      id: 3,
-      title: '체험 3',
-      status: 'CLOSED',
-      applyEndDateTime: '2026-03-01T23:59:00',
-    },
-    {
-      id: 4,
-      title: '체험 4',
-      status: 'OPEN',
-      applyEndDateTime: '2026-03-20T23:59:00',
-    },
-    {
-      id: 5,
-      title: '체험 5',
-      status: 'OPEN',
-      applyEndDateTime: '2026-03-30T23:59:00',
-    },
-  ];
+
+  // 무한 스크롤 적용 상태
+  const [lists, setLists] = useState(items);
+  const [hasMore, setHasMore] = useState(true);
+  /*
+    const [page, setPage] = useState(1); //실제로 스크롤링할 페이지 기준
+    const [loading, setLoading] = useState(false); //무한 스크롤링할 때마다 로딩
+   */
+
+  // 다음 페이지 로드(임의로 채워뒀습니다)
+  const loadMore = useCallback(() => {
+    // 이 부분은 임의로 넣어둔 곳이라 실제 데이터 들어오면 수정 필요
+    const nextId = lists.length + 1;
+    const newItem = Array.from({ length: 5 }, (_, i) => ({
+      id: nextId + i,
+      title: `체험 ${nextId + i}`,
+      status: 'CLOSE',
+      applyEndDateTime: '2026-04-30T23:59:59',
+    }));
+    setLists((prev) => [...prev, ...newItem]);
+    // 100개까지 쭉 늘려봄
+    if (lists.length + newItem.length >= 100) setHasMore(false);
+  }, [lists.length]);
+
+  const loadMoreRef = useInfiniteScroll(loadMore, hasMore);
 
   const handleBack = () => {
     window.history.back();
@@ -63,7 +92,7 @@ export default function CategoryPage() {
 
       {/* 카드 그리드 */}
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {items.map((event) => (
+        {lists.map((event) => (
           <article
             key={event.id}
             className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
@@ -88,6 +117,9 @@ export default function CategoryPage() {
           </article>
         ))}
       </div>
+
+      {/* 무한 스크롤 감지 타겟 */}
+      <div ref={loadMoreRef} className="h-1" />
     </section>
   );
 }
