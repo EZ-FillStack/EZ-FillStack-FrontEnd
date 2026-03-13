@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, MapPin, X } from 'lucide-react';
 // 페이지네이션
@@ -40,11 +40,14 @@ const appliedExperiences: AppliedExperience[] = [
   { id: 6, title: '캔들 만들기 체험', eventStartDateTime: '2026.04.10 14:00', placeName: '서울시 서대문구', status: 'APPROVED' },  
 ];
 
-const PAGE_SIZE = 2; //임의 페이지 개수
+// API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
+const PAGE_SIZE = 2; // API 연결 시 수정합니다.
 const TOTAL_PAGES = Math.ceil(appliedExperiences.length / PAGE_SIZE);
 
 export default function MyPageApplied() {
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = Math.max(1, Number(searchParams.get('page')) || 1);
+
   const paginatedItems = appliedExperiences.slice(
     (page - 1) * PAGE_SIZE,
     page * PAGE_SIZE,
@@ -122,7 +125,11 @@ export default function MyPageApplied() {
         ))}
       </div>
 
-      <Pagination page={page} totalPages={TOTAL_PAGES} onPageChange={setPage} />
+      <Pagination
+        page={page}
+        totalPages={TOTAL_PAGES}
+        onPageChange={(p) => setSearchParams({ page: String(p) })}
+      />
     </div>
   );
 }
