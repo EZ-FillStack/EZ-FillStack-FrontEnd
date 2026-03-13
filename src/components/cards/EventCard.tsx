@@ -17,8 +17,7 @@ type EventCardProps = {
   isBookmarked?: boolean;
   size?: 'sm' | 'md' | 'lg';
   badgeType?: 'default' | 'upcoming';
-  // 카드 클릭 시 이동 경로 (events: 이벤트 상세, experiences: 체험 상세)
-  linkTo?: 'events' | 'experiences';
+  linkTo?: 'experiences';
 };
 
 const EventCard = ({
@@ -34,7 +33,7 @@ const EventCard = ({
   isBookmarked,
   size,
   badgeType,
-  linkTo = 'events',
+  linkTo = 'experiences',
 }: EventCardProps) => {
   return (
     <Link to={`/${linkTo}/${id}`} className="block">

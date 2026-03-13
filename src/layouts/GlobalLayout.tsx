@@ -35,7 +35,7 @@ export default function GlobalLayout() {
               <Link
                 key={category.id}
                 to={`/categories/${category.id}`}
-                className="font-medium text-foreground/80 hover:text-primary transition-colors"
+                className="font-medium text-foreground/80 hover:text-primary hover:font-bold transition-colors"
               >
                 {category.label}
               </Link>

@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
-import EventStatusBadge from '@/components/events/EventStatusBadge';
 import { useParams } from 'react-router';
+import EventCard from '@/components/cards/EventCard';
 import { categories } from '@/lib/categories';
 import { useState, useCallback } from 'react';
 // 무한 스크롤
@@ -93,28 +93,21 @@ export default function CategoryPage() {
       {/* 카드 그리드 */}
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {lists.map((event) => (
-          <article
+          <EventCard
             key={event.id}
-            className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
-          >
-            <div className="aspect-4/3 w-full bg-gray-200" />
-
-            <div className="p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-medium truncate">{event.title}</h2>
-
-                <EventStatusBadge
-                  status={event.status}
-                  applyEndDateTime={event.applyEndDateTime}
-                />
-              </div>
-
-              <div className="mt-3 space-y-2">
-                <div className="h-2 w-24 bg-gray-200" />
-                <div className="h-2 w-32 bg-gray-200" />
-              </div>
-            </div>
-          </article>
+            id={event.id}
+            title={event.title}
+            thumbnailUrl="/placeholder.png"
+            placeName=""
+            eventStartDateTime=""
+            applyEndDateTime={event.applyEndDateTime}
+            status={event.status}
+            capacity={0}
+            currentParticipants={0}
+            size="sm"
+            badgeType="default"
+            linkTo="experiences"
+          />
         ))}
       </div>
 
