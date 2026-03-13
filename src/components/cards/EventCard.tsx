@@ -46,7 +46,7 @@ const EventCard = ({
           size === 'lg',
         )}
       >
-        <div className="relative bg-muted">
+        <div className="relative bg-gray-200">
           <img
             src={thumbnailUrl}
             alt={title}
