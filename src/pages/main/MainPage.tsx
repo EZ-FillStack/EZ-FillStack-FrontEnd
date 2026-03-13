@@ -67,7 +67,7 @@ export default function MainPage() {
                       currentParticipants={10}
                       isBookmarked={false}
                       badgeType="default"
-                      size="sm"
+                      size="md"
                     />
                   </CarouselItem>
                 ))}
