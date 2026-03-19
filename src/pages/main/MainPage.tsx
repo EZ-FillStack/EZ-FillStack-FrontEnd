@@ -1,7 +1,7 @@
 import { categories } from '@/lib/categories';
 import { Link } from 'react-router';
 import EventCard from '@/components/cards/EventCard';
-import EventStatusBadge from '@/components/events/EventStatusBadge';
+import EventStatusBadge from '@/components/badge/EventStatusBadge';
 // 메인에 슬라이더(carousel) 추가
 import Autoplay from 'embla-carousel-autoplay';
 import {

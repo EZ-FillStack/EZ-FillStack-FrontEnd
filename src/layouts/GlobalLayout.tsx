@@ -1,11 +1,18 @@
-import { Link, Outlet } from 'react-router';
+import {Link, Outlet, useLocation} from 'react-router';
 import Logo from '@/components/assets/Logo';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { categories } from '@/lib/categories';
+import { useEffect } from "react";
 import HeaderAuthSection from '@/layouts/header/HeaderAuthSection';
 
 export default function GlobalLayout() {
+  const winLocation = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [winLocation.pathname]);
+
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur">

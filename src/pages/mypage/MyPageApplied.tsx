@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { CalendarDays, MapPin, X } from 'lucide-react';
 // 페이지네이션
 import Pagination from '@/components/nav/Pagination';
+import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import { useState } from 'react';
 
 type AppliedExperience = {
@@ -11,7 +12,7 @@ type AppliedExperience = {
   thumbnailUrl?: string;
   eventStartDateTime: string;
   placeName: string;
-  status: 'PENDING' | 'APPROVED' | 'COMPLETED';
+  status: 'PENDING' | 'APPROVED' | 'COMPLETED' | 'FAILED';
 };
 // 예시
 const appliedExperiences: AppliedExperience[] = [
@@ -65,13 +66,10 @@ export default function MyPageApplied() {
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
 
   // API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
-const PAGE_SIZE = 2; // API 연결 시 수정합니다.
-const TOTAL_PAGES = Math.ceil(items.length / PAGE_SIZE);
+  const PAGE_SIZE = 2; // API 연결 시 수정합니다.
+  const TOTAL_PAGES = Math.ceil(items.length / PAGE_SIZE);
 
-  const paginatedItems = items.slice(
-    (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE,
-  );
+  const paginatedItems = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const handleDelete = (id: number) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
@@ -112,15 +110,7 @@ const TOTAL_PAGES = Math.ceil(items.length / PAGE_SIZE);
                   </div>
 
                   <div className="mt-3">
-                    {item.status === 'APPROVED' ? (
-                      <span className="inline-flex rounded-md bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-                        신청 완료
-                      </span>
-                    ) : (
-                      <span className="inline-flex rounded-md bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-700">
-                        대기중
-                      </span>
-                    )}
+                    <MyStatusBadge status={item.status} />
                   </div>
                 </div>
               </div>
