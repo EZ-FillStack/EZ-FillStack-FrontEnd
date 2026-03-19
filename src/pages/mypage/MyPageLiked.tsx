@@ -1,8 +1,10 @@
 import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, HeartIcon, MapPin } from 'lucide-react';
+import { CalendarDays, MapPin } from 'lucide-react';
 // 페이지네이션
 import Pagination from '@/components/nav/Pagination';
+import MyStatusBadge from '@/components/badge/MyStatusBadge';
+import BookmarkButton from '@/components/actions/BookmarkButton';
 
 type LikedExperience = {
   id: number;
@@ -87,30 +89,18 @@ export default function MyPageLiked() {
                   </div>
 
                   <div className="mt-3">
-                    {item.status === 'OPEN' ? (
-                      <span className="inline-flex rounded-md bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">
-                        모집중
-                      </span>
-                    ) : (
-                      <span className="inline-flex rounded-md bg-slate-100 px-3 py-1 text-sm font-medium text-slate-600">
-                        마감
-                      </span>
-                    )}
+                    <MyStatusBadge status={item.status} />
                   </div>
                 </div>
               </div>
 
               {/* 우측 버튼 영역 */}
               <div className="flex items-start gap-2 pt-1">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  aria-label="북마크 해제"
-                >
-                  <HeartIcon className="h-5 w-5 fill-current text-rose-500" />
-                </Button>
+                <BookmarkButton
+                  isBookmarked
+                  className="bg-transparent p-1"
+                  iconClassName="text-rose-500 fill-current"
+                />
 
                 <Button
                   type="button"
