@@ -9,11 +9,15 @@ const badgeVariants = cva(
         variants: {
             variant: { //현재로서는 default success warning만 두었습니다.
                 default:
-                    "bg-muted text-muted-foreground",
+                    "bg-slate-100 text-slate-600",
                 success:
-                    "bg-success text-success-foreground",
+                    "bg-green-100 text-green-700",
                 warning:
-                    "bg-warning text-warning-foreground",
+                    "bg-yellow-100 text-yellow-700",
+                fail:
+                    "bg-red-100 text-red-700",
+                info:
+                    "bg-blue-100 text-blue-700",
             },
             size: { //뱃지 사이즈는 임의로 설정. 하면서 수정됩니다.
                 default: "px-2 py-0.5 rounded-sm",

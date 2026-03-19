@@ -1,7 +1,7 @@
-import EventStatusBadge from '@/components/events/EventStatusBadge.tsx';
+import EventStatusBadge from '@/components/badge/EventStatusBadge.tsx';
 import { Link } from 'react-router';
 import { cn } from '@/lib/utils.ts';
-import { HeartIcon } from 'lucide-react';
+import BookmarkButton from '@/components/actions/BookmarkButton';
 
 type EventCardProps = {
   //props 타입 설정, ERD와 맞춤
@@ -52,22 +52,13 @@ const EventCard = ({
             className="object-cover w-full h-40"
           />
           {/* 북마크 버튼 */}
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            className="absolute top-2 right-2 bg-white/80 rounded-full p-2"
-          >
-            <HeartIcon
-              className={cn(
-                'h-5 w-5 transition-colors',
-                isBookmarked
-                  ? 'fill-red-500 text-red-500'
-                  : 'text-gray-400 hover:text-red-500',
-              )}
+          <div className="absolute top-2 right-2">
+            <BookmarkButton
+              isBookmarked={!!isBookmarked}
+              stopNavigation
+              // API 연결 전: 토글 로직은 추후 연결
             />
-          </button>
+          </div>
         </div>
         <div className={cn(size === 'sm' && 'p-4', (size === 'md' || size === 'lg' || !size) && 'p-3')}>
           <div className="flex justify-between">
