@@ -7,8 +7,56 @@ import Logo from '@/components/assets/Logo';
 import googleLogo from '@/assets/google.svg';
 import kakaoLogo from '@/assets/kakaotalk.svg';
 import naverLogo from '@/assets/naver.svg';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { generateErrorMessage } from '@/lib/error';
+import { useLoginWithPassword } from '@/hooks/mutations/auth/useLoginWithPassword';
+import { loginWithOAuth } from '@/api/auth';
+
 
 export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const { mutate: loginWithPassword, isPending: isLoginWithPasswordPending } =
+    useLoginWithPassword({
+      onError: (error) => {
+        const message = generateErrorMessage(error);
+
+        toast.error(message, {
+          position: 'top-center',
+        });
+        setPassword('');
+      },
+    });
+
+  const handleLoginWithOAuth = (provider: 'google' | 'kakao' | 'naver') => {
+    loginWithOAuth(provider);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (email.trim() === '') {
+      toast.error('이메일을 입력해주세요.', {
+        position: 'top-center',
+      });
+      return;
+    }
+
+    if (password.trim() === '') {
+      toast.error('비밀번호를 입력해주세요.', {
+        position: 'top-center',
+      });
+      return;
+    }
+
+    loginWithPassword({
+      email,
+      password,
+    });
+  };
+
   return (
     <div className="w-full max-w-md">
       <div className="rounded-2xl border bg-card p-6 shadow-sm">
@@ -23,14 +71,20 @@ export default function LoginPage() {
 
         {/* 로그인 카드 */}
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <form className="flex flex-col gap-4">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isLoginWithPasswordPending}
               type="email"
               placeholder="example@email.com"
               autoComplete="email"
               className="h-11"
             />
             <Input
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={isLoginWithPasswordPending}
               type="password"
               placeholder="password"
               autoComplete="current-password"
@@ -51,7 +105,11 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            <Button type="submit" className="w-full h-11">
+            <Button
+              disabled={isLoginWithPasswordPending}
+              type="submit"
+              className="w-full h-11"
+            >
               로그인
             </Button>
           </form>
@@ -68,6 +126,8 @@ export default function LoginPage() {
             <div className="grid grid-cols-3 gap-3">
               {/* Google */}
               <Button
+                onClick={() => handleLoginWithOAuth('google')}
+                disabled={isLoginWithPasswordPending}
                 type="button"
                 variant="outline"
                 className="h-11 justify-center border-blue-300 border-2"
@@ -82,6 +142,8 @@ export default function LoginPage() {
 
               {/* Kakao */}
               <Button
+                onClick={() => handleLoginWithOAuth('kakao')}
+                disabled={isLoginWithPasswordPending}
                 type="button"
                 variant="outline"
                 className="h-11 justify-center border-yellow-300 border-2"
@@ -92,6 +154,8 @@ export default function LoginPage() {
 
               {/* Naver */}
               <Button
+                onClick={() => handleLoginWithOAuth('naver')}
+                disabled={isLoginWithPasswordPending}
                 type="button"
                 variant="outline"
                 className="h-11 justify-center border-green-400 border-2"

@@ -5,55 +5,56 @@ import { devtools } from 'zustand/middleware';
 //User 관련 설정
 // User 정보는 일단 id/닉네임/진짜 id로 설정함
 type User = {
-    id: number;
-    username: string;
-    nickname: string;
-    profileImageUrl?: string;
-}
+  id: number;
+  username: string;
+  nickname: string;
+  email?: string;
+  phone?: string;
+  profileImageUrl?: string;
+};
 
 // AppState type 정의
 type AppState = {
-    user: User | null;
-    isAuthenticated: boolean;
-    loading: boolean;
-    error: string | null;
+  user: User | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
 
-    setUser: (user : User | null) => void;
-    setLoading: (loading: boolean) => void;
-    setError: (error: string | null) => void;
-    logout: () => void;
-}
+  setUser: (user: User | null) => void;
+  setLoading: (loading: boolean) => void;
+  setError: (error: string | null) => void;
+  logout: () => void;
+};
 
 // 메인 전역 스토어 설정
 const useAppStore = create<AppState>()(
-    devtools((set) =>  ({
+  devtools(
+    (set) => ({
+      //기본 설정
+      user: null,
+      isAuthenticated: false,
+      loading: false,
+      error: null,
 
+      //!!으로 truthy / falsy를 boolean으로 반환
+      setUser: (user) =>
+        set({
+          user,
+          isAuthenticated: !!user,
+        }),
 
-    //기본 설정
-    user: null,
-    isAuthenticated: false,
-    loading: false,
-    error: null,
+      setLoading: (loading) => set({ loading }),
 
-    //!!으로 truthy / falsy를 boolean으로 반환
-    setUser: (user) => set({
-       user,
-        isAuthenticated: !!user,
+      setError: (message) => set({ error: message }),
+
+      logout: () =>
+        set({
+          user: null,
+          isAuthenticated: false,
+        }),
     }),
-
-    setLoading: (loading) => set ({ loading }),
-
-    setError: (message) => set({ error : message }),
-
-    logout: ()=> set({
-        user:null,
-        isAuthenticated: false
-    }),
-
-
-
-    }), { name : 'E.GO project'})
-
-    );
+    { name: 'E.GO project' },
+  ),
+);
 
 export default useAppStore;

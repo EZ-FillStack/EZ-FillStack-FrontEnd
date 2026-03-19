@@ -1,8 +1,9 @@
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, MapPin, X } from 'lucide-react';
 // 페이지네이션
 import Pagination from '@/components/nav/Pagination';
+import { useState } from 'react';
 
 type AppliedExperience = {
   id: number;
@@ -35,23 +36,46 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 마포구',
     status: 'PENDING',
   },
-  { id: 4, title: '천연 염색 체험', eventStartDateTime: '2026.04.01 13:00', placeName: '서울시 성동구', status: 'APPROVED' },
-  { id: 5, title: '목공예 원데이 클래스', eventStartDateTime: '2026.04.05 10:00', placeName: '서울시 용산구', status: 'PENDING' },
-  { id: 6, title: '캔들 만들기 체험', eventStartDateTime: '2026.04.10 14:00', placeName: '서울시 서대문구', status: 'APPROVED' },  
+  {
+    id: 4,
+    title: '천연 염색 체험',
+    eventStartDateTime: '2026.04.01 13:00',
+    placeName: '서울시 성동구',
+    status: 'APPROVED',
+  },
+  {
+    id: 5,
+    title: '목공예 원데이 클래스',
+    eventStartDateTime: '2026.04.05 10:00',
+    placeName: '서울시 용산구',
+    status: 'PENDING',
+  },
+  {
+    id: 6,
+    title: '캔들 만들기 체험',
+    eventStartDateTime: '2026.04.10 14:00',
+    placeName: '서울시 서대문구',
+    status: 'APPROVED',
+  },
 ];
-
-// API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
-const PAGE_SIZE = 2; // API 연결 시 수정합니다.
-const TOTAL_PAGES = Math.ceil(appliedExperiences.length / PAGE_SIZE);
 
 export default function MyPageApplied() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [items, setItems] = useState(appliedExperiences);
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
 
-  const paginatedItems = appliedExperiences.slice(
+  // API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
+const PAGE_SIZE = 2; // API 연결 시 수정합니다.
+const TOTAL_PAGES = Math.ceil(items.length / PAGE_SIZE);
+
+  const paginatedItems = items.slice(
     (page - 1) * PAGE_SIZE,
     page * PAGE_SIZE,
   );
+
+  const handleDelete = (id: number) => {
+    setItems((prev) => prev.filter((item) => item.id !== id));
+  };
   return (
     <div>
       <div className="text-xl font-semibold text-slate-900">
@@ -109,16 +133,18 @@ export default function MyPageApplied() {
                   size="icon"
                   className="h-8 w-8"
                   aria-label="삭제"
+                  onClick={() => handleDelete(item.id)}
                 >
                   <X className="h-4 w-4" />
                 </Button>
-
-                <Button
-                  type="button"
-                  className="h-8 px-3 text-xs bg-gray-600 hover:bg-gray-800 text-white"
-                >
-                  상세보기
-                </Button>
+                <Link to={`/experiences/${item.id}`}>
+                  <Button
+                    type="button"
+                    className="h-8 px-3 text-xs bg-gray-600 hover:bg-gray-800 text-white"
+                  >
+                    상세보기
+                  </Button>
+                </Link>
               </div>
             </div>
           </article>
