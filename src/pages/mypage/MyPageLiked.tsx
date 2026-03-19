@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, HeartIcon, MapPin } from 'lucide-react';
 // 페이지네이션
@@ -36,9 +36,27 @@ const likedExperiences: LikedExperience[] = [
     placeName: '서울시 마포구',
     status: 'CLOSED',
   },
-  { id: 4, title: '천연 염색 체험', eventStartDateTime: '2026.04.01 13:00', placeName: '서울시 성동구', status: 'OPEN' },
-  { id: 5, title: '목공예 원데이 클래스', eventStartDateTime: '2026.04.05 10:00', placeName: '서울시 용산구', status: 'CLOSED' },
-  { id: 6, title: '캔들 만들기 체험', eventStartDateTime: '2026.04.10 14:00', placeName: '서울시 서대문구', status: 'OPEN' },
+  {
+    id: 4,
+    title: '천연 염색 체험',
+    eventStartDateTime: '2026.04.01 13:00',
+    placeName: '서울시 성동구',
+    status: 'OPEN',
+  },
+  {
+    id: 5,
+    title: '목공예 원데이 클래스',
+    eventStartDateTime: '2026.04.05 10:00',
+    placeName: '서울시 용산구',
+    status: 'CLOSED',
+  },
+  {
+    id: 6,
+    title: '캔들 만들기 체험',
+    eventStartDateTime: '2026.04.10 14:00',
+    placeName: '서울시 서대문구',
+    status: 'OPEN',
+  },
 ];
 
 // API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
@@ -49,8 +67,8 @@ export default function MyPageLiked() {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
   const paginatedItems = likedExperiences.slice(
-      (page - 1) * PAGE_SIZE,
-      page * PAGE_SIZE,
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE,
   );
 
   return (
@@ -111,13 +129,14 @@ export default function MyPageLiked() {
                 >
                   <HeartIcon className="h-5 w-5 fill-current text-rose-500" />
                 </Button>
-
-                <Button
-                  type="button"
-                  className="h-8 bg-gray-600 px-3 text-xs text-white hover:bg-gray-800"
-                >
-                  상세보기
-                </Button>
+                <Link to={`/experiences/${item.id}`}>
+                  <Button
+                    type="button"
+                    className="h-8 bg-gray-600 px-3 text-xs text-white hover:bg-gray-800"
+                  >
+                    상세보기
+                  </Button>
+                </Link>
               </div>
             </div>
           </article>
