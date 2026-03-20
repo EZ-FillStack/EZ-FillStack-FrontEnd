@@ -5,6 +5,7 @@ import { Search } from 'lucide-react';
 import { categories } from '@/lib/categories';
 import { useEffect } from "react";
 import HeaderAuthSection from '@/layouts/header/HeaderAuthSection';
+import SupportFloatingButton from '@/components/actions/SupportFloatingButton';
 
 export default function GlobalLayout() {
   const winLocation = useLocation();
@@ -56,6 +57,11 @@ export default function GlobalLayout() {
           <Outlet />
         </div>
       </main>
+
+      {/* 고객센터 플로팅 버튼 */}
+      <div className="fixed bottom-6 right-6">
+        <SupportFloatingButton />
+      </div>
 
       <footer className="mt-16 border-t bg-zinc-300 text-zinc-600">
         <div className="mx-auto w-full max-w-6xl px-4 py-10 text-sm text-muted-foreground">
