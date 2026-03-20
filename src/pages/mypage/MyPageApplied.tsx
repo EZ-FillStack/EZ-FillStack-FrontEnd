@@ -12,7 +12,7 @@ type AppliedExperience = {
   thumbnailUrl?: string;
   eventStartDateTime: string;
   placeName: string;
-  status: 'PENDING' | 'APPROVED' | 'COMPLETED' | 'FAILED';
+  status: 'PENDING' | 'APPROVED' | 'COMPLETED' | 'REJECTED';
 };
 // 예시
 const appliedExperiences: AppliedExperience[] = [
@@ -42,7 +42,7 @@ const appliedExperiences: AppliedExperience[] = [
     title: '천연 염색 체험',
     eventStartDateTime: '2026.04.01 13:00',
     placeName: '서울시 성동구',
-    status: 'FAILED',
+    status: 'REJECTED',
   },
   {
     id: 5,
