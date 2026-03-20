@@ -53,7 +53,7 @@ export default function MainPage() {
             <h2 className="text-xl font-semibold">인기 체험</h2>
             <Carousel opts={{ slidesToScroll: 1, align: 'start', duration: 15}}>
               <CarouselContent>
-                {[1, 2, 3, 4, 5, 6].map((i) => (
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                   <CarouselItem key={i} className="basis-1/4">
                     <EventCard
                       id={i}
@@ -82,7 +82,7 @@ export default function MainPage() {
             <h2 className="text-xl font-semibold">베스트 리뷰</h2>
             <Carousel opts={{ slidesToScroll: 1, align: 'start', duration: 15}}>
               <CarouselContent>
-                {[1, 2, 3, 4, 5, 6].map((i) => (
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                   <CarouselItem key={i} className="basis-1/4">
                     <div className="rounded-xl border bg-card h-28" />
                   </CarouselItem>
@@ -97,11 +97,6 @@ export default function MainPage() {
           <section className="flex flex-col gap-5">
             <div className="flex items-center gap-2">
               <h2 className="text-xl font-semibold">오픈 예정 체험</h2>
-              <EventStatusBadge
-                status="OPEN"
-                applyEndDateTime="2026-03-09"
-                eventStartDateTime="2026-03-10"
-              />
             </div>
             <Carousel opts={{ slidesToScroll: 1, align: 'start', duration: 15}}>
               <CarouselContent>
