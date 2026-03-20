@@ -64,9 +64,9 @@ const likedExperiences: LikedExperience[] = [
 // API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
 const PAGE_SIZE = 2; // API 연결 시 수정합니다.
 const TOTAL_PAGES = Math.ceil(likedExperiences.length / PAGE_SIZE);
-
 export default function MyPageLiked() {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
   const paginatedItems = likedExperiences.slice(
     (page - 1) * PAGE_SIZE,
@@ -77,66 +77,66 @@ export default function MyPageLiked() {
     <div>
       <div className="text-xl font-semibold text-slate-900">관심 체험 목록</div>
 
-      <div className="mt-6 space-y-4">
-        {paginatedItems.map((item) => (
-          <article
-            key={item.id}
-            className="rounded-2xl border border-slate-200 bg-white px-4 py-4"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex gap-4">
-                {/* 썸네일 */}
-                <div className="flex h-28 w-40 shrink-0 items-center justify-center rounded-md bg-slate-300 text-sm text-slate-600">
-                  이미지
-                </div>
-
-                {/* 정보 */}
-                <div className="pt-1">
-                  <div className="text-lg font-medium">{item.title}</div>
-
-                  <div className="mt-3 space-y-2 text-sm text-slate-700">
-                    <div className="flex items-center gap-2">
-                      <CalendarDays size={16} className="text-slate-500" />
-                      <span>{item.eventStartDateTime}</span>
+          <div className="mt-6 space-y-4">
+            {paginatedItems.map((item) => (
+              <article
+                key={item.id}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-4"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex gap-4">
+                    {/* 썸네일 */}
+                    <div className="flex h-28 w-40 shrink-0 items-center justify-center rounded-md bg-slate-300 text-sm text-slate-600">
+                      이미지
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <MapPin size={16} className="text-slate-500" />
-                      <span>{item.placeName}</span>
+                    {/* 정보 */}
+                    <div className="pt-1">
+                      <div className="text-lg font-medium">{item.title}</div>
+
+                      <div className="mt-3 space-y-2 text-sm text-slate-700">
+                        <div className="flex items-center gap-2">
+                          <CalendarDays size={16} className="text-slate-500" />
+                          <span>{item.eventStartDateTime}</span>
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                          <MapPin size={16} className="text-slate-500" />
+                          <span>{item.placeName}</span>
+                        </div>
+                      </div>
+
+                      <div className="mt-3">
+                        <MyStatusBadge status={item.status} size="lg" />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="mt-3">
-                    <MyStatusBadge status={item.status} size="lg" />
+                  {/* 우측 버튼 영역 */}
+                  <div className="flex items-start gap-2 pt-1">
+                    <BookmarkButton
+                      isBookmarked
+                      onToggle={() => {}}
+                      className="bg-transparent p-1"
+                    />
+
+                    <Button
+                      type="button"
+                      className="h-8 bg-gray-600 px-3 text-xs text-white hover:bg-gray-800"
+                    >
+                      상세보기
+                    </Button>
                   </div>
                 </div>
-              </div>
+              </article>
+            ))}
+          </div>
 
-              {/* 우측 버튼 영역 */}
-              <div className="flex items-start gap-2 pt-1">
-                <BookmarkButton
-                  isBookmarked
-                  className="bg-transparent p-1"
-                  iconClassName="text-rose-500 fill-current"
-                />
-
-                <Button
-                  type="button"
-                  className="h-8 bg-gray-600 px-3 text-xs text-white hover:bg-gray-800"
-                >
-                  상세보기
-                </Button>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>
-
-      <Pagination
-        page={page}
-        totalPages={TOTAL_PAGES}
-        onPageChange={(p) => setSearchParams({ page: String(p) })}
-      />
+          <Pagination
+            page={page}
+            totalPages={TOTAL_PAGES}
+            onPageChange={(p) => setSearchParams({ page: String(p) })}
+          />
     </div>
   );
 }
