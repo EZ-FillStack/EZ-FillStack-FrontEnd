@@ -1,4 +1,5 @@
-// 관리자 화면에서 쓰는 엔티티 타입입니다(ERD 참고).
+// 관리자 화면에서 쓰는 type들입니다.
+// 한꺼번에 처리해둡니다.
 
 export type Event = {
   id: number;
@@ -26,7 +27,6 @@ export type Review = {
   id: number;
   memberId: number;
   eventId: number;
-  // 좋아요 수입니다. 별점이 아닙니다.
   rating: number;
   content: string;
   createdAt: string;
@@ -38,6 +38,7 @@ export type ReviewWithRelations = Review & {
   eventTitle: string;
 };
 
+//고객 센터
 export type Inquiry = {
   id: number;
   memberId: number;
