@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import useAppStore from '@/stores/useAppStore';
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ export default function SupportFloatingButton({
   className,
   hidden,
 }: SupportFloatingButtonProps) {
+  const user = useAppStore((s) => s.user);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [replyEmail, setReplyEmail] = useState('');
@@ -41,7 +43,12 @@ export default function SupportFloatingButton({
   };
 
   const handleOpenChange = (next: boolean) => {
-    if (!next) reset();
+    if (!next) {
+      reset();
+    } else {
+      // 로그인 시 전역 User 이메일을 답변 받을 주소 기본값으로
+      setReplyEmail(user?.email?.trim() ?? '');
+    }
     setOpen(next);
   };
 
@@ -78,7 +85,7 @@ export default function SupportFloatingButton({
         type="button"
         onClick={() => {
           onClick?.();
-          setOpen(true);
+          handleOpenChange(true);
         }}
         className={cn(
           'flex h-14 w-14 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-md transition hover:bg-slate-50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
