@@ -102,12 +102,8 @@ export default function MyPageAccount() {
             >
               정보 수정
             </Button>
-            {/* 데이터가 없어서 임시 확인용
-            <ProfileEditorModal/>
-            */}
             <ProfileEditorModal
               user={{
-                id: 1,
                 username: myAccount.username,
                 nickname: myAccount.nickname || '',
                 profileImageUrl: myAccount.profileImageUrl,
