@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 const menuItems = [
   { title: '체험 등록', to: '/admin/experiences/register' },
   { title: '체험 관리', to: '/admin/experiences/manage' },
-  { title: '신청 · 예약 관리', to: '/admin/applications' },
+  { title: '신청 관리', to: '/admin/applications' },
   { title: '고객센터 문의', to: '/admin/inquiries' },
   { title: '리뷰 관리', to: '/admin/reviews' },
 ];
