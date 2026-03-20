@@ -57,9 +57,9 @@ export default function AdminApplicationsPage() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold text-slate-900">신청 · 예약 관리</h1>
+      <h1 className="text-xl font-semibold text-slate-900">신청 관리</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        체험 신청·예약 목록을 조회합니다.
+        체험 신청 목록을 조회합니다.
       </p>
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
