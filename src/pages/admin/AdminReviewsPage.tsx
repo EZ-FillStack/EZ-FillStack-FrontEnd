@@ -102,7 +102,7 @@ export default function AdminReviewsPage() {
     <div>
       <h1 className="text-xl font-semibold text-slate-900">리뷰 관리</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        리뷰 목록을 조회합니다. 좋아요 수는 rating 필드입니다.
+        리뷰 목록을 조회합니다.
       </p>
 
       <div className="mt-10 flex flex-wrap items-center justify-end gap-2 sm:mt-12">
