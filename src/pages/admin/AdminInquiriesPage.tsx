@@ -5,16 +5,16 @@ import { Mail } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import type { Inquiry } from '@/lib/adminEntityTypes';
 
-type InquiryStatus = 'PENDING' | 'ANSWERED';
+type InquiryStatus = 'UNANSWERED' | 'ANSWERED';
 
 // 문의 상태 뱃지 문구입니다.
 const statusLabel: Record<InquiryStatus, string> = {
-  PENDING: '미답변',
+  UNANSWERED: '답변대기',
   ANSWERED: '답변완료',
 };
 
 const statusVariant: Record<InquiryStatus, 'warning' | 'success'> = {
-  PENDING: 'warning',
+  UNANSWERED: 'warning',
   ANSWERED: 'success',
 };
 
