@@ -13,6 +13,32 @@ import { generateErrorMessage } from '@/lib/error';
 import { useLoginWithPassword } from '@/hooks/mutations/auth/useLoginWithPassword';
 import { loginWithOAuth } from '@/api/auth';
 
+function validateLoginForm(email: string, password: string) {
+  const trimmedEmail = email.trim();
+
+  if (trimmedEmail === '') {
+    return '이메일을 입력해주세요.';
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(trimmedEmail)) {
+    return '올바른 이메일 형식을 입력해주세요.';
+  }
+
+  if (password.trim() === '') {
+    return '비밀번호를 입력해주세요.';
+  }
+
+  if (password.length < 8) {
+    return '비밀번호는 8자 이상 입력해주세요.';
+  }
+
+  if (password.length > 72) {
+    return '비밀번호가 너무 깁니다.';
+  }
+
+  return null;
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -37,22 +63,17 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (email.trim() === '') {
-      toast.error('이메일을 입력해주세요.', {
-        position: 'top-center',
-      });
-      return;
-    }
+    const validationMessage = validateLoginForm(email, password);
 
-    if (password.trim() === '') {
-      toast.error('비밀번호를 입력해주세요.', {
+    if (validationMessage) {
+      toast.error(validationMessage, {
         position: 'top-center',
       });
       return;
     }
 
     loginWithPassword({
-      email,
+      email: email.trim(),
       password,
     });
   };
@@ -71,7 +92,11 @@ export default function LoginPage() {
 
         {/* 로그인 카드 */}
         <div className="rounded-2xl border bg-card p-6 shadow-sm">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <form
+            onSubmit={handleSubmit}
+            noValidate
+            className="flex flex-col gap-4"
+          >
             <Input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -108,7 +133,7 @@ export default function LoginPage() {
             <Button
               disabled={isLoginWithPasswordPending}
               type="submit"
-              className="w-full h-11"
+              className="h-11 w-full"
             >
               로그인
             </Button>
@@ -124,13 +149,12 @@ export default function LoginPage() {
             </p>
 
             <div className="grid grid-cols-3 gap-3">
-              {/* Google */}
               <Button
                 onClick={() => handleLoginWithOAuth('google')}
                 disabled={isLoginWithPasswordPending}
                 type="button"
                 variant="outline"
-                className="h-11 justify-center border-blue-300 border-2"
+                className="h-11 justify-center border-2 border-blue-300"
               >
                 <img
                   src={googleLogo}
@@ -140,25 +164,23 @@ export default function LoginPage() {
                 구글
               </Button>
 
-              {/* Kakao */}
               <Button
                 onClick={() => handleLoginWithOAuth('kakao')}
                 disabled={isLoginWithPasswordPending}
                 type="button"
                 variant="outline"
-                className="h-11 justify-center border-yellow-300 border-2"
+                className="h-11 justify-center border-2 border-yellow-300"
               >
                 <img src={kakaoLogo} alt="kakao" className="h-4 w-4 shrink-0" />
                 카톡
               </Button>
 
-              {/* Naver */}
               <Button
                 onClick={() => handleLoginWithOAuth('naver')}
                 disabled={isLoginWithPasswordPending}
                 type="button"
                 variant="outline"
-                className="h-11 justify-center border-green-400 border-2"
+                className="h-11 justify-center border-2 border-green-400"
               >
                 <img src={naverLogo} alt="naver" className="h-4 w-4 shrink-0" />
                 네이버
@@ -172,7 +194,7 @@ export default function LoginPage() {
           <span className="text-muted-foreground">계정이 없으신가요? </span>
           <Link
             to="/sign-up"
-            className="font-medium hover:underline underline-offset-4"
+            className="font-medium underline-offset-4 hover:underline"
           >
             회원가입
           </Link>

@@ -1,6 +1,6 @@
 import clientAPI from '@/lib/axios';
 
-// 회원가입 요청하는 비동기 함수
+// 회원가입 요청
 export async function signUp({
   email,
   password,
@@ -15,7 +15,7 @@ export async function signUp({
 
   return data;
 }
-// 비밀번호와 함께 로그인하는 비동기 함수
+// 비밀번호와 함께 로그인
 export async function loginWithPassword({
   email,
   password,

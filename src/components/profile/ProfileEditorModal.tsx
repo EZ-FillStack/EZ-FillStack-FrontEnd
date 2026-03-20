@@ -23,7 +23,6 @@ type SelectedImage = {
 
 // 임시 확인용
 type User = {
-  id: number;
   username: string;
   nickname: string;
   email?: string;
@@ -40,7 +39,6 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
   const setUser = useAppStore((state) => state.setUser);
 
   const [nickname, setNickname] = useState(user.nickname || '');
-  const [email, setEmail] = useState(user.email || '');
   const [phone, setPhone] = useState(user.phone || '');
   const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(
     null,
@@ -99,12 +97,10 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
     }
 
     const trimmedNickname = nickname.trim();
-    const trimmedEmail = email.trim() || undefined;
     const trimmedPhone = phone.trim() || undefined;
 
     const isUnchanged =
       trimmedNickname === user.nickname &&
-      trimmedEmail === user.email &&
       trimmedPhone === user.phone &&
       !selectedImage;
 
@@ -112,7 +108,6 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
       toast.error('변경된 내용이 없습니다.', {
         position: 'top-center',
       });
-      onClose();
       return;
     }
 
@@ -124,10 +119,8 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
       }
 
       updateProfileMutate({
-        userId: user.id,
-        nickname: nickname.trim(),
-        email: email.trim() || undefined,
-        phone: phone.trim() || undefined,
+        nickname: trimmedNickname,
+        phone: trimmedPhone,
         profileImageUrl: nextProfileImageUrl,
       });
     } catch (error) {
@@ -192,17 +185,6 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label className="text-sm text-muted-foreground">이메일</label>
-          <Input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={isPending}
-            placeholder="이메일을 입력해주세요"
-            type="email"
-          />
-        </div>
-
-        <div className="flex flex-col gap-2">
           <label className="text-sm text-muted-foreground">전화번호</label>
           <Input
             value={phone}
@@ -245,13 +227,7 @@ export default function ProfileEditorModal({ user }: ProfileEditorModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
       <DialogContent className="sm:max-w-md">
-        {isOpen ? (
-          <ProfileEditorForm
-            key={`${user.id}-${isOpen}`}
-            user={user}
-            onClose={close}
-          />
-        ) : null}
+        {isOpen ? <ProfileEditorForm user={user} onClose={close} /> : null}
       </DialogContent>
     </Dialog>
   );

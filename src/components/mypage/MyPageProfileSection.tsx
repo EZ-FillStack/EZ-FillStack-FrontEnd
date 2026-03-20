@@ -21,10 +21,9 @@ export default function MyPageProfileSection() {
 
         {/* 프로필 정보 */}
         <div className="flex flex-col gap-2">
-          <div className="text-xl font-semibold text-slate-900">홍길동</div>
-
-          <p className="text-base text-slate-700">hong@email.com</p>
-
+          <div className="text-xl font-semibold text-slate-900">
+            {user?.nickname || user?.username || '사용자'}
+          </div>
           <div className="mt-1 flex items-center gap-6 text-sm text-slate-700">
             <span>신청한 체험 3</span>
             <span>관심 체험 12</span>
