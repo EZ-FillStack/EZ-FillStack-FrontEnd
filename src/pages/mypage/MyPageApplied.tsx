@@ -42,14 +42,14 @@ const appliedExperiences: AppliedExperience[] = [
     title: '천연 염색 체험',
     eventStartDateTime: '2026.04.01 13:00',
     placeName: '서울시 성동구',
-    status: 'APPROVED',
+    status: 'FAILED',
   },
   {
     id: 5,
     title: '목공예 원데이 클래스',
     eventStartDateTime: '2026.04.05 10:00',
     placeName: '서울시 용산구',
-    status: 'PENDING',
+    status: 'COMPLETED',
   },
   {
     id: 6,
@@ -110,7 +110,7 @@ export default function MyPageApplied() {
                   </div>
 
                   <div className="mt-3">
-                    <MyStatusBadge status={item.status} />
+                    <MyStatusBadge status={item.status} size="lg" />
                   </div>
                 </div>
               </div>

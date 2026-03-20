@@ -1,5 +1,4 @@
 import { Link } from 'react-router';
-import EventCard from "@/components/cards/EventCard.tsx";
 
 type ReviewCardProps = {
     //props 타입 설정, ERD와 맞춤

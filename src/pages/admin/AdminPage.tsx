@@ -1,3 +1,5 @@
+import { Navigate } from 'react-router';
+
 export default function AdminPage() {
-  return <div>AdminPage</div>;
+  return <Navigate to="/admin/experiences/manage" replace />;
 }

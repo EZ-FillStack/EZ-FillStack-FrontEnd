@@ -12,7 +12,7 @@ type LikedExperience = {
   thumbnailUrl?: string;
   eventStartDateTime: string;
   placeName: string;
-  status: 'OPEN' | 'CLOSED';
+  status: 'UPCOMING' | 'OPEN' | 'CLOSED' | 'FINISHED';
 };
 
 // 예시
@@ -29,7 +29,7 @@ const likedExperiences: LikedExperience[] = [
     title: '전통 한지 공예 체험',
     eventStartDateTime: '2026.03.20 10:00',
     placeName: '서울시 종로구',
-    status: 'OPEN',
+    status: 'UPCOMING',
   },
   {
     id: 3,
@@ -50,7 +50,7 @@ const likedExperiences: LikedExperience[] = [
     title: '목공예 원데이 클래스',
     eventStartDateTime: '2026.04.05 10:00',
     placeName: '서울시 용산구',
-    status: 'CLOSED',
+    status: 'UPCOMING',
   },
   {
     id: 6,
@@ -107,7 +107,7 @@ export default function MyPageLiked() {
                   </div>
 
                   <div className="mt-3">
-                    <MyStatusBadge status={item.status} />
+                    <MyStatusBadge status={item.status} size="lg" />
                   </div>
                 </div>
               </div>
