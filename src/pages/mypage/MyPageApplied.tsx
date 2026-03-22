@@ -5,7 +5,7 @@ import { CalendarDays, MapPin, X } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import { useState } from 'react';
-import ReviewWriteModal from '@/components/mypage/ReviewWriteModal';
+import ReviewWriteModal from '@/components/review/ReviewWriteModal';
 
 type AppliedExperience = {
   id: number;
