@@ -5,6 +5,7 @@ import { CalendarDays, MapPin, X } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import { useState } from 'react';
+import ReviewWriteModal from '@/components/mypage/ReviewWriteModal';
 
 type AppliedExperience = {
   id: number;
@@ -63,6 +64,9 @@ const appliedExperiences: AppliedExperience[] = [
 export default function MyPageApplied() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [items, setItems] = useState(appliedExperiences);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
 
   // API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
@@ -70,6 +74,13 @@ export default function MyPageApplied() {
   const TOTAL_PAGES = Math.ceil(items.length / PAGE_SIZE);
 
   const paginatedItems = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const handleReviewModalChange = (open: boolean) => {
+  setIsReviewModalOpen(open);
+  if (!open) {
+    setSelectedEventId(null);
+  }
+};
 
   const handleDelete = (id: number) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
@@ -109,8 +120,20 @@ export default function MyPageApplied() {
                     </div>
                   </div>
 
-                  <div className="mt-3">
+                  <div className="mt-3 flex items-center gap-2">
                     <MyStatusBadge status={item.status} size="lg" />
+
+                    {item.status === 'COMPLETED' && (
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setSelectedEventId(item.id);
+                          setIsReviewModalOpen(true);
+                        }}
+                      >
+                        리뷰 작성
+                      </Button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -145,6 +168,12 @@ export default function MyPageApplied() {
         page={page}
         totalPages={TOTAL_PAGES}
         onPageChange={(p) => setSearchParams({ page: String(p) })}
+      />
+
+      <ReviewWriteModal
+        open={isReviewModalOpen}
+        onOpenChange={handleReviewModalChange}
+        eventId={selectedEventId}
       />
     </div>
   );
