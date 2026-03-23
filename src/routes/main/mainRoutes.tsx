@@ -5,7 +5,7 @@ import MainPage from '@/pages/main/MainPage';
 import CategoryPage from '@/pages/main/CategoryPage';
 import EventPage from '@/pages/events/EventPage';
 import ExperienceDetailPage from '@/pages/experiences/ExperienceDetailPage';
-import ReviewDetailPage from '@/pages/reviews/ReviewDetailPage';
+import ReviewPage from '@/pages/reviews/ReviewPage';
 
 export const mainRoutes: RouteObject = {
   element: <MainLayout />,
@@ -14,6 +14,6 @@ export const mainRoutes: RouteObject = {
     { path: '/categories/:categoryId', element: <CategoryPage /> },
     { path: '/events', element: <EventPage /> },
     { path: '/experiences/:id', element: <ExperienceDetailPage /> },
-    { path: '/reviews/:id', element: <ReviewDetailPage /> },
+    { path: '/reviews', element: <ReviewPage /> },
   ],
 };
