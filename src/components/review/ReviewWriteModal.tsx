@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Star } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -22,11 +23,13 @@ export default function ReviewWriteModal({
   eventId,
 }: ReviewWriteModalProps) {
   const [reviewContent, setReviewContent] = useState('');
+  const [rating, setRating] = useState(0);
   const { mutate, isPending } = useCreateReview();
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
       setReviewContent('');
+      setRating(0);
     }
     onOpenChange(nextOpen);
   };
@@ -43,6 +46,13 @@ export default function ReviewWriteModal({
       return;
     }
 
+    if (rating < 1) {
+      toast.error('별점을 선택해주세요.', {
+        position: 'top-center',
+      });
+      return;
+    }
+
     if (!reviewContent.trim()) {
       toast.error('리뷰 내용을 입력해주세요.', {
         position: 'top-center',
@@ -54,6 +64,7 @@ export default function ReviewWriteModal({
       {
         eventId,
         content: reviewContent,
+        rating,
       },
       {
         onSuccess: () => {
@@ -61,6 +72,7 @@ export default function ReviewWriteModal({
             position: 'top-center',
           });
           setReviewContent('');
+          setRating(0);
           onOpenChange(false);
         },
         onError: (error) => {
@@ -83,6 +95,28 @@ export default function ReviewWriteModal({
         </DialogHeader>
 
         <div className="mt-2 space-y-5">
+          <div>
+            <div className="mb-2 text-sm font-medium text-slate-700">별점</div>
+            <div className="flex gap-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setRating((prev) => (prev === star ? 0 : star))}
+                  className="transition"
+                >
+                  <Star
+                    className={`h-6 w-6 ${
+                      star <= rating
+                        ? 'fill-yellow-400 text-yellow-400'
+                        : 'text-gray-300'
+                    }`}
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div>
             <div className="mb-2 text-sm font-medium text-slate-700">
               리뷰 내용

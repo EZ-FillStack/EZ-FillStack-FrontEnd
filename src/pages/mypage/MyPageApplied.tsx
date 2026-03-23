@@ -5,7 +5,7 @@ import { CalendarDays, MapPin, X } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import { useState } from 'react';
-import ReviewWriteModal from '@/components/mypage/ReviewWriteModal';
+import ReviewWriteModal from '@/components/review/ReviewWriteModal';
 
 type AppliedExperience = {
   id: number;
@@ -14,6 +14,7 @@ type AppliedExperience = {
   eventStartDateTime: string;
   placeName: string;
   status: 'PENDING' | 'APPROVED' | 'COMPLETED' | 'FAILED';
+  hasReview: boolean;
 };
 // 예시
 const appliedExperiences: AppliedExperience[] = [
@@ -23,13 +24,15 @@ const appliedExperiences: AppliedExperience[] = [
     eventStartDateTime: '2026.03.15 14:00',
     placeName: '서울시 강남구',
     status: 'APPROVED',
+    hasReview: false,
   },
   {
     id: 2,
     title: '전통 한지 공예 체험',
     eventStartDateTime: '2026.03.20 10:00',
     placeName: '서울시 종로구',
-    status: 'APPROVED',
+    status: 'COMPLETED',
+    hasReview: true,
   },
   {
     id: 3,
@@ -37,6 +40,7 @@ const appliedExperiences: AppliedExperience[] = [
     eventStartDateTime: '2026.03.25 15:00',
     placeName: '서울시 마포구',
     status: 'PENDING',
+    hasReview: true,
   },
   {
     id: 4,
@@ -44,6 +48,7 @@ const appliedExperiences: AppliedExperience[] = [
     eventStartDateTime: '2026.04.01 13:00',
     placeName: '서울시 성동구',
     status: 'FAILED',
+    hasReview: false,
   },
   {
     id: 5,
@@ -51,6 +56,7 @@ const appliedExperiences: AppliedExperience[] = [
     eventStartDateTime: '2026.04.05 10:00',
     placeName: '서울시 용산구',
     status: 'COMPLETED',
+    hasReview: false,
   },
   {
     id: 6,
@@ -58,6 +64,7 @@ const appliedExperiences: AppliedExperience[] = [
     eventStartDateTime: '2026.04.10 14:00',
     placeName: '서울시 서대문구',
     status: 'APPROVED',
+    hasReview: true,
   },
 ];
 
@@ -76,11 +83,11 @@ export default function MyPageApplied() {
   const paginatedItems = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const handleReviewModalChange = (open: boolean) => {
-  setIsReviewModalOpen(open);
-  if (!open) {
-    setSelectedEventId(null);
-  }
-};
+    setIsReviewModalOpen(open);
+    if (!open) {
+      setSelectedEventId(null);
+    }
+  };
 
   const handleDelete = (id: number) => {
     setItems((prev) => prev.filter((item) => item.id !== id));
@@ -123,17 +130,22 @@ export default function MyPageApplied() {
                   <div className="mt-3 flex items-center gap-2">
                     <MyStatusBadge status={item.status} size="lg" />
 
-                    {item.status === 'COMPLETED' && (
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          setSelectedEventId(item.id);
-                          setIsReviewModalOpen(true);
-                        }}
-                      >
-                        리뷰 작성
-                      </Button>
-                    )}
+                    {item.status === 'COMPLETED' &&
+                      (item.hasReview ? (
+                        <span className="text-xs text-slate-400">
+                          리뷰 작성 완료
+                        </span>
+                      ) : (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setSelectedEventId(item.id);
+                            setIsReviewModalOpen(true);
+                          }}
+                        >
+                          리뷰 작성
+                        </Button>
+                      ))}
                   </div>
                 </div>
               </div>
