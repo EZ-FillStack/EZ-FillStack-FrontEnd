@@ -13,7 +13,7 @@ type ReviewDetailModalProps = {
     id: number;
     nickname: string;
     content: string;
-    eventTitle: string;
+    title: string;
     rating: number;
   } | null;
 };
@@ -40,7 +40,7 @@ export default function ReviewDetailModal({
 
             <div className="mt-1 flex items-center justify-between">
               <span className="text-base font-semibold text-slate-900">
-                {review.eventTitle}
+                {review.title}
               </span>
 
               <div className="flex gap-1">
