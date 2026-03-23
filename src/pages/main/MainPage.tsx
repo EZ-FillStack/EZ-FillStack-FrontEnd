@@ -1,8 +1,7 @@
 import { categories } from '@/lib/categories';
 import { Link } from 'react-router';
 import EventCard from '@/components/cards/EventCard';
-import EventStatusBadge from '@/components/badge/EventStatusBadge';
-import { Star } from 'lucide-react';
+import ReviewCard from '@/components/cards/ReviewCard';
 // 메인에 슬라이더(carousel) 추가
 import Autoplay from 'embla-carousel-autoplay';
 import {
@@ -14,29 +13,17 @@ import {
 } from '@/components/ui/carousel';
 import { useState } from 'react';
 import ReviewDetailModal from '@/components/review/ReviewDetailModal';
-
-type BestReview = {
-  id: number;
-  memberId: number;
-  eventId: number;
-  rating: number;
-  content: string;
-  createdAt: string;
-
-  // 화면용
-  nickname: string;
-  eventTitle: string;
-};
+import type { Review } from '@/types/review';
 
 // 임시 확인용
-const bestReviews: BestReview[] = [
+const bestReviews: Review[] = [
   {
     id: 1,
     memberId: 101,
     eventId: 201,
     rating: 5,
     nickname: '한강킹',
-    eventTitle: '한강 요트 체험',
+    title: '한강 요트 체험',
     content: '야경이 정말 예뻤고 진행도 매끄러워서 만족스러웠어요.',
     createdAt: '2026-03-20',
   },
@@ -46,7 +33,7 @@ const bestReviews: BestReview[] = [
     eventId: 202,
     rating: 4,
     nickname: '옴뇸뇸',
-    eventTitle: '도자기 원데이 클래스',
+    title: '도자기 원데이 클래스',
     content: '처음이었는데도 친절하게 알려주셔서 재밌게 만들었어요.',
     createdAt: '2026-03-19',
   },
@@ -56,33 +43,35 @@ const bestReviews: BestReview[] = [
     eventId: 203,
     rating: 5,
     nickname: '고양이',
-    eventTitle: '성수 베이킹 클래스',
+    title: '성수 베이킹 클래스',
     content: '재료도 좋고 완성한 빵도 맛있어서 또 가고 싶어요.',
     createdAt: '2026-03-18',
   },
   {
-  id: 4,
-  memberId: 104,
-  eventId: 204,
-  rating: 4,
-  nickname: '강아지',
-  eventTitle: '뮤지컬 라이온킹 공연',
-  content: '배우들 연기랑 무대 연출이 정말 압도적이었어요. 가격이 조금 있었지만 그만큼 충분히 값어치를 했습니다.',
-  createdAt: '2026-03-17',
-},
+    id: 4,
+    memberId: 104,
+    eventId: 204,
+    rating: 4,
+    nickname: '강아지',
+    title: '뮤지컬 라이온킹 공연',
+    content:
+      '배우들 연기랑 무대 연출이 정말 압도적이었어요. 가격이 조금 있었지만 그만큼 충분히 값어치를 했습니다.',
+    createdAt: '2026-03-17',
+  },
 ];
 
 // 베스트리뷰 api 연결시 변경 예정
 // const { data: bestReviews = [] } = useGetBestReviews();
 
 export default function MainPage() {
-  const [selectedReview, setSelectedReview] = useState<BestReview | null>(null);
+  const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  const handleReviewClick = (review: BestReview) => {
+  const handleReviewClick = (review: Review) => {
     setSelectedReview(review);
     setIsReviewModalOpen(true);
   };
+
   return (
     <div className="mx-auto max-w-7xl px-6 pt-2 pb-2">
       <div className="p-4">
@@ -153,46 +142,26 @@ export default function MainPage() {
 
           {/* 베스트 리뷰 - 수동 슬라이더 */}
           <section className="flex flex-col gap-5">
-            <h2 className="text-xl font-semibold">베스트 리뷰</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-semibold">베스트 리뷰</h2>
+
+              <Link
+                to="/reviews"
+                className="text-sm text-muted-foreground hover:underline"
+              >
+                전체보기
+              </Link>
+            </div>
             <Carousel
               opts={{ slidesToScroll: 1, align: 'start', duration: 15 }}
             >
               <CarouselContent>
                 {bestReviews.slice(0, 10).map((review) => (
                   <CarouselItem key={review.id} className="basis-1/4">
-                    <div
+                    <ReviewCard
+                      {...review}
                       onClick={() => handleReviewClick(review)}
-                      className="rounded-xl border bg-card p-4 h-36 cursor-pointer hover:bg-muted/50 transition"
-                    >
-                      {/* 1. 이벤트 타이틀 */}
-                      <div className="text-sm font-semibold text-slate-900 line-clamp-1">
-                        {review.eventTitle}
-                      </div>
-
-                      {/* 2. 닉네임 + 별점 */}
-                      <div className="mt-1 flex items-center justify-between">
-                        <span className="text-xs text-slate-500">
-                          {review.nickname}
-                        </span>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star
-                              key={star}
-                              className={`h-4 w-4 ${
-                                star <= review.rating
-                                  ? 'fill-yellow-400 text-yellow-400'
-                                  : 'text-gray-300'
-                              }`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* 3. 리뷰 내용 */}
-                      <p className="mt-2 text-sm text-slate-600 line-clamp-2 leading-5">
-                        {review.content}
-                      </p>
-                    </div>
+                    />
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -221,11 +190,13 @@ export default function MainPage() {
             </Carousel>
           </section>
         </div>
-        <ReviewDetailModal
-          open={isReviewModalOpen}
-          onOpenChange={setIsReviewModalOpen}
-          review={selectedReview}
-        />
+        {selectedReview && (
+          <ReviewDetailModal
+            open={isReviewModalOpen}
+            onOpenChange={setIsReviewModalOpen}
+            review={selectedReview}
+          />
+        )}
       </div>
     </div>
   );
