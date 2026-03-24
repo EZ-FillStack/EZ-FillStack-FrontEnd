@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import Pagination from '@/components/nav/Pagination';
-import type { ReviewWithRelations } from '@/lib/adminEntityTypes';
+import type { Review } from '@/types/review';
 
 type SortKey = 'latest' | 'oldest' | 'rating';
 
 // 리뷰 목록 더미입니다.
-const rows: ReviewWithRelations[] = [
+const rows: Review[] = [
   {
     id: 1,
     memberId: 101,
@@ -16,8 +16,8 @@ const rows: ReviewWithRelations[] = [
     content: '강사님이 친절해서 재방문 꼭 하고 싶어요.',
     createdAt: '2026-02-18T12:00:00.000Z',
     updatedAt: '2026-02-18T12:00:00.000Z',
-    memberNickname: 'user01',
-    eventTitle: '도자기 만들기 체험',
+    nickname: 'user01',
+    title: '도자기 만들기 체험',
   },
   {
     id: 2,
@@ -27,8 +27,8 @@ const rows: ReviewWithRelations[] = [
     content: '시간이 조금 타이트했지만 재미있었습니다.',
     createdAt: '2026-02-10T09:00:00.000Z',
     updatedAt: '2026-02-10T09:00:00.000Z',
-    memberNickname: 'user04',
-    eventTitle: '캔들 만들기 체험',
+    nickname: 'user04',
+    title: '캔들 만들기 체험',
   },
   {
     id: 3,
@@ -38,8 +38,8 @@ const rows: ReviewWithRelations[] = [
     content: '설명이 자세해서 초보자도 따라가기 좋았어요.',
     createdAt: '2026-02-22T15:00:00.000Z',
     updatedAt: '2026-02-22T15:00:00.000Z',
-    memberNickname: 'user02',
-    eventTitle: '전통 한지 공예 체험',
+    nickname: 'user02',
+    title: '전통 한지 공예 체험',
   },
   {
     id: 4,
@@ -49,8 +49,8 @@ const rows: ReviewWithRelations[] = [
     content: '작품 하나 완성하고 와서 뿌듯했습니다.',
     createdAt: '2026-01-28T11:00:00.000Z',
     updatedAt: '2026-01-28T11:00:00.000Z',
-    memberNickname: 'user03',
-    eventTitle: '가죽 공예 원데이',
+    nickname: 'user03',
+    title: '가죽 공예 원데이',
   },
   {
     id: 5,
@@ -60,14 +60,14 @@ const rows: ReviewWithRelations[] = [
     content: '색이 예쁘게 나왔고 친구들한테도 추천했습니다.',
     createdAt: '2026-02-05T14:00:00.000Z',
     updatedAt: '2026-02-05T14:00:00.000Z',
-    memberNickname: 'user05',
-    eventTitle: '천연 염색 체험',
+    nickname: 'user05',
+    title: '천연 염색 체험',
   },
 ];
 
 const PAGE_SIZE = 2;
 
-function sortReviews(list: ReviewWithRelations[], sort: SortKey): ReviewWithRelations[] {
+function sortReviews(list: Review[], sort: SortKey): Review[] {
   const next = [...list];
   if (sort === 'latest') {
     next.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
@@ -144,12 +144,12 @@ export default function AdminReviewsPage() {
             >
               <div className="min-w-0 flex-1 space-y-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-medium text-slate-900">{row.eventTitle}</span>
+                  <span className="font-medium text-slate-900">{row.title}</span>
                   <span className="text-sm font-medium text-slate-600">
                     좋아요 {row.rating.toLocaleString()}
                   </span>
                 </div>
-                <div className="text-sm text-slate-600">{row.memberNickname}</div>
+                <div className="text-sm text-slate-600">{row.nickname}</div>
                 <p className="line-clamp-2 text-sm text-slate-700">{row.content}</p>
                 <div className="text-xs text-slate-500">
                   등록 {formatDate(row.createdAt)} · 수정 {formatDate(row.updatedAt)}

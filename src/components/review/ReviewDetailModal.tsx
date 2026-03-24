@@ -5,17 +5,12 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Star } from 'lucide-react';
+import type { Review } from '@/types/review';
 
 type ReviewDetailModalProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  review: {
-    id: number;
-    nickname: string;
-    content: string;
-    title: string;
-    rating: number;
-  } | null;
+  review: Review | null;
 };
 
 export default function ReviewDetailModal({
