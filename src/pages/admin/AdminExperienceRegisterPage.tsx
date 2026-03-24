@@ -3,7 +3,7 @@ import { useOutletContext } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import type { Event } from '@/lib/adminEntityTypes';
+import type { EventType } from '@/types/event';
 import type { AdminExperiencesOutletContext } from '@/layouts/AdminLayout';
 
 function localDateTimeToIso(value: string): string {
@@ -32,7 +32,7 @@ export default function AdminExperienceRegisterPage() {
     const nextId =
       experiences.length > 0 ? Math.max(...experiences.map((i) => i.id)) + 1 : 1;
     const now = new Date().toISOString();
-    const newItem: Event = {
+    const newItem: EventType = {
       id: nextId,
       version: 0,
       title: title.trim() || '(제목 없음)',

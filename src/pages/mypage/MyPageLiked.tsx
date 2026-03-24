@@ -5,18 +5,10 @@ import { CalendarDays, MapPin } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import BookmarkButton from '@/components/actions/BookmarkButton';
-
-type LikedExperience = {
-  id: number;
-  title: string;
-  thumbnailUrl?: string;
-  eventStartDateTime: string;
-  placeName: string;
-  status: 'UPCOMING' | 'OPEN' | 'CLOSED' | 'FINISHED';
-};
+import type { EventType } from '@/types/event';
 
 // 예시
-const likedExperiences: LikedExperience[] = [
+const likedExperiences: EventType[] = [
   {
     id: 1,
     title: '도자기 만들기 체험',

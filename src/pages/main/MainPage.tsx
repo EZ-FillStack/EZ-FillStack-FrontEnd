@@ -26,6 +26,7 @@ const bestReviews: Review[] = [
     title: '한강 요트 체험',
     content: '야경이 정말 예뻤고 진행도 매끄러워서 만족스러웠어요.',
     createdAt: '2026-03-20',
+    updatedAt: '2026-03-20',
   },
   {
     id: 2,
@@ -36,6 +37,7 @@ const bestReviews: Review[] = [
     title: '도자기 원데이 클래스',
     content: '처음이었는데도 친절하게 알려주셔서 재밌게 만들었어요.',
     createdAt: '2026-03-19',
+    updatedAt: '2026-03-19',
   },
   {
     id: 3,
@@ -46,6 +48,7 @@ const bestReviews: Review[] = [
     title: '성수 베이킹 클래스',
     content: '재료도 좋고 완성한 빵도 맛있어서 또 가고 싶어요.',
     createdAt: '2026-03-18',
+    updatedAt: '2026-03-18',
   },
   {
     id: 4,
@@ -57,6 +60,7 @@ const bestReviews: Review[] = [
     content:
       '배우들 연기랑 무대 연출이 정말 압도적이었어요. 가격이 조금 있었지만 그만큼 충분히 값어치를 했습니다.',
     createdAt: '2026-03-17',
+    updatedAt: '2026-03-17',
   },
 ];
 

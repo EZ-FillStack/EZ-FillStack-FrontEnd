@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { Link, Outlet } from 'react-router';
 import AdminSidebar from '@/components/admin/AdminSidebar';
-import type { Event } from '@/lib/adminEntityTypes';
+import type { EventType } from '@/types/event';
 
 export type AdminExperiencesOutletContext = {
-  experiences: Event[];
-  setExperiences: React.Dispatch<React.SetStateAction<Event[]>>;
+  experiences: EventType[];
+  setExperiences: React.Dispatch<React.SetStateAction<EventType[]>>;
 };
 
 // 개발용 더미 — API 연동 시 제거
-const ADMIN_EXPERIENCES_SEED: Event[] = [
+const ADMIN_EXPERIENCES_SEED: EventType[] = [
   {
     id: 1,
     version: 0,
@@ -181,7 +181,7 @@ const ADMIN_EXPERIENCES_SEED: Event[] = [
 ];
 
 export default function AdminLayout() {
-  const [experiences, setExperiences] = useState<Event[]>(ADMIN_EXPERIENCES_SEED);
+  const [experiences, setExperiences] = useState<EventType[]>(ADMIN_EXPERIENCES_SEED);
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 text-sm">
