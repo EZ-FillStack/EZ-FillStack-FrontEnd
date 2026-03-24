@@ -2,18 +2,14 @@ import EventStatusBadge from '@/components/badge/EventStatusBadge.tsx';
 import { Link } from 'react-router';
 import { cn } from '@/lib/utils.ts';
 import BookmarkButton from '@/components/actions/BookmarkButton';
+import type { EventType } from '@/types/event';
 
-type EventCardProps = {
-  //props 타입 설정, ERD와 맞춤
-  id: number;
-  title: string;
+type EventCardProps = Pick<
+    EventType,
+    'id' | 'title' | 'thumbnailUrl' | 'placeName' | 'eventStartDateTime' | 'applyEndDateTime' | 'capacity' | 'currentParticipants' | 'status'
+> & {
   thumbnailUrl: string;
-  placeName: string;
-  eventStartDateTime: string;
   applyEndDateTime: string;
-  status: string;
-  capacity: number;
-  currentParticipants: number;
   isBookmarked?: boolean;
   size?: 'sm' | 'md' | 'lg';
   badgeType?: 'default' | 'upcoming';

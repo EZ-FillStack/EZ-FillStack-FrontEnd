@@ -3,17 +3,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Mail } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
-import type { Inquiry } from '@/lib/adminEntityTypes';
-
-type InquiryStatus = 'UNANSWERED' | 'ANSWERED';
+import type { Inquiry } from '@/types/inquiry';
 
 // 문의 상태 뱃지 문구입니다.
-const statusLabel: Record<InquiryStatus, string> = {
+const statusLabel: Record<Inquiry['status'], string> = {
   UNANSWERED: '답변대기',
   ANSWERED: '답변완료',
 };
 
-const statusVariant: Record<InquiryStatus, 'warning' | 'success'> = {
+const statusVariant: Record<Inquiry['status'], 'warning' | 'success'> = {
   UNANSWERED: 'warning',
   ANSWERED: 'success',
 };
@@ -25,7 +23,7 @@ const rows: Inquiry[] = [
     title: '환불 문의 드립니다',
     content: '환불 절차 알려주세요.',
     replyEmail: 'user@example.com',
-    status: 'PENDING',
+    status: 'UNANSWERED',
     createdAt: '2026-02-20T10:00:00.000Z',
     answeredAt: null,
   },
@@ -45,7 +43,7 @@ const rows: Inquiry[] = [
     title: '신청 취소 방법 문의',
     content: '마이페이지에서 취소가 안 보입니다.',
     replyEmail: 'member@example.com',
-    status: 'PENDING',
+    status: 'UNANSWERED',
     createdAt: '2026-02-15T14:00:00.000Z',
     answeredAt: null,
   },
@@ -61,8 +59,8 @@ const rows: Inquiry[] = [
   },
 ];
 
-function inquiryUiStatus(status: string): InquiryStatus {
-  return status === 'ANSWERED' ? 'ANSWERED' : 'PENDING';
+function inquiryUiStatus(status: string): Inquiry['status'] {
+  return status === 'ANSWERED' ? 'ANSWERED' : 'UNANSWERED';
 }
 
 // 한 페이지당 행 개수입니다.
