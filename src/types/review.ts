@@ -5,6 +5,7 @@ export type Review = {
   rating: number;
   content: string;
   createdAt: string;
+  updatedAt: string;
   nickname: string;
   title: string;
 };

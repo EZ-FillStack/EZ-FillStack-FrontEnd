@@ -1,8 +1,8 @@
-import React from 'react';
-import { Badge } from "@/components/ui/badge"
+import { Badge } from '@/components/ui/badge';
+import type { EventStatus } from '@/types/event';
 
 type EventStatusBadgeProps = {
-    status: string;
+    status: EventStatus;
     applyEndDateTime: string;
     eventStartDateTime?: string;
 };
