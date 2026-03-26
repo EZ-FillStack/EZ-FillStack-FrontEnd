@@ -2,11 +2,82 @@ import { useState } from 'react';
 import { Link, Outlet } from 'react-router';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import type { EventType } from '@/types/event';
+import type { Users } from '@/types/users';
 
 export type AdminExperiencesOutletContext = {
   experiences: EventType[];
   setExperiences: React.Dispatch<React.SetStateAction<EventType[]>>;
 };
+
+export type AdminUserOutletContext = {
+  users: Users[];
+  setUsers: React.Dispatch<React.SetStateAction<Users[]>>;
+};
+
+
+// 개발용 더미 - API 연동 시 제거
+const ADMIN_USERS_SEED: Users[] = [
+  {
+    id: 1,
+    username: 'user01',
+    nickname: '비제',
+    provider: 'LOCAL',
+    providerId: null,
+    profileImageUrl: null,
+    createdAt: '2026-02-01T10:00:00.000Z',
+    updatedAt: '2026-02-01T10:00:00.000Z',
+    deletedAt: null,
+    status:'ACTIVE',
+  },
+  {
+    id: 2,
+    username: 'user02',
+    nickname: 'cherry',
+    provider: 'KAKAO',
+    providerId: 'kakao_10492833',
+    profileImageUrl: 'https://picsum.photos/seed/user02/200/200',
+    createdAt: '2026-02-10T09:20:00.000Z',
+    updatedAt: '2026-03-01T14:05:00.000Z',
+    deletedAt: null,
+    status:'ACTIVE',
+  },
+  {
+    id: 3,
+    username: 'user03',
+    nickname: '캔들장인',
+    provider: 'GOOGLE',
+    providerId: 'google_998172',
+    profileImageUrl: 'https://picsum.photos/seed/user03/200/200',
+    createdAt: '2026-02-15T12:00:00.000Z',
+    updatedAt: '2026-02-15T12:00:00.000Z',
+    deletedAt: null,
+    status:'ACTIVE',
+  },
+  {
+    id: 4,
+    username: 'user04',
+    nickname: '탈퇴유저',
+    provider: 'LOCAL',
+    providerId: null,
+    profileImageUrl: null,
+    createdAt: '2026-01-05T08:00:00.000Z',
+    updatedAt: '2026-02-20T11:30:00.000Z',
+    deletedAt: '2026-03-10T00:00:00.000Z',
+    status:'DELETED',
+  },
+  {
+    id: 5,
+    username: 'user05',
+    nickname: '한지덕후',
+    provider: 'NAVER',
+    providerId: 'naver_55443322',
+    profileImageUrl: 'https://picsum.photos/seed/user05/200/200',
+    createdAt: '2026-03-05T16:40:00.000Z',
+    updatedAt: '2026-03-18T10:10:00.000Z',
+    deletedAt: null,
+    status:'BANNED',
+  },
+];
 
 // 개발용 더미 — API 연동 시 제거
 const ADMIN_EXPERIENCES_SEED: EventType[] = [
@@ -182,6 +253,7 @@ const ADMIN_EXPERIENCES_SEED: EventType[] = [
 
 export default function AdminLayout() {
   const [experiences, setExperiences] = useState<EventType[]>(ADMIN_EXPERIENCES_SEED);
+  const [users, setUsers] = useState<Users[]>(ADMIN_USERS_SEED);
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 text-sm">
@@ -205,7 +277,7 @@ export default function AdminLayout() {
           <AdminSidebar />
         </aside>
         <section className="min-h-[60vh] flex-1 rounded-2xl border border-slate-200 bg-white p-5">
-          <Outlet context={{ experiences, setExperiences }} />
+          <Outlet context={{ experiences, setExperiences, users, setUsers }} />
         </section>
       </div>
     </main>

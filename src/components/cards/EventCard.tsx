@@ -58,7 +58,7 @@ const EventCard = ({
           </div>
         </div>
         <div className={cn(size === 'sm' && 'p-4', (size === 'md' || size === 'lg' || !size) && 'p-3')}>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-start gap-1">
             <h3 className="text-foreground font-medium">{title}</h3>
             {badgeType === 'default' && (
               <EventStatusBadge
