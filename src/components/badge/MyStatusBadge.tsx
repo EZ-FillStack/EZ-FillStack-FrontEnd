@@ -59,12 +59,6 @@ const MyStatusBadge = ({ status, size = 'default' }: MyStatusBadgeProps) => {
           신청 실패
         </Badge>
       );
-    case 'REJECTED':
-      return (
-        <Badge variant="fail" size={size}>
-          반려
-        </Badge>
-      );
     case 'CANCELLED':
       return (
         <Badge variant="default" size={size}>

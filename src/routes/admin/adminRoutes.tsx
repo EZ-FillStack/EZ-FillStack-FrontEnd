@@ -6,6 +6,7 @@ import AdminInquiriesPage from '@/pages/admin/AdminInquiriesPage';
 import AdminReviewsPage from '@/pages/admin/AdminReviewsPage';
 import AdminExperienceRegisterPage from '@/pages/admin/AdminExperienceRegisterPage';
 import AdminExperienceManagePage from '@/pages/admin/AdminExperienceManagePage';
+import AdminUserManagePage from '@/pages/admin/AdminUserManagePage.tsx';
 
 export const adminRoutes: RouteObject = {
   path: '/admin',
@@ -16,6 +17,7 @@ export const adminRoutes: RouteObject = {
     { path: 'experiences/manage', element: <AdminExperienceManagePage /> },
     { path: 'applications', element: <AdminApplicationsPage /> },
     { path: 'inquiries', element: <AdminInquiriesPage /> },
+    { path: 'users', element: <AdminUserManagePage/> },
     { path: 'reviews', element: <AdminReviewsPage /> },
   ],
 };

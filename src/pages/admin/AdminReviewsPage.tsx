@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import Pagination from '@/components/nav/Pagination';
 import type { Review } from '@/types/review';
+import { User } from "lucide-react";
 
 type SortKey = 'latest' | 'oldest' | 'rating';
 
@@ -149,7 +150,10 @@ export default function AdminReviewsPage() {
                     좋아요 {row.rating.toLocaleString()}
                   </span>
                 </div>
-                <div className="text-sm text-slate-600">{row.nickname}</div>
+                <div className="text-sm text-slate-600 flex gap-1">
+                  <User size={15} className="text-slate-500" />
+                  {row.nickname}
+                </div>
                 <p className="line-clamp-2 text-sm text-slate-700">{row.content}</p>
                 <div className="text-xs text-slate-500">
                   등록 {formatDate(row.createdAt)} · 수정 {formatDate(row.updatedAt)}

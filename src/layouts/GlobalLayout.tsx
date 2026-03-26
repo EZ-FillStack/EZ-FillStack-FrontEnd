@@ -1,14 +1,16 @@
-import {Link, Outlet, useLocation} from 'react-router';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router';
 import Logo from '@/components/assets/Logo';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { categories } from '@/lib/categories';
-import { useEffect } from "react";
+import { useEffect, useState } from 'react';
 import HeaderAuthSection from '@/layouts/header/HeaderAuthSection';
 import SupportFloatingButton from '@/components/actions/SupportFloatingButton';
 
 export default function GlobalLayout() {
   const winLocation = useLocation();
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -26,10 +28,22 @@ export default function GlobalLayout() {
 
           {/* Center: 검색 */}
           <div className="flex-1 flex justify-center">
-            <div className="relative w-full max-w-xl">
+            <form
+              className="relative w-full max-w-xl"
+              onSubmit={(e) => {
+                e.preventDefault();
+                const next = keyword.trim();
+                navigate(`/search?keyword=${encodeURIComponent(next)}&page=1`);
+              }}
+            >
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="검색어를 입력하세요" className="pl-9" />
-            </div>
+              <Input
+                placeholder="검색어를 입력하세요"
+                className="pl-9"
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+              />
+            </form>
           </div>
 
           {/* Right: 인증 영역 */}

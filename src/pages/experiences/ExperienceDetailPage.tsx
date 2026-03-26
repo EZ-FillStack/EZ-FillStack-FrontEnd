@@ -3,17 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CalendarDays, Users } from 'lucide-react';
 import KakaoMap from '@/components/map/KakaoMap';
-
-// 사용할 예정
-type EventRecruitInfo = {
-  capacity: number; // 정원
-  appliedCount: number; // 현재 신청자
-  applyStartDate: string; // "2026.02.01"
-  applyEndDate: string; // "2026.02.28"
-  eventDate: string; // "2026.03.15"
-  eventStartTime: string; // "14:00"
-  eventEndTime: string; // "17:00"
-};
+import { toast } from 'sonner';
+import type { EventStatus } from '@/types/event';
 
 // API 연결 후 다시 타입 적용
 // type EventDetailContentProps = {
@@ -30,7 +21,24 @@ type EventRecruitInfo = {
 // };
 
 // 임시 사용 용도
-const mockEvent = {
+const mockEvent: {
+  title: string;
+  status: EventStatus;
+  applyEndDateTime: string;
+  eventStartDateTime?: string;
+  imageUrl?: string;
+  description?: string;
+  recruitInfo: {
+    capacity: number;
+    appliedCount: number;
+    applyStartDate: string;
+    applyEndDate: string;
+    eventDate: string;
+    eventStartTime: string;
+    eventEndTime: string;
+  };
+  location: { address: string };
+} = {
   title: '체험 행사 이름',
   status: 'OPEN',
   applyEndDateTime: '2026-02-28T23:59:00',
@@ -191,7 +199,11 @@ export default function ExperienceDetailPage() {
             </CardContent>
           </Card>
 
-          <Button className="w-full" size="lg">
+          <Button className="w-full" size="lg"
+                  onClick={() => {
+                    toast.success('신청이 완료되었습니다.');
+                  }}
+          >
             신청하기
           </Button>
         </div>

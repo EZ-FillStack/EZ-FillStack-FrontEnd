@@ -90,7 +90,12 @@ export default function AdminInquiriesPage() {
               className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="min-w-0 flex-1 space-y-2">
-                <div className="font-medium text-slate-900">{row.title}</div>
+                <div className="font-medium text-slate-900 flex gap-1">
+                  {row.title}
+                  <Badge variant={statusVariant[inquiryUiStatus(row.status)]}>
+                    {statusLabel[inquiryUiStatus(row.status)]}
+                  </Badge>
+                </div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-700">
                   <span className="flex items-center gap-1.5">
                     <Mail size={15} className="text-slate-500" />
@@ -100,9 +105,6 @@ export default function AdminInquiriesPage() {
                 </div>
               </div>
               <div className="flex shrink-0 flex-wrap items-center gap-2">
-                <Badge variant={statusVariant[inquiryUiStatus(row.status)]}>
-                  {statusLabel[inquiryUiStatus(row.status)]}
-                </Badge>
                 <Button
                   type="button"
                   size="sm"
