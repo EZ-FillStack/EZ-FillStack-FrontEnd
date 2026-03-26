@@ -19,6 +19,7 @@ import {
 import { useState } from 'react';
 import ReviewDetailModal from '@/components/review/ReviewDetailModal';
 import type { Review } from '@/types/review';
+import { categoryIconByEng } from '@/assets/icons/categoryIcons.ts';
 
 // 임시 확인용
 const bestReviews: Review[] = [
@@ -115,8 +116,10 @@ export default function MainPage() {
                 to={`/categories/${c.id}`}
                 className="flex flex-col items-center gap-2"
               >
-                <div className="h-20 w-20 rounded-full bg-muted" />
-                <span className="text-sm text-muted-foreground">{c.label}</span>
+                <div className="h-20 w-20 rounded-full bg-muted">
+                  <img src={categoryIconByEng[c.eng]} alt={c.label}/>
+                </div>
+                <span className="text-sm text-foreground">{c.label}</span>
               </Link>
             ))}
           </section>
@@ -218,7 +221,20 @@ export default function MainPage() {
                 )) */}
                 {[1, 2, 3, 4, 5].map((i) => (
                   <CarouselItem key={i} className="basis-1/3">
-                    <div className="rounded-xl border bg-card h-52" />
+                    <EventCard
+                        id={i}
+                        title={`체험 ${i}`}
+                        thumbnailUrl="/placeholder.png"
+                        placeName="서울 강남"
+                        eventStartDateTime="2026-04-28"
+                        applyEndDateTime="2027-03-09"
+                        status="UPCOMING"
+                        capacity={30}
+                        currentParticipants={10}
+                        isBookmarked={false}
+                        badgeType="upcoming"
+                        size="lg"
+                    />
                   </CarouselItem>
                 ))}
               </CarouselContent>

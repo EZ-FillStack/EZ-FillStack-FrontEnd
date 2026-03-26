@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { useParams } from 'react-router';
+import type { EventType } from '@/types/event';
 import EventCard from '@/components/cards/EventCard';
 import { categories } from '@/lib/categories';
 import { useState, useCallback } from 'react';
@@ -7,7 +8,7 @@ import { useState, useCallback } from 'react';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 // item은 우선 예시입니다
-const items = [
+const items:EventType[] = [
   {
     id: 1,
     title: '체험 1',
@@ -59,10 +60,10 @@ export default function CategoryPage() {
   const loadMore = useCallback(() => {
     // 이 부분은 임의로 넣어둔 곳이라 실제 데이터 들어오면 수정 필요
     const nextId = lists.length + 1;
-    const newItem = Array.from({ length: 5 }, (_, i) => ({
+    const newItem:EventType[] = Array.from({ length: 5 }, (_, i) => ({
       id: nextId + i,
       title: `체험 ${nextId + i}`,
-      status: 'CLOSE',
+      status: 'CLOSED',
       applyEndDateTime: '2026-04-30T23:59:59',
     }));
     setLists((prev) => [...prev, ...newItem]);
@@ -98,9 +99,9 @@ export default function CategoryPage() {
             id={event.id}
             title={event.title}
             thumbnailUrl="/placeholder.png"
-            placeName=""
+            placeName="강남"
             eventStartDateTime=""
-            applyEndDateTime={event.applyEndDateTime}
+            applyEndDateTime={event.applyEndDateTime || '1990-01-01'}
             status={event.status}
             capacity={0}
             currentParticipants={0}
