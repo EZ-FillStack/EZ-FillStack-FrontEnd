@@ -1,11 +1,13 @@
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, MapPin } from 'lucide-react';
+import { CalendarDays, MapPin, Search } from 'lucide-react';
 // 페이지네이션
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import BookmarkButton from '@/components/actions/BookmarkButton';
 import type { EventType } from '@/types/event';
+import { Input } from '@/components/ui/input';
 
 // 예시
 const likedExperiences: EventType[] = [
@@ -55,20 +57,60 @@ const likedExperiences: EventType[] = [
 
 // API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
 const PAGE_SIZE = 2; // API 연결 시 수정합니다.
-const TOTAL_PAGES = Math.ceil(likedExperiences.length / PAGE_SIZE);
+
+function normalizeKeyword(value: string) {
+  return value.trim().toLowerCase();
+}
+
 export default function MyPageLiked() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
-  const paginatedItems = likedExperiences.slice(
-    (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE,
+  const keyword = searchParams.get('keyword') ?? '';
+  const [draftKeyword, setDraftKeyword] = useState(keyword);
+
+  useEffect(() => {
+    setDraftKeyword(keyword);
+  }, [keyword]);
+
+  const filtered = likedExperiences.filter((x) => {
+    const kw = normalizeKeyword(keyword);
+    if (!kw) return true;
+    const hay = `${x.title ?? ''} ${x.placeName ?? ''}`.toLowerCase();
+    return hay.includes(kw);
+  });
+
+  const TOTAL_PAGES = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const safePage = Math.min(page, TOTAL_PAGES);
+
+  const paginatedItems = filtered.slice(
+    (safePage - 1) * PAGE_SIZE,
+    safePage * PAGE_SIZE,
   );
 
   return (
     <div>
       <div className="text-xl font-semibold text-slate-900">관심 체험 목록</div>
-
+      <div className="flex justify-between mt-6">
+        <div className="flex-1 flex justify-end items-center gap-1">
+          <div className="relative max-w-xl">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setSearchParams({ keyword: draftKeyword, page: '1' });
+              }}
+            >
+              <Input
+                placeholder="검색어를 입력하세요"
+                className="pl-9 rounded-2xl"
+                value={draftKeyword}
+                onChange={(e) => setDraftKeyword(e.target.value)}
+              />
+            </form>
+          </div>
+        </div>
+      </div>
           <div className="mt-6 space-y-4">
             {paginatedItems.map((item) => (
               <article
@@ -125,9 +167,11 @@ export default function MyPageLiked() {
           </div>
 
           <Pagination
-            page={page}
+            page={safePage}
             totalPages={TOTAL_PAGES}
-            onPageChange={(p) => setSearchParams({ page: String(p) })}
+            onPageChange={(p) =>
+              setSearchParams({ keyword, page: String(p) })
+            }
           />
     </div>
   );
