@@ -12,7 +12,6 @@ type AppliedExperience = {
   id: number;
   title: string;
   thumbnailUrl?: string;
-  content: string;
   appliedAt: string; // 신청 일자(기간 필터 기준)
   eventStartDateTime: string;
   placeName: string;
@@ -24,7 +23,6 @@ const appliedExperiences: AppliedExperience[] = [
   {
     id: 1,
     title: '도자기 만들기 체험',
-    content: '도자기 만들기 체험 신청합니다. 초보도 가능한가요?',
     appliedAt: '2026-02-01T10:00:00.000Z',
     eventStartDateTime: '2026.03.15 14:00',
     placeName: '서울시 강남구',
@@ -34,7 +32,6 @@ const appliedExperiences: AppliedExperience[] = [
   {
     id: 2,
     title: '전통 한지 공예 체험',
-    content: '한지 공예 난이도 문의드립니다.',
     appliedAt: '2026-02-10T09:20:00.000Z',
     eventStartDateTime: '2026.03.20 10:00',
     placeName: '서울시 종로구',
@@ -44,7 +41,6 @@ const appliedExperiences: AppliedExperience[] = [
   {
     id: 3,
     title: '가죽 공예 원데이 클래스',
-    content: '재료는 제공되나요?',
     appliedAt: '2026-02-15T12:00:00.000Z',
     eventStartDateTime: '2026.03.25 15:00',
     placeName: '서울시 마포구',
@@ -54,7 +50,6 @@ const appliedExperiences: AppliedExperience[] = [
   {
     id: 4,
     title: '천연 염색 체험',
-    content: '체험 준비물이 있나요?',
     appliedAt: '2026-01-28T11:00:00.000Z',
     eventStartDateTime: '2026.04.01 13:00',
     placeName: '서울시 성동구',
@@ -64,7 +59,6 @@ const appliedExperiences: AppliedExperience[] = [
   {
     id: 5,
     title: '목공예 원데이 클래스',
-    content: '목공예 원데이 클래스 신청합니다.',
     appliedAt: '2026-02-05T14:00:00.000Z',
     eventStartDateTime: '2026.04.05 10:00',
     placeName: '서울시 용산구',
@@ -74,7 +68,6 @@ const appliedExperiences: AppliedExperience[] = [
   {
     id: 6,
     title: '캔들 만들기 체험',
-    content: '캔들 향은 선택 가능한가요?',
     appliedAt: '2026-02-20T10:00:00.000Z',
     eventStartDateTime: '2026.04.10 14:00',
     placeName: '서울시 서대문구',
@@ -131,7 +124,7 @@ export default function MyPageApplied() {
 
   const filteredItems = items.filter((x) => {
     const kw = normalizeKeyword(keyword);
-    const hay = `${x.title} ${x.content}`.toLowerCase();
+    const hay = `${x.title}`.toLowerCase();
     const keywordOk = kw ? hay.includes(kw) : true;
 
     const days = periodToDays(period);
