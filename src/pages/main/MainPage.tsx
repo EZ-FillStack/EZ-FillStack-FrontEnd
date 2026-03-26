@@ -4,6 +4,11 @@ import EventCard from '@/components/cards/EventCard';
 import ReviewCard from '@/components/cards/ReviewCard';
 // 메인에 슬라이더(carousel) 추가
 import Autoplay from 'embla-carousel-autoplay';
+// API 연결 예정
+// import { useGetBestReviews } from '@/hooks/queries/review/useGetBestReviews';
+// import { useGetPopularEvents } from '@/hooks/queries/events/useGetPopularEvents';
+// import { useGetUpcomingEvents } from '@/hooks/queries/events/useGetUpcomingEvents';
+// import { useGetCategories } from '@/hooks/queries/categories/useGetCategories';
 import {
   Carousel,
   CarouselContent,
@@ -64,8 +69,10 @@ const bestReviews: Review[] = [
   },
 ];
 
-// 베스트리뷰 api 연결시 변경 예정
+// API 연결 예정
 // const { data: bestReviews = [] } = useGetBestReviews();
+// const { data: popularEvents = [] } = useGetPopularEvents();
+// const { data: upcomingEvents = [] } = useGetUpcomingEvents();
 
 export default function MainPage() {
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
@@ -100,6 +107,7 @@ export default function MainPage() {
           </section>
 
           {/* 카테고리 아이콘 */}
+          {/* API 연결 예정: const { data: categories = [] } = useGetCategories(); */}
           <section className="flex items-center justify-center gap-12">
             {categories.map((c) => (
               <Link
@@ -120,6 +128,18 @@ export default function MainPage() {
               opts={{ slidesToScroll: 1, align: 'start', duration: 15 }}
             >
               <CarouselContent>
+                {/* API 연결 예정: popularEvents.slice(0, 10).map((event) => (
+                  <CarouselItem key={event.id} className="basis-1/4">
+                    <EventCard
+                      {...event}
+                      thumbnailUrl={event.thumbnailUrl ?? '/placeholder.png'}
+                      applyEndDateTime={event.applyEndDateTime ?? ''}
+                      isBookmarked={false}
+                      badgeType="default"
+                      size="md"
+                    />
+                  </CarouselItem>
+                )) */}
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
                   <CarouselItem key={i} className="basis-1/4">
                     <EventCard
@@ -160,6 +180,7 @@ export default function MainPage() {
               opts={{ slidesToScroll: 1, align: 'start', duration: 15 }}
             >
               <CarouselContent>
+                {/* API 연결 예정: bestReviews.slice(0, 10).map((review) => (...)) */}
                 {bestReviews.slice(0, 10).map((review) => (
                   <CarouselItem key={review.id} className="basis-1/4">
                     <ReviewCard
@@ -183,6 +204,18 @@ export default function MainPage() {
               opts={{ slidesToScroll: 1, align: 'start', duration: 15 }}
             >
               <CarouselContent>
+                {/* API 연결 예정: upcomingEvents.slice(0, 10).map((event) => (
+                  <CarouselItem key={event.id} className="basis-1/3">
+                    <EventCard
+                      {...event}
+                      thumbnailUrl={event.thumbnailUrl ?? '/placeholder.png'}
+                      applyEndDateTime={event.applyEndDateTime ?? ''}
+                      isBookmarked={false}
+                      badgeType="upcoming"
+                      size="md"
+                    />
+                  </CarouselItem>
+                )) */}
                 {[1, 2, 3, 4, 5].map((i) => (
                   <CarouselItem key={i} className="basis-1/3">
                     <div className="rounded-xl border bg-card h-52" />
