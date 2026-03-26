@@ -3,6 +3,8 @@ import Logo from '@/components/assets/Logo';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
 import { categories } from '@/lib/categories';
+// API 연결 예정
+// import { useGetCategories } from '@/hooks/queries/categories/useGetCategories';
 import { useEffect } from "react";
 import HeaderAuthSection from '@/layouts/header/HeaderAuthSection';
 import SupportFloatingButton from '@/components/actions/SupportFloatingButton';
@@ -37,6 +39,7 @@ export default function GlobalLayout() {
         </div>
 
         {/* 하단 줄: 카테고리 */}
+        {/* API 연결 예정: const { data: categories = [] } = useGetCategories(); */}
         <div className="border-t">
           <nav className="mx-auto w-full max-w-6xl px-4 h-12 flex items-center gap-10">
             {categories.map((category) => (
