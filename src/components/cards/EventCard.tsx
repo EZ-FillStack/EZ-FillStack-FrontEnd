@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { cn } from '@/lib/utils.ts';
 import BookmarkButton from '@/components/actions/BookmarkButton';
 import type { EventType } from '@/types/event';
+import { MapPin } from 'lucide-react';
 
 type EventCardProps = Pick<
     EventType,
@@ -73,20 +74,14 @@ const EventCard = ({
               />
             )}
           </div>
-          {size === 'md' && (
-              <div className="mt-3 space-y-2">
-                <div className="mt-2 text-xs text-muted-foreground">{placeName}</div>
+          <div className="mt-3 space-y-2">
+            {placeName && <div className="mt-2 text-xs text-muted-foreground flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /><span>{placeName}</span></div> }
+          {size != 'lg' && (
                 <div className="mt-0.5 text-xs text-muted-foreground">
                   신청 {currentParticipants} / {capacity}명
                 </div>
-              </div>
           )}
-          {size === 'sm' && (
-              <div className="mt-3 space-y-2">
-                <div className="h-2 w-24 bg-gray-200 rounded" />
-                <div className="h-2 w-32 bg-gray-200 rounded" />
-              </div>
-          )}
+          </div>
         </div>
       </article>
     </Link>
