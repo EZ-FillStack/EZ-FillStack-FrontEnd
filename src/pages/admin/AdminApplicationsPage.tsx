@@ -4,7 +4,7 @@ import { CalendarDays, User } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 
-type ApplicationStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
+type ApplicationStatus = 'PENDING' | 'APPROVED' | 'FAILED' | 'CANCELLED';
 
 type ApplicationRow = {
   id: number;
@@ -34,7 +34,7 @@ const rows: ApplicationRow[] = [
     experienceTitle: '가죽 공예 원데이',
     applicantNickname: 'user03',
     eventStartDateTime: '2026.03.25 15:00',
-    status: 'REJECTED',
+    status: 'FAILED',
   },
   {
     id: 4,
@@ -70,7 +70,10 @@ export default function AdminApplicationsPage() {
               className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="min-w-0 flex-1 space-y-2">
-                <div className="font-medium text-slate-900">{row.experienceTitle}</div>
+                <div className="font-medium text-slate-900 flex gap-1">
+                  {row.experienceTitle}
+                  <MyStatusBadge status={row.status} />
+                </div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-700">
                   <span className="flex items-center gap-1.5">
                     <User size={15} className="text-slate-500" />
@@ -83,7 +86,6 @@ export default function AdminApplicationsPage() {
                 </div>
               </div>
               <div className="flex shrink-0 flex-wrap items-center gap-2">
-                <MyStatusBadge status={row.status} />
                 <Button type="button" variant="outline" size="sm" className="h-8 text-xs">
                   상세
                 </Button>
