@@ -148,7 +148,7 @@ export default function MainPage() {
                     <EventCard
                       id={i}
                       title={`체험 ${i}`}
-                      thumbnailUrl="/placeholder.png"
+                      thumbnailUrl={`https://picsum.photos/seed/experience${i}/250/160`}
                       placeName="서울 강남"
                       eventStartDateTime="2026-03-10"
                       applyEndDateTime="2026-03-09"
@@ -224,7 +224,7 @@ export default function MainPage() {
                     <EventCard
                         id={i}
                         title={`체험 ${i}`}
-                        thumbnailUrl="/placeholder.png"
+                        thumbnailUrl={`https://picsum.photos/seed/experience${i}/250/160`}
                         placeName="서울 강남"
                         eventStartDateTime="2026-04-28"
                         applyEndDateTime="2027-03-09"

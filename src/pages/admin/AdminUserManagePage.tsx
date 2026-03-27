@@ -3,12 +3,12 @@ import { Button } from '@/components/ui/button';
 import Pagination from '@/components/nav/Pagination';
 import UserStatusBadge from '@/components/badge/UserStatusBadge';
 import type { AdminUserOutletContext } from '@/layouts/AdminLayout';
-import { Search, User } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
 
 // 한 페이지당 행 개수입니다.
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 3;
 
 function formatDate(iso: string) {
     return iso?.slice(0, 10) ?? '-';
@@ -79,14 +79,19 @@ export default function AdminUserManagePage() {
                             className="flex flex-col gap-4 px-4 py-4"
                         >
                             <div className="min-w-0 flex-1 space-y-2">
-                                <div className="font-bold text-slate-900 flex gap-1">
-                                    <User size={15} className="text-slate-500" />
-                                    {row.nickname}
-                                    <span className="text-gray-400 font-light">@{row.username}</span>
+                                <div className="flex items-end gap-1.5">
+                                    <div>
+                                        {row.profileImageUrl && <img src={row.profileImageUrl} alt="프로필 이미지" className="w-10 h-10 rounded-full"/> }
+                                    </div>
+                                    <div className="font-bold text-slate-900 flex gap-1">
+                                        {row.nickname}
+                                        <span className="text-gray-400 font-light">@{row.username}</span>
+                                    </div>
                                     <UserStatusBadge status={row.status} />
                                 </div>
                                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-700">
                                     <span className="flex items-center gap-1.5">
+                                        여기에 뭘 적을 필요가 있을까요?
                                     </span>
                                 </div>
                             </div>
