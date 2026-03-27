@@ -79,7 +79,7 @@ export default function SearchPage() {
             currentParticipants={event.currentParticipants ?? 0}
             size="sm"
             badgeType="default"
-            linkTo="experiences"
+            linkTo="events"
           />
         ))}
       </div>

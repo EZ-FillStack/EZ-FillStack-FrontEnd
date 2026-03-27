@@ -14,7 +14,7 @@ export default function ReviewCard({
 }: ReviewCardProps) {
   return (
     <button type="button" onClick={onClick} className="block w-full text-left">
-      <div className="h-36 rounded-xl border bg-card p-4 transition hover:bg-muted/50">
+      <div className="h-36 rounded-xl border p-4 transition hover:brightness-95 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
         <div className="line-clamp-1 text-sm font-semibold text-slate-900">
           {title}
         </div>

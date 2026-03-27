@@ -14,7 +14,7 @@ type EventCardProps = Pick<
   isBookmarked?: boolean;
   size?: 'sm' | 'md' | 'lg';
   badgeType?: 'default' | 'upcoming';
-  linkTo?: 'experiences';
+  linkTo?: 'events';
 };
 
 const EventCard = ({
@@ -30,7 +30,7 @@ const EventCard = ({
   isBookmarked,
   size,
   badgeType,
-  linkTo = 'experiences',
+  linkTo = 'events',
 }: EventCardProps) => {
   return (
     <Link to={`/${linkTo}/${id}`} className="block">

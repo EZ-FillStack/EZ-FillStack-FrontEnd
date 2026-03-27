@@ -6,6 +6,7 @@ import { categories } from '@/lib/categories';
 import { useState, useCallback } from 'react';
 // 무한 스크롤
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+// import { useGetEvents } from '@/hooks/queries/events/useGetEvents';
 
 // item은 우선 예시입니다
 const items:EventType[] = [
@@ -52,6 +53,9 @@ export default function CategoryPage() {
 
   const categoryName =
     categories.find((c) => c.id === cid)?.label ?? '카테고리';
+
+  // API 연결 시 아래 주석 해제 후 목업 데이터 대신 data 사용
+  // const { data: lists = [] } = useGetEvents({ categoryId: cid });
 
   // 무한 스크롤 적용 상태
   const [lists, setLists] = useState(items);
@@ -113,7 +117,7 @@ export default function CategoryPage() {
             currentParticipants={0}
             size="sm"
             badgeType="default"
-            linkTo="experiences"
+            linkTo="events"
           />
         ))}
       </div>
