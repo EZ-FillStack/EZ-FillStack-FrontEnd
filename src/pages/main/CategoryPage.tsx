@@ -14,30 +14,35 @@ const items:EventType[] = [
     title: '체험 1',
     status: 'OPEN',
     applyEndDateTime: '2026-03-10T23:59:00',
+    thumbnailUrl: 'https://picsum.photos/seed/experience01/250/160',
   },
   {
     id: 2,
     title: '체험 2',
     status: 'OPEN',
     applyEndDateTime: '2026-03-06T10:00:00',
+    thumbnailUrl: 'https://picsum.photos/seed/experience02/250/160',
   },
   {
     id: 3,
     title: '체험 3',
     status: 'CLOSED',
     applyEndDateTime: '2026-03-01T23:59:00',
+    thumbnailUrl: 'https://picsum.photos/seed/experience03/250/160',
   },
   {
     id: 4,
     title: '체험 4',
     status: 'OPEN',
     applyEndDateTime: '2026-03-20T23:59:00',
+    thumbnailUrl: 'https://picsum.photos/seed/experience04/250/160',
   },
   {
     id: 5,
     title: '체험 5',
     status: 'OPEN',
     applyEndDateTime: '2026-03-30T23:59:00',
+    thumbnailUrl: 'https://picsum.photos/seed/experience05/250/160',
   },
 ];
 
@@ -65,6 +70,7 @@ export default function CategoryPage() {
       title: `체험 ${nextId + i}`,
       status: 'CLOSED',
       applyEndDateTime: '2026-04-30T23:59:59',
+      thumbnailUrl: `https://picsum.photos/seed/experience${nextId + i}/250/160`,
     }));
     setLists((prev) => [...prev, ...newItem]);
     // 100개까지 쭉 늘려봄
@@ -98,7 +104,7 @@ export default function CategoryPage() {
             key={event.id}
             id={event.id}
             title={event.title}
-            thumbnailUrl="/placeholder.png"
+            thumbnailUrl={event.thumbnailUrl || ''}
             placeName="강남"
             eventStartDateTime=""
             applyEndDateTime={event.applyEndDateTime || '1990-01-01'}

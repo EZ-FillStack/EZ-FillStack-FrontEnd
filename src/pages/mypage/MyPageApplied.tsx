@@ -28,6 +28,7 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 강남구',
     status: 'APPROVED',
     hasReview: false,
+    thumbnailUrl: 'https://picsum.photos/seed/experience01/160/110',
   },
   {
     id: 2,
@@ -37,6 +38,7 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 종로구',
     status: 'COMPLETED',
     hasReview: true,
+    thumbnailUrl: 'https://picsum.photos/seed/experience02/160/110',
   },
   {
     id: 3,
@@ -46,6 +48,7 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 마포구',
     status: 'PENDING',
     hasReview: true,
+    thumbnailUrl: 'https://picsum.photos/seed/experience03/160/110',
   },
   {
     id: 4,
@@ -55,6 +58,7 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 성동구',
     status: 'FAILED',
     hasReview: false,
+    thumbnailUrl: 'https://picsum.photos/seed/experience04/160/110',
   },
   {
     id: 5,
@@ -64,6 +68,7 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 용산구',
     status: 'COMPLETED',
     hasReview: false,
+    thumbnailUrl: 'https://picsum.photos/seed/experience05/160/110',
   },
   {
     id: 6,
@@ -73,6 +78,7 @@ const appliedExperiences: AppliedExperience[] = [
     placeName: '서울시 서대문구',
     status: 'APPROVED',
     hasReview: true,
+    thumbnailUrl: 'https://picsum.photos/seed/experience06/160/110',
   },
 ];
 
@@ -221,8 +227,8 @@ export default function MyPageApplied() {
             <div className="flex items-start justify-between gap-4">
               <div className="flex gap-4">
                 {/* 썸네일 */}
-                <div className="flex h-28 w-40 shrink-0 items-center justify-center rounded-md bg-slate-300 text-sm text-slate-600">
-                  이미지
+                <div className="flex h-28 w-40 shrink-0 items-center justify-center rounded-md bg-slate-300 text-sm text-slate-600 overflow-hidden">
+                  {item.thumbnailUrl && <img src={item.thumbnailUrl} alt="행사 이미지"/>}
                 </div>
 
                 {/* 정보 */}
