@@ -14,3 +14,8 @@ export async function getUpcomingEvents() {
   });
   return response.data;
 }
+
+export async function getMyApplications() {
+  const response = await clientAPI.get<EventType[]>('/me/applications');
+  return response.data;
+}

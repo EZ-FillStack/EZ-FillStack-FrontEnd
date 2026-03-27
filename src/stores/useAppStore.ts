@@ -11,6 +11,7 @@ type User = {
   email?: string;
   phone?: string;
   profileImageUrl?: string;
+  loginType?: 'LOCAL' | 'GOOGLE' | 'KAKAO' | 'NAVER';
 };
 
 // AppState type 정의
@@ -47,11 +48,14 @@ const useAppStore = create<AppState>()(
 
       setError: (message) => set({ error: message }),
 
-      logout: () =>
+      logout: () => {
+        localStorage.removeItem('accessToken');
+        sessionStorage.removeItem('accessToken');
         set({
           user: null,
           isAuthenticated: false,
-        }),
+        });
+      },
     }),
     { name: 'E.GO project' },
   ),

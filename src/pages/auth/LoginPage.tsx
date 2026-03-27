@@ -8,6 +8,7 @@ import googleLogo from '@/assets/google.svg';
 import kakaoLogo from '@/assets/kakaotalk.svg';
 import naverLogo from '@/assets/naver.svg';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import { generateErrorMessage } from '@/lib/error';
 import { useLoginWithPassword } from '@/hooks/mutations/auth/useLoginWithPassword';
@@ -43,18 +44,26 @@ function validateLoginForm(email: string, password: string) {
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [autoLogin, setAutoLogin] = useState(false);
+  const navigate = useNavigate();
 
   const { mutate: loginWithPassword, isPending: isLoginWithPasswordPending } =
-    useLoginWithPassword({
-      onError: (error) => {
-        const message = generateErrorMessage(error);
+    useLoginWithPassword(
+      {
+        onSuccess: () => {
+          navigate('/', { replace: true });
+        },
+        onError: (error) => {
+          const message = generateErrorMessage(error);
 
-        toast.error(message, {
-          position: 'top-center',
-        });
-        setPassword('');
+          toast.error(message, {
+            position: 'top-center',
+          });
+          setPassword('');
+        },
       },
-    });
+      autoLogin,
+    );
 
   const handleLoginWithOAuth = (provider: 'google' | 'kakao' | 'naver') => {
     loginWithOAuth(provider);
@@ -118,7 +127,10 @@ export default function LoginPage() {
 
             <div className="flex items-center justify-between text-sm">
               <label className="flex items-center gap-2">
-                <Checkbox />
+                <Checkbox
+                  checked={autoLogin}
+                  onCheckedChange={(checked) => setAutoLogin(checked === true)}
+                />
                 <span className="text-muted-foreground">자동로그인</span>
               </label>
 

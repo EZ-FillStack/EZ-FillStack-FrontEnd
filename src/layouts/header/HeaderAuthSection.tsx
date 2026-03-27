@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import useAppStore from '@/stores/useAppStore';
@@ -18,14 +18,24 @@ export default function HeaderAuthSection() {
   // 프로필 작업하기 위해 임시로 넣어둠
 
   const logout = useAppStore((state) => state.logout);
+  const navigate = useNavigate();
 
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  // 실제 store 연결 (API 연결 후 주석 해제)
+  // const user = useAppStore((state) => state.user);
+  // const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+
+  // 목업 데이터 (API 연결 전 UI 확인용)
   const user = {
     id: 1,
     username: 'kang',
     nickname: '강이',
     profileImageUrl: '',
   };
-
   const isAuthenticated = true;
 
   if (isAuthenticated && user) {
@@ -65,7 +75,7 @@ export default function HeaderAuthSection() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
-              onClick={logout}
+              onClick={handleLogout}
               className="cursor-pointer rounded-md text-red-600 focus:text-red-600"
             >
               로그아웃
