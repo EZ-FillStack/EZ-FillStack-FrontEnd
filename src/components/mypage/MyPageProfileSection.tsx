@@ -1,9 +1,13 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import useAppStore from '@/stores/useAppStore';
 import defaultAvatar from '@/assets/default-avatar.png';
+import { useMyApplications } from '@/hooks/queries/events/useMyApplications';
+import { useMyBookmarks } from '@/hooks/queries/useMyBookmarks';
 
 export default function MyPageProfileSection() {
   const user = useAppStore((state) => state.user);
+  const { data: applications } = useMyApplications();
+  const { data: bookmarks } = useMyBookmarks();
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white px-6 py-6">
@@ -25,8 +29,8 @@ export default function MyPageProfileSection() {
             {user?.nickname || user?.username || '사용자'}
           </div>
           <div className="mt-1 flex items-center gap-6 text-sm text-slate-700">
-            <span>신청한 체험 3</span>
-            <span>관심 체험 12</span>
+            <span>신청한 체험 {applications?.length ?? '-'}</span>
+            <span>관심 체험 {bookmarks?.length ?? '-'}</span>
           </div>
         </div>
       </div>

@@ -31,6 +31,7 @@ export default function MyPageAccount() {
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
 
   const logout = useAppStore((state) => state.logout);
+  const user = useAppStore((state) => state.user);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -148,14 +149,16 @@ export default function MyPageAccount() {
           <h3 className="text-lg font-semibold text-slate-900">계정 설정</h3>
 
           <div className="mt-5 flex flex-wrap gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              className="text-slate-700"
-              onClick={() => setIsChangePasswordOpen(true)}
-            >
-              비밀번호 변경
-            </Button>
+            {user?.loginType === 'LOCAL' && (
+              <Button
+                type="button"
+                variant="outline"
+                className="text-slate-700"
+                onClick={() => setIsChangePasswordOpen(true)}
+              >
+                비밀번호 변경
+              </Button>
+            )}
             <Button
               type="button"
               variant="outline"

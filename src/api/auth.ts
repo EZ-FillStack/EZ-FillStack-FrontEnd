@@ -42,7 +42,7 @@ type ChangePasswordRequest = {
 };
 
 export async function changePassword(data: ChangePasswordRequest) {
-  const response = await clientAPI.patch('/users/password', data);
+  const response = await clientAPI.patch('/users/me/password', data);
   return response.data;
 }
 

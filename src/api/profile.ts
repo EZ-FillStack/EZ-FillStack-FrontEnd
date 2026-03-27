@@ -6,14 +6,22 @@ export type UpdateProfileParams = {
   profileImageUrl?: string;
 };
 
-export type UpdateProfileResponse = {
+export type ProfileResponse = {
   id: number;
   username: string;
   nickname: string;
   email?: string;
   phone?: string;
   profileImageUrl?: string;
+  loginType?: 'LOCAL' | 'GOOGLE' | 'KAKAO' | 'NAVER';
 };
+
+export type UpdateProfileResponse = ProfileResponse;
+
+export async function getMyProfile() {
+  const response = await clientAPI.get<ProfileResponse>('/users/me');
+  return response.data;
+}
 
 export async function updateProfile({
   nickname,
@@ -21,7 +29,7 @@ export async function updateProfile({
   profileImageUrl,
 }: UpdateProfileParams) {
   const response = await clientAPI.patch<UpdateProfileResponse>(
-    '/users/me',
+    '/users/me/profile',
     {
       nickname,
       phone,
