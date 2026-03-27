@@ -17,6 +17,7 @@ const likedExperiences: EventType[] = [
     eventStartDateTime: '2026.03.15 14:00',
     placeName: '서울시 강남구',
     status: 'OPEN',
+    thumbnailUrl: 'https://picsum.photos/seed/experience01/160/110',
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ const likedExperiences: EventType[] = [
     eventStartDateTime: '2026.03.20 10:00',
     placeName: '서울시 종로구',
     status: 'UPCOMING',
+    thumbnailUrl: 'https://picsum.photos/seed/experience02/160/110',
   },
   {
     id: 3,
@@ -31,6 +33,7 @@ const likedExperiences: EventType[] = [
     eventStartDateTime: '2026.03.25 15:00',
     placeName: '서울시 마포구',
     status: 'CLOSED',
+    thumbnailUrl: 'https://picsum.photos/seed/experience03/160/110',
   },
   {
     id: 4,
@@ -38,6 +41,7 @@ const likedExperiences: EventType[] = [
     eventStartDateTime: '2026.04.01 13:00',
     placeName: '서울시 성동구',
     status: 'OPEN',
+    thumbnailUrl: 'https://picsum.photos/seed/experience04/160/110',
   },
   {
     id: 5,
@@ -45,6 +49,7 @@ const likedExperiences: EventType[] = [
     eventStartDateTime: '2026.04.05 10:00',
     placeName: '서울시 용산구',
     status: 'UPCOMING',
+    thumbnailUrl: 'https://picsum.photos/seed/experience05/160/110',
   },
   {
     id: 6,
@@ -52,6 +57,7 @@ const likedExperiences: EventType[] = [
     eventStartDateTime: '2026.04.10 14:00',
     placeName: '서울시 서대문구',
     status: 'OPEN',
+    thumbnailUrl: 'https://picsum.photos/seed/experience06/160/110',
   },
 ];
 
@@ -120,8 +126,8 @@ export default function MyPageLiked() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex gap-4">
                     {/* 썸네일 */}
-                    <div className="flex h-28 w-40 shrink-0 items-center justify-center rounded-md bg-slate-300 text-sm text-slate-600">
-                      이미지
+                    <div className="flex h-28 w-40 shrink-0 items-center justify-center rounded-md bg-slate-300 text-sm text-slate-600 overflow-hidden">
+                      {item.thumbnailUrl && <img src={item.thumbnailUrl} alt="행사 이미지"/>}
                     </div>
 
                     {/* 정보 */}
