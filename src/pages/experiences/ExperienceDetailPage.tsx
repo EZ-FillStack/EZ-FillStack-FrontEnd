@@ -5,6 +5,8 @@ import { CalendarDays, Users } from 'lucide-react';
 import KakaoMap from '@/components/map/KakaoMap';
 import { toast } from 'sonner';
 import type { EventStatus } from '@/types/event';
+// import { useParams } from 'react-router';
+// import { useGetEventDetail } from '@/hooks/queries/events/useGetEventDetail';
 
 // API 연결 후 다시 타입 적용
 // type EventDetailContentProps = {
@@ -80,6 +82,10 @@ const EventImageHero = ({ imageUrl }: { imageUrl?: string }) => {
 };
 
 export default function ExperienceDetailPage() {
+  // API 연결 시 아래 주석 해제 후 mockEvent 대신 data 사용
+  // const { id } = useParams();
+  // const { data } = useGetEventDetail(Number(id));
+
   const {
     title,
     status,
