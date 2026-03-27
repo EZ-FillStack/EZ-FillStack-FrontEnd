@@ -1,6 +1,8 @@
 import { Link, useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, MapPin, Search, X } from 'lucide-react';
+import { useCancelApplication } from '@/hooks/mutations/events/useCancelApplication';
+// import { useMyApplications } from '@/hooks/queries/events/useMyApplications';
 // 페이지네이션
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
@@ -115,9 +117,11 @@ function withinDays(iso: string, days: number) {
 
 export default function MyPageApplied() {
   const [searchParams, setSearchParams] = useSearchParams();
+  // const { data: items = [] } = useMyApplications();
   const [items, setItems] = useState(appliedExperiences);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+  const { mutate: cancelApplicationMutate } = useCancelApplication();
 
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
   const keyword = searchParams.get('keyword') ?? '';
@@ -282,14 +286,25 @@ export default function MyPageApplied() {
                 >
                   <X className="h-4 w-4" />
                 </Button>
-                <Link to={`/experiences/${item.id}`}>
-                  <Button
-                    type="button"
-                    className="h-8 px-3 text-xs bg-gray-600 hover:bg-gray-800 text-white"
-                  >
-                    상세보기
-                  </Button>
-                </Link>
+                <div className="flex flex-col gap-1">
+                  <Link to={`/events/${item.id}`}>
+                    <Button
+                      type="button"
+                      className="h-8 w-full px-3 text-xs bg-gray-600 hover:bg-gray-800 text-white"
+                    >
+                      상세보기
+                    </Button>
+                  </Link>
+                  {item.status !== 'COMPLETED' && (
+                    <Button
+                      type="button"
+                      className="h-8 w-full px-3 text-xs bg-slate-300 hover:bg-slate-400 text-slate-700"
+                      onClick={() => cancelApplicationMutate(item.id)}
+                    >
+                      신청 취소
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </article>

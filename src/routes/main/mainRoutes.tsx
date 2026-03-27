@@ -15,7 +15,7 @@ export const mainRoutes: RouteObject = {
     { path: '/search', element: <SearchPage /> },
     { path: '/categories/:categoryId', element: <CategoryPage /> },
     { path: '/events', element: <EventPage /> },
-    { path: '/experiences/:id', element: <ExperienceDetailPage /> },
+    { path: '/events/:id', element: <ExperienceDetailPage /> },
     { path: '/reviews', element: <ReviewPage /> },
   ],
 };
