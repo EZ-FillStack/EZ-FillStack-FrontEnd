@@ -134,7 +134,7 @@ export default function LoginPage() {
               </label>
 
               <Link
-                to="/forget-password"
+                to="/forgot-password"
                 className="text-muted-foreground hover:text-foreground underline-offset-4 hover:underline"
               >
                 비밀번호 찾기
