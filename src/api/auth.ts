@@ -46,6 +46,22 @@ export async function changePassword(data: ChangePasswordRequest) {
   return response.data;
 }
 
+export async function forgotPassword({ email }: { email: string }) {
+  const { data } = await clientAPI.post('/auth/forgot-password', { email });
+  return data;
+}
+
+export async function resetPassword({
+  token,
+  newPassword,
+}: {
+  token: string;
+  newPassword: string;
+}) {
+  const { data } = await clientAPI.post('/auth/reset-password', { token, newPassword });
+  return data;
+}
+
 export function loginWithOAuth(provider: 'google' | 'naver') {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   window.location.href = `${baseUrl}/oauth2/authorization/${provider}`;

@@ -1,10 +1,41 @@
+import { useState } from 'react';
+import { toast } from 'sonner';
 import Logo from '@/components/assets/Logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Link } from 'react-router';
+import { useForgotPasswordMutation } from '@/hooks/mutations/auth/useForgotPassword';
+import { generateErrorMessage } from '@/lib/error';
 
-export default function ForgetPasswordPage() {
+export default function ForgotPasswordPage() {
+  const [email, setEmail] = useState('');
+  const { mutate: forgotPassword, isPending } = useForgotPasswordMutation();
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (email.trim() === '') {
+      toast.error('이메일을 입력해주세요.', { position: 'top-center' });
+      return;
+    }
+
+    forgotPassword(
+      { email: email.trim() },
+      {
+        onSuccess: () => {
+          toast.success('인증 메일이 발송되었습니다. 이메일을 확인해주세요.', {
+            position: 'top-center',
+          });
+        },
+        onError: (error) => {
+          const message = generateErrorMessage(error);
+          toast.error(message, { position: 'top-center' });
+        },
+      },
+    );
+  };
+
   return (
     <div className="w-full max-w-xl">
       <div className="rounded-2xl border-2 border-border/80 bg-card p-6 shadow-md">
@@ -29,19 +60,21 @@ export default function ForgetPasswordPage() {
               </p>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <Input
-                id="email"
                 type="email"
                 placeholder="example@email.com"
                 autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isPending}
                 className="h-11"
               />
-            </div>
 
-            <Button type="button" className="w-full h-11">
-              인증 메일 요청하기
-            </Button>
+              <Button type="submit" disabled={isPending} className="w-full h-11">
+                {isPending ? '발송 중...' : '인증 메일 요청하기'}
+              </Button>
+            </form>
 
             <div className="pt-2">
               <Separator />
