@@ -46,7 +46,7 @@ export async function changePassword(data: ChangePasswordRequest) {
   return response.data;
 }
 
-export function loginWithOAuth(provider: 'google' | 'kakao' | 'naver') {
+export function loginWithOAuth(provider: 'google' | 'naver') {
   const baseUrl = import.meta.env.VITE_API_BASE_URL;
   window.location.href = `${baseUrl}/oauth2/authorization/${provider}`;
 }

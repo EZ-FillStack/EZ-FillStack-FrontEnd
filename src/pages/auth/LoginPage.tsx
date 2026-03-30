@@ -5,7 +5,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import Logo from '@/components/assets/Logo';
 import googleLogo from '@/assets/google.svg';
-import kakaoLogo from '@/assets/kakaotalk.svg';
 import naverLogo from '@/assets/naver.svg';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -65,7 +64,7 @@ export default function LoginPage() {
       autoLogin,
     );
 
-  const handleLoginWithOAuth = (provider: 'google' | 'kakao' | 'naver') => {
+  const handleLoginWithOAuth = (provider: 'google' | 'naver') => {
     loginWithOAuth(provider);
   };
 
@@ -160,13 +159,13 @@ export default function LoginPage() {
               SNS 계정으로 시작하기
             </p>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <Button
                 onClick={() => handleLoginWithOAuth('google')}
                 disabled={isLoginWithPasswordPending}
                 type="button"
                 variant="outline"
-                className="h-11 justify-center border-2 border-blue-300"
+                className="h-11 justify-center border-2 border-blue-400"
               >
                 <img
                   src={googleLogo}
@@ -174,17 +173,6 @@ export default function LoginPage() {
                   className="h-4 w-4 shrink-0"
                 />
                 구글
-              </Button>
-
-              <Button
-                onClick={() => handleLoginWithOAuth('kakao')}
-                disabled={isLoginWithPasswordPending}
-                type="button"
-                variant="outline"
-                className="h-11 justify-center border-2 border-yellow-300"
-              >
-                <img src={kakaoLogo} alt="kakao" className="h-4 w-4 shrink-0" />
-                카톡
               </Button>
 
               <Button
