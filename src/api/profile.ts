@@ -48,8 +48,8 @@ export async function uploadProfileImage(file: File) {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await clientAPI.post<UploadProfileImageResponse>(
-    '/images/profile',
+  const response = await clientAPI.patch<UploadProfileImageResponse>(
+    '/users/me/profile-image',
     formData,
   );
 
