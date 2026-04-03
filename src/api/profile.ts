@@ -4,7 +4,6 @@ import { resolvePublicImageUrl } from '@/api/images';
 export type UpdateProfileParams = {
   nickname: string;
   phone?: string;
-  profileImageUrl?: string;
 };
 
 export type ProfileResponse = {
@@ -24,19 +23,25 @@ export async function getMyProfile() {
   return response.data;
 }
 
-export async function updateProfile({
-  nickname,
-  phone,
-  profileImageUrl,
-}: UpdateProfileParams) {
+// PATCH /users/me/profile — 닉네임·전화만 (이미지와는 PATCH가 달라 분리)
+export async function updateProfile({ nickname, phone }: UpdateProfileParams) {
   const response = await clientAPI.patch<UpdateProfileResponse>(
     '/users/me/profile',
     {
       nickname,
       phone,
-      ...(profileImageUrl !== undefined && {
-        profile_image_url: profileImageUrl,
-      }),
+    },
+  );
+
+  return response.data;
+}
+
+// PATCH /users/me/profile-image : 업로드 이후 반환된 이미지 URL 반영
+export async function patchProfileImage(profileImageUrl: string) {
+  const response = await clientAPI.patch<UpdateProfileResponse>(
+    '/users/me/profile-image',
+    {
+      profile_image_url: profileImageUrl,
     },
   );
 
@@ -45,6 +50,7 @@ export async function updateProfile({
 
 export type UploadProfileImageResponse = Record<string, unknown>;
 
+// POST /api/images/upload : 파일만 보내고 응답에서 URL 추출 후 profile-image PATCH로 연결
 export async function uploadProfileImage(file: File) {
   const formData = new FormData();
   formData.append('file', file);
