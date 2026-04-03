@@ -14,7 +14,8 @@ import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import defaultAvatar from '@/assets/default-avatar.png';
 import { useProfileEditorModal } from '@/stores/useProfileEditorModalStore';
 import { useUpdateProfileMutation } from '@/hooks/mutations/profile/useUpdateProfile';
-import { uploadProfileImage } from '@/api/profile';
+import type { ProfileResponse } from '@/api/profile';
+import { patchProfileImage, uploadProfileImage } from '@/api/profile';
 
 type SelectedImage = {
   file: File;
@@ -45,22 +46,8 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
   );
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutate: updateProfileMutate, isPending } = useUpdateProfileMutation({
-    onSuccess: (updatedUser) => {
-      setUser(updatedUser);
-
-      toast.success('프로필이 수정되었습니다.', {
-        position: 'top-center',
-      });
-      onClose();
-    },
-    onError: (error) => {
-      console.error(error);
-      toast.error('프로필 수정에 실패했습니다.', {
-        position: 'top-center',
-      });
-    },
-  });
+  const { mutateAsync: updateProfileAsync, isPending } =
+    useUpdateProfileMutation();
 
   useEffect(() => {
     return () => {
@@ -111,21 +98,35 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
       return;
     }
 
+    // PATCH가 달라서 분리: 이미지는 /users/me/profile-image, 닉네임·전화는 /users/me/profile
+    const metaChanged =
+      trimmedNickname !== user.nickname || trimmedPhone !== user.phone;
+
     try {
-      let nextProfileImageUrl = user.profileImageUrl;
+      let latestUser: ProfileResponse | undefined;
 
       if (selectedImage) {
-        nextProfileImageUrl = await uploadProfileImage(selectedImage.file);
+        const url = await uploadProfileImage(selectedImage.file);
+        latestUser = await patchProfileImage(url);
       }
 
-      updateProfileMutate({
-        nickname: trimmedNickname,
-        phone: trimmedPhone,
-        profileImageUrl: nextProfileImageUrl,
-      });
+      if (metaChanged) {
+        latestUser = await updateProfileAsync({
+          nickname: trimmedNickname,
+          phone: trimmedPhone,
+        });
+      }
+
+      if (latestUser) {
+        setUser(latestUser);
+        toast.success('프로필이 수정되었습니다.', {
+          position: 'top-center',
+        });
+        onClose();
+      }
     } catch (error) {
       console.error(error);
-      toast.error('이미지 업로드에 실패했습니다.', {
+      toast.error('프로필 수정에 실패했습니다.', {
         position: 'top-center',
       });
     }
