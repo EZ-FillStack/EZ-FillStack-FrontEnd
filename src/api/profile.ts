@@ -1,4 +1,5 @@
 import clientAPI from '@/lib/axios';
+import { resolvePublicImageUrl } from '@/api/images';
 
 export type UpdateProfileParams = {
   nickname: string;
@@ -33,25 +34,25 @@ export async function updateProfile({
     {
       nickname,
       phone,
-      profileImageUrl,
+      ...(profileImageUrl !== undefined && {
+        profile_image_url: profileImageUrl,
+      }),
     },
   );
 
   return response.data;
 }
 
-export type UploadProfileImageResponse = {
-  profileImageUrl: string;
-};
+export type UploadProfileImageResponse = Record<string, unknown>;
 
 export async function uploadProfileImage(file: File) {
   const formData = new FormData();
   formData.append('file', file);
 
-  const response = await clientAPI.patch<UploadProfileImageResponse>(
-    '/users/me/profile-image',
+  const response = await clientAPI.post<UploadProfileImageResponse>(
+    '/api/images/upload',
     formData,
   );
 
-  return response.data.profileImageUrl;
+  return resolvePublicImageUrl(response.data);
 }
