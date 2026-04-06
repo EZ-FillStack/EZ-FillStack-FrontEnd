@@ -8,6 +8,7 @@ import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import BookmarkButton from '@/components/actions/BookmarkButton';
 import type { EventType } from '@/types/event';
 import { Input } from '@/components/ui/input';
+import { PAGE_SIZE } from '@/lib/pagination';
 
 // 예시
 const likedExperiences: EventType[] = [
@@ -60,9 +61,6 @@ const likedExperiences: EventType[] = [
     thumbnailUrl: 'https://picsum.photos/seed/experience06/160/110',
   },
 ];
-
-// API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
-const PAGE_SIZE = 2; // API 연결 시 수정합니다.
 
 function normalizeKeyword(value: string) {
   return value.trim().toLowerCase();

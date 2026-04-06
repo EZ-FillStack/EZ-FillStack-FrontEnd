@@ -1,24 +1,40 @@
+import { useState } from 'react';
 import { useOutletContext, useSearchParams } from 'react-router';
+import { toast } from 'sonner';
+import { generateErrorMessage } from '@/lib/error';
 import { Button } from '@/components/ui/button';
 import { MapPin, Users } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import type { AdminExperiencesOutletContext } from '@/layouts/AdminLayout';
-
-// 한 페이지당 행 개수입니다.
-const PAGE_SIZE = 2;
+import { deleteAdminEvent } from '@/api/admin';
+import { PAGE_SIZE } from '@/lib/pagination';
 
 export default function AdminExperienceManagePage() {
-  const { experiences, setExperiences } =
+  const { experiences, refetchExperiences } =
     useOutletContext<AdminExperiencesOutletContext>();
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
   const TOTAL_PAGES = Math.max(1, Math.ceil(experiences.length / PAGE_SIZE));
   const paginatedItems = experiences.slice(
     (page - 1) * PAGE_SIZE,
     page * PAGE_SIZE,
   );
+
+  const handleDelete = async (eventId: number) => {
+    setDeletingId(eventId);
+    try {
+      await deleteAdminEvent(eventId);
+      toast.success('삭제되었습니다.');
+      await refetchExperiences();
+    } catch (err) {
+      toast.error(generateErrorMessage(err, 'adminEventDelete'));
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   return (
     <div>
@@ -36,8 +52,8 @@ export default function AdminExperienceManagePage() {
             >
               <div className="min-w-0 flex-1 space-y-2">
                 <div className="font-medium text-slate-900 flex gap-1">
-                    {row.title}
-                    <MyStatusBadge status={row.status} />
+                  {row.title}
+                  <MyStatusBadge status={row.status ?? 'OPEN'} />
                 </div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-700">
                   <span className="flex items-center gap-1.5">
@@ -46,7 +62,7 @@ export default function AdminExperienceManagePage() {
                   </span>
                   <span className="flex items-center gap-1.5">
                     <Users size={15} className="text-slate-500" />
-                    신청 {row.currentParticipants} / {row.capacity}명
+                    신청 {row.currentParticipants ?? 0} / {row.capacity ?? 0}명
                   </span>
                 </div>
               </div>
@@ -59,11 +75,10 @@ export default function AdminExperienceManagePage() {
                   variant="outline"
                   size="sm"
                   className="h-8 text-xs"
-                  onClick={() =>
-                    setExperiences((prev) => prev.filter((x) => x.id !== row.id))
-                  }
+                  disabled={deletingId === row.id}
+                  onClick={() => handleDelete(row.id)}
                 >
-                  삭제
+                  {deletingId === row.id ? '삭제 중...' : '삭제'}
                 </Button>
               </div>
             </div>

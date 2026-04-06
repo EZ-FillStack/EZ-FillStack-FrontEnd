@@ -1,9 +1,12 @@
 // 고객센터 문의 플로팅 버튼입니다.
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import useAppStore from '@/stores/useAppStore';
+import { createInquiry } from '@/api/inquiry';
+import { generateErrorMessage } from '@/lib/error';
 import {
   Dialog,
   DialogContent,
@@ -30,11 +33,14 @@ export default function SupportFloatingButton({
   className,
   hidden,
 }: SupportFloatingButtonProps) {
+  const navigate = useNavigate();
   const user = useAppStore((s) => s.user);
+  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [replyEmail, setReplyEmail] = useState('');
   const [content, setContent] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const reset = () => {
     setTitle('');
@@ -46,14 +52,20 @@ export default function SupportFloatingButton({
     if (!next) {
       reset();
     } else {
-      // 로그인 시 전역 User 이메일을 답변 받을 주소 기본값으로
       setReplyEmail(user?.email?.trim() ?? '');
     }
     setOpen(next);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isAuthenticated) {
+      toast.error('로그인이 필요합니다.');
+      setOpen(false);
+      navigate('/login');
+      return;
+    }
 
     if (!title.trim()) {
       toast.error('제목을 입력해주세요.');
@@ -72,9 +84,21 @@ export default function SupportFloatingButton({
       return;
     }
 
-    toast.success('문의가 접수되었습니다.');
-    reset();
-    setOpen(false);
+    setSubmitting(true);
+    try {
+      // 답변 이메일은 UI·검증만 유지. 백엔드 스펙 확정 후 createInquiry 바디에 포함 예정.
+      await createInquiry({
+        title: title.trim(),
+        content: content.trim(),
+      });
+      toast.success('문의가 접수되었습니다.');
+      reset();
+      setOpen(false);
+    } catch (err) {
+      toast.error(generateErrorMessage(err, 'supportInquiry'));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   if (hidden) return null;
@@ -102,7 +126,7 @@ export default function SupportFloatingButton({
             고객센터 문의
           </DialogTitle>
           <DialogDescription className="text-sm text-muted-foreground">
-            문의를 남겨주시면 답변을 이메일로 보내드립니다.
+            문의를 남겨주시면 답변을 이메일로 보내드립니다. (로그인이 필요합니다.)
           </DialogDescription>
         </DialogHeader>
 
@@ -156,8 +180,12 @@ export default function SupportFloatingButton({
               >
                 닫기
               </Button>
-              <Button type="submit" className="bg-gray-600 text-white hover:bg-gray-800">
-                보내기
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="bg-gray-600 text-white hover:bg-gray-800"
+              >
+                {submitting ? '전송 중...' : '보내기'}
               </Button>
             </div>
           </form>
