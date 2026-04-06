@@ -40,3 +40,8 @@ export async function cancelApplication(eventId: number) {
   const response = await clientAPI.delete(`/events/applications/${eventId}`);
   return response.data;
 }
+
+export async function applyToEvent(eventId: number) {
+  const response = await clientAPI.post(`/events/${eventId}/applications`);
+  return response.data;
+}
