@@ -9,6 +9,7 @@ import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import { useEffect, useState } from 'react';
 import ReviewWriteModal from '@/components/review/ReviewWriteModal';
 import { Input } from '@/components/ui/input';
+import { PAGE_SIZE } from '@/lib/pagination';
 
 type AppliedExperience = {
   id: number;
@@ -143,8 +144,6 @@ export default function MyPageApplied() {
     return keywordOk && periodOk;
   });
 
-  // API 응답: { page: { page, size, totalPages, hasNext } } / size는 API 요청 시 사용
-  const PAGE_SIZE = 2; // API 연결 시 수정합니다.
   const TOTAL_PAGES = Math.max(1, Math.ceil(filteredItems.length / PAGE_SIZE));
 
   const safePage = Math.min(page, TOTAL_PAGES);
