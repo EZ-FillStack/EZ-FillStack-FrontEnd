@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useOutletContext } from 'react-router';
+import { toast } from 'sonner';
+import { generateErrorMessage } from '@/lib/error';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import type { EventType } from '@/types/event';
 import type { AdminExperiencesOutletContext } from '@/layouts/AdminLayout';
+import { createAdminEvent } from '@/api/admin';
 
 function localDateTimeToIso(value: string): string {
   if (!value.trim()) return '';
@@ -13,7 +15,7 @@ function localDateTimeToIso(value: string): string {
 }
 
 export default function AdminExperienceRegisterPage() {
-  const { experiences, setExperiences } =
+  const { refetchExperiences } =
     useOutletContext<AdminExperiencesOutletContext>();
 
   const [title, setTitle] = useState('');
@@ -25,45 +27,61 @@ export default function AdminExperienceRegisterPage() {
   const [applyStartDateTime, setApplyStartDateTime] = useState('');
   const [applyEndDateTime, setApplyEndDateTime] = useState('');
   const [description, setDescription] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const cap = Number(capacity) || 0;
-    const nextId =
-      experiences.length > 0 ? Math.max(...experiences.map((i) => i.id)) + 1 : 1;
-    const now = new Date().toISOString();
-    const newItem: EventType = {
-      id: nextId,
-      version: 0,
-      title: title.trim() || '(제목 없음)',
-      thumbnailUrl: thumbnailUrl.trim(),
-      description: description.trim(),
-      address: '',
-      placeName: placeName.trim() || '-',
-      eventStartDateTime: localDateTimeToIso(eventStartDateTime),
-      eventEndDateTime: localDateTimeToIso(eventEndDateTime),
-      applyStartDateTime: localDateTimeToIso(applyStartDateTime),
-      applyEndDateTime: localDateTimeToIso(applyEndDateTime),
-      capacity: cap,
-      currentParticipants: 0,
-      viewCount: 0,
-      status: 'OPEN',
-      categoryId: 1,
-      createdAt: now,
-      updatedAt: now,
-      deletedAt: null,
-    };
-    setExperiences((prev) => [...prev, newItem]);
+    const cap = Number(capacity);
+    const eventStart = localDateTimeToIso(eventStartDateTime);
+    const eventEnd = localDateTimeToIso(eventEndDateTime);
+    const applyStart = localDateTimeToIso(applyStartDateTime);
+    const applyEnd = localDateTimeToIso(applyEndDateTime);
 
-    setTitle('');
-    setPlaceName('');
-    setThumbnailUrl('');
-    setCapacity('');
-    setEventStartDateTime('');
-    setEventEndDateTime('');
-    setApplyStartDateTime('');
-    setApplyEndDateTime('');
-    setDescription('');
+    if (!title.trim()) {
+      toast.error('제목을 입력해 주세요.');
+      return;
+    }
+    if (!Number.isFinite(cap) || cap < 1) {
+      toast.error('정원은 1명 이상이어야 합니다.');
+      return;
+    }
+    if (!eventStart || !eventEnd || !applyStart || !applyEnd) {
+      toast.error('일시를 모두 올바르게 입력해 주세요.');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      await createAdminEvent({
+        title: title.trim(),
+        thumbnailUrl: thumbnailUrl.trim() || undefined,
+        description: description.trim() || undefined,
+        address: '',
+        placeName: placeName.trim() || '-',
+        eventStartDateTime: eventStart,
+        eventEndDateTime: eventEnd,
+        applyStartDateTime: applyStart,
+        applyEndDateTime: applyEnd,
+        capacity: cap,
+        categoryId: 1,
+      });
+      toast.success('등록되었습니다.');
+      await refetchExperiences();
+
+      setTitle('');
+      setPlaceName('');
+      setThumbnailUrl('');
+      setCapacity('');
+      setEventStartDateTime('');
+      setEventEndDateTime('');
+      setApplyStartDateTime('');
+      setApplyEndDateTime('');
+      setDescription('');
+    } catch (err) {
+      toast.error(generateErrorMessage(err, 'adminEventCreate'));
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -71,7 +89,7 @@ export default function AdminExperienceRegisterPage() {
       <h1 className="text-xl font-semibold text-slate-900">체험 등록</h1>
       <p className="mt-1 text-sm text-muted-foreground">
         새 체험을 등록합니다. 등록된 항목은 &quot;체험 관리&quot; 메뉴에서 확인할 수
-        있습니다.
+        있습니다. (카테고리는 현재 기본값 1로 전송됩니다.)
       </p>
 
       <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5">
@@ -181,8 +199,12 @@ export default function AdminExperienceRegisterPage() {
               className="resize-y"
             />
           </div>
-          <Button type="submit" className="bg-gray-600 text-white hover:bg-gray-800">
-            등록하기
+          <Button
+            type="submit"
+            disabled={submitting}
+            className="bg-gray-600 text-white hover:bg-gray-800"
+          >
+            {submitting ? '등록 중...' : '등록하기'}
           </Button>
         </form>
       </div>

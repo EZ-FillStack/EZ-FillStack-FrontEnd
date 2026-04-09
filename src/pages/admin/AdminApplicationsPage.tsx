@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { CalendarDays, User } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
+import { PAGE_SIZE } from '@/lib/pagination';
 
 type ApplicationStatus = 'PENDING' | 'APPROVED' | 'FAILED' | 'CANCELLED';
 
@@ -45,9 +46,7 @@ const rows: ApplicationRow[] = [
   },
 ];
 
-// 한 페이지당 행 개수입니다.
-const PAGE_SIZE = 2;
-const TOTAL_PAGES = Math.ceil(rows.length / PAGE_SIZE);
+const TOTAL_PAGES = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
 
 export default function AdminApplicationsPage() {
   const [searchParams, setSearchParams] = useSearchParams();
