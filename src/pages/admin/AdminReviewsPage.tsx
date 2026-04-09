@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import Pagination from '@/components/nav/Pagination';
 import type { Review } from '@/types/review';
-import { User } from "lucide-react";
+import { User } from 'lucide-react';
+import { PAGE_SIZE } from '@/lib/pagination';
 
 type SortKey = 'latest' | 'oldest' | 'rating';
 
@@ -65,8 +66,6 @@ const rows: Review[] = [
     title: '천연 염색 체험',
   },
 ];
-
-const PAGE_SIZE = 2;
 
 function sortReviews(list: Review[], sort: SortKey): Review[] {
   const next = [...list];
