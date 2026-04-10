@@ -2,65 +2,13 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
 import { CalendarDays, MapPin, Search } from 'lucide-react';
-// 페이지네이션
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import BookmarkButton from '@/components/actions/BookmarkButton';
-import type { EventType } from '@/types/event';
 import { Input } from '@/components/ui/input';
 import { PAGE_SIZE } from '@/lib/pagination';
-
-// 예시
-const likedExperiences: EventType[] = [
-  {
-    id: 1,
-    title: '도자기 만들기 체험',
-    eventStartDateTime: '2026.03.15 14:00',
-    placeName: '서울시 강남구',
-    status: 'OPEN',
-    thumbnailUrl: 'https://picsum.photos/seed/experience01/160/110',
-  },
-  {
-    id: 2,
-    title: '전통 한지 공예 체험',
-    eventStartDateTime: '2026.03.20 10:00',
-    placeName: '서울시 종로구',
-    status: 'UPCOMING',
-    thumbnailUrl: 'https://picsum.photos/seed/experience02/160/110',
-  },
-  {
-    id: 3,
-    title: '가죽 공예 원데이 클래스',
-    eventStartDateTime: '2026.03.25 15:00',
-    placeName: '서울시 마포구',
-    status: 'CLOSED',
-    thumbnailUrl: 'https://picsum.photos/seed/experience03/160/110',
-  },
-  {
-    id: 4,
-    title: '천연 염색 체험',
-    eventStartDateTime: '2026.04.01 13:00',
-    placeName: '서울시 성동구',
-    status: 'OPEN',
-    thumbnailUrl: 'https://picsum.photos/seed/experience04/160/110',
-  },
-  {
-    id: 5,
-    title: '목공예 원데이 클래스',
-    eventStartDateTime: '2026.04.05 10:00',
-    placeName: '서울시 용산구',
-    status: 'UPCOMING',
-    thumbnailUrl: 'https://picsum.photos/seed/experience05/160/110',
-  },
-  {
-    id: 6,
-    title: '캔들 만들기 체험',
-    eventStartDateTime: '2026.04.10 14:00',
-    placeName: '서울시 서대문구',
-    status: 'OPEN',
-    thumbnailUrl: 'https://picsum.photos/seed/experience06/160/110',
-  },
-];
+import { useMyBookmarks } from '@/hooks/queries/useMyBookmarks';
+import { Link } from 'react-router';
 
 function normalizeKeyword(value: string) {
   return value.trim().toLowerCase();
@@ -68,6 +16,7 @@ function normalizeKeyword(value: string) {
 
 export default function MyPageLiked() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { data: items = [] } = useMyBookmarks();
 
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
   const keyword = searchParams.get('keyword') ?? '';
@@ -77,7 +26,7 @@ export default function MyPageLiked() {
     setDraftKeyword(keyword);
   }, [keyword]);
 
-  const filtered = likedExperiences.filter((x) => {
+  const filtered = items.filter((x) => {
     const kw = normalizeKeyword(keyword);
     if (!kw) return true;
     const hay = `${x.title ?? ''} ${x.placeName ?? ''}`.toLowerCase();
@@ -158,12 +107,14 @@ export default function MyPageLiked() {
                       className="bg-transparent p-1"
                     />
 
-                    <Button
-                      type="button"
-                      className="h-8 bg-gray-600 px-3 text-xs text-white hover:bg-gray-800"
-                    >
-                      상세보기
-                    </Button>
+                    <Link to={`/events/${item.id}`}>
+                      <Button
+                        type="button"
+                        className="h-8 bg-gray-600 px-3 text-xs text-white hover:bg-gray-800"
+                      >
+                        상세보기
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </article>

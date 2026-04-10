@@ -1,89 +1,14 @@
 import { Link, useSearchParams } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, MapPin, Search, X } from 'lucide-react';
+import { CalendarDays, MapPin, Search } from 'lucide-react';
 import { useCancelApplication } from '@/hooks/mutations/events/useCancelApplication';
-// import { useMyApplications } from '@/hooks/queries/events/useMyApplications';
-// 페이지네이션
+import { useMyApplications } from '@/hooks/queries/events/useMyApplications';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import { useEffect, useState } from 'react';
 import ReviewWriteModal from '@/components/review/ReviewWriteModal';
 import { Input } from '@/components/ui/input';
 import { PAGE_SIZE } from '@/lib/pagination';
-
-type AppliedExperience = {
-  id: number;
-  title: string;
-  thumbnailUrl?: string;
-  appliedAt: string; // 신청 일자(기간 필터 기준)
-  eventStartDateTime: string;
-  placeName: string;
-  status: 'PENDING' | 'APPROVED' | 'COMPLETED' | 'FAILED';
-  hasReview: boolean;
-};
-// 예시
-const appliedExperiences: AppliedExperience[] = [
-  {
-    id: 1,
-    title: '도자기 만들기 체험',
-    appliedAt: '2026-02-01T10:00:00.000Z',
-    eventStartDateTime: '2026.03.15 14:00',
-    placeName: '서울시 강남구',
-    status: 'APPROVED',
-    hasReview: false,
-    thumbnailUrl: 'https://picsum.photos/seed/experience01/160/110',
-  },
-  {
-    id: 2,
-    title: '전통 한지 공예 체험',
-    appliedAt: '2026-02-10T09:20:00.000Z',
-    eventStartDateTime: '2026.03.20 10:00',
-    placeName: '서울시 종로구',
-    status: 'COMPLETED',
-    hasReview: true,
-    thumbnailUrl: 'https://picsum.photos/seed/experience02/160/110',
-  },
-  {
-    id: 3,
-    title: '가죽 공예 원데이 클래스',
-    appliedAt: '2026-02-15T12:00:00.000Z',
-    eventStartDateTime: '2026.03.25 15:00',
-    placeName: '서울시 마포구',
-    status: 'PENDING',
-    hasReview: true,
-    thumbnailUrl: 'https://picsum.photos/seed/experience03/160/110',
-  },
-  {
-    id: 4,
-    title: '천연 염색 체험',
-    appliedAt: '2026-01-28T11:00:00.000Z',
-    eventStartDateTime: '2026.04.01 13:00',
-    placeName: '서울시 성동구',
-    status: 'FAILED',
-    hasReview: false,
-    thumbnailUrl: 'https://picsum.photos/seed/experience04/160/110',
-  },
-  {
-    id: 5,
-    title: '목공예 원데이 클래스',
-    appliedAt: '2026-02-05T14:00:00.000Z',
-    eventStartDateTime: '2026.04.05 10:00',
-    placeName: '서울시 용산구',
-    status: 'COMPLETED',
-    hasReview: false,
-    thumbnailUrl: 'https://picsum.photos/seed/experience05/160/110',
-  },
-  {
-    id: 6,
-    title: '캔들 만들기 체험',
-    appliedAt: '2026-02-20T10:00:00.000Z',
-    eventStartDateTime: '2026.04.10 14:00',
-    placeName: '서울시 서대문구',
-    status: 'APPROVED',
-    hasReview: true,
-    thumbnailUrl: 'https://picsum.photos/seed/experience06/160/110',
-  },
-];
 
 type PeriodKey = '7d' | '15d' | '1m' | '2m' | '3m' | 'all';
 
@@ -118,8 +43,7 @@ function withinDays(iso: string, days: number) {
 
 export default function MyPageApplied() {
   const [searchParams, setSearchParams] = useSearchParams();
-  // const { data: items = [] } = useMyApplications();
-  const [items, setItems] = useState(appliedExperiences);
+  const { data: items = [] } = useMyApplications();
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
   const { mutate: cancelApplicationMutate } = useCancelApplication();
@@ -159,9 +83,6 @@ export default function MyPageApplied() {
     }
   };
 
-  const handleDelete = (id: number) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
   return (
     <div>
       <div className="text-xl font-semibold text-slate-900">
@@ -275,16 +196,6 @@ export default function MyPageApplied() {
 
               {/* 우측 버튼 영역 */}
               <div className="flex items-start gap-2 pt-1">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  aria-label="삭제"
-                  onClick={() => handleDelete(item.id)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
                 <div className="flex flex-col gap-1">
                   <Link to={`/events/${item.id}`}>
                     <Button

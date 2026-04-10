@@ -11,21 +11,6 @@ import { useDeleteUserMutation } from '@/hooks/mutations/auth/useDeleteUser';
 import ChangePasswordModal from '@/components/profile/ChangePasswordModal';
 import { useState } from 'react';
 
-type MyAccount = {
-  username: string;
-  nickname?: string;
-  email?: string;
-  phone?: string;
-  profileImageUrl?: string;
-};
-
-const myAccount: MyAccount = {
-  username: '홍길동',
-  nickname: '길동이',
-  email: 'gildong@example.com',
-  phone: '010-1234-5678',
-};
-
 export default function MyPageAccount() {
   const openProfileEditorModal = useOpenProfileEditorModal();
   const [isChangePasswordOpen, setIsChangePasswordOpen] = useState(false);
@@ -80,18 +65,18 @@ export default function MyPageAccount() {
             <div className="flex items-center gap-5">
               <Avatar className="h-24 w-24 shrink-0">
                 <AvatarImage
-                  src={myAccount.profileImageUrl || defaultAvatar}
-                  alt={myAccount.nickname || myAccount.username || 'user'}
+                  src={user?.profileImageUrl || defaultAvatar}
+                  alt={user?.nickname || user?.username || 'user'}
                   className="object-cover"
                 />
               </Avatar>
 
               <div>
                 <div className="text-xl font-semibold text-slate-900">
-                  {myAccount.nickname || myAccount.username}
+                  {user?.nickname || user?.username}
                 </div>
                 <div className="mt-1 text-sm text-slate-500">
-                  {myAccount.email}
+                  {user?.email}
                 </div>
               </div>
             </div>
@@ -105,9 +90,9 @@ export default function MyPageAccount() {
             </Button>
             <ProfileEditorModal
               user={{
-                username: myAccount.username,
-                nickname: myAccount.nickname || '',
-                profileImageUrl: myAccount.profileImageUrl,
+                username: user?.username ?? '',
+                nickname: user?.nickname ?? '',
+                profileImageUrl: user?.profileImageUrl,
               }}
             />
           </div>
@@ -121,25 +106,25 @@ export default function MyPageAccount() {
             <div className="flex items-center gap-3 text-sm text-slate-700">
               <User className="h-4 w-4 text-slate-500" />
               <span className="w-20 shrink-0 text-slate-500">이름</span>
-              <span>{myAccount.username}</span>
+              <span>{user?.username}</span>
             </div>
 
             <div className="flex items-center gap-3 text-sm text-slate-700">
               <User className="h-4 w-4 text-slate-500" />
               <span className="w-20 shrink-0 text-slate-500">닉네임</span>
-              <span>{myAccount.nickname || '-'}</span>
+              <span>{user?.nickname || '-'}</span>
             </div>
 
             <div className="flex items-center gap-3 text-sm text-slate-700">
               <Mail className="h-4 w-4 text-slate-500" />
               <span className="w-20 shrink-0 text-slate-500">이메일</span>
-              <span>{myAccount.email || '-'}</span>
+              <span>{user?.email || '-'}</span>
             </div>
 
             <div className="flex items-center gap-3 text-sm text-slate-700">
               <Phone className="h-4 w-4 text-slate-500" />
               <span className="w-20 shrink-0 text-slate-500">전화번호</span>
-              <span>{myAccount.phone || '-'}</span>
+              <span>{user?.phone || '-'}</span>
             </div>
           </div>
         </section>
