@@ -11,7 +11,11 @@ export async function removeBookmark(eventId: number) {
   return response.data;
 }
 
+type EventPage = { content: EventType[]; [key: string]: unknown };
+
 export async function getMyBookmarks() {
-  const response = await clientAPI.get<EventType[]>('/users/me/bookmarks');
-  return response.data;
+  const response = await clientAPI.get<EventType[] | EventPage>('/users/me/bookmarks');
+  const data = response.data;
+  if (Array.isArray(data)) return data;
+  return (data.content as EventType[]) ?? [];
 }
