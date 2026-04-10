@@ -12,11 +12,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export default function HeaderAuthSection() {
-  // const user = useAppStore((state) => state.user);
-  // const isAuthenticated = useAppStore((state) => state.isAuthenticated);
-
-  // 프로필 작업하기 위해 임시로 넣어둠
-
+  const user = useAppStore((state) => state.user);
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
   const logout = useAppStore((state) => state.logout);
   const navigate = useNavigate();
 
@@ -24,19 +21,6 @@ export default function HeaderAuthSection() {
     logout();
     navigate('/');
   };
-
-  // 실제 store 연결 (API 연결 후 주석 해제)
-  // const user = useAppStore((state) => state.user);
-  // const isAuthenticated = useAppStore((state) => state.isAuthenticated);
-
-  // 목업 데이터 (API 연결 전 UI 확인용)
-  const user = {
-    id: 1,
-    username: 'kang',
-    nickname: '강이',
-    profileImageUrl: '',
-  };
-  const isAuthenticated = true;
 
   if (isAuthenticated && user) {
     return (

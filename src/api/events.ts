@@ -1,22 +1,46 @@
 import clientAPI from '@/lib/axios';
 import type { EventType } from '@/types/event';
 
+type EventPage = {
+  content: EventType[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+};
+
+function extractList(data: EventType[] | EventPage): EventType[] {
+  if (Array.isArray(data)) return data;
+  return data.content ?? [];
+}
+
 export async function getPopularEvents() {
-  const response = await clientAPI.get<EventType[]>('/events', {
+  const response = await clientAPI.get<EventType[] | EventPage>('/events', {
     params: { sort: 'popular' },
   });
-  return response.data;
+  return extractList(response.data);
 }
 
 export async function getUpcomingEvents() {
-  const response = await clientAPI.get<EventType[]>('/events', {
+  const response = await clientAPI.get<EventType[] | EventPage>('/events', {
     params: { status: 'upcoming' },
   });
-  return response.data;
+  return extractList(response.data);
 }
 
+export type ApplicationType = {
+  id: number;
+  title: string;
+  thumbnailUrl?: string;
+  appliedAt: string;
+  eventStartDateTime: string;
+  placeName: string;
+  status: 'PENDING' | 'APPROVED' | 'COMPLETED' | 'FAILED';
+  hasReview: boolean;
+};
+
 export async function getMyApplications() {
-  const response = await clientAPI.get<EventType[]>('/me/applications');
+  const response = await clientAPI.get<ApplicationType[]>('/me/applications');
   return response.data;
 }
 
@@ -27,8 +51,8 @@ export async function getEvents(params?: {
   page?: number;
   size?: number;
 }) {
-  const response = await clientAPI.get<EventType[]>('/events', { params });
-  return response.data;
+  const response = await clientAPI.get<EventType[] | EventPage>('/events', { params });
+  return extractList(response.data);
 }
 
 export async function getEventDetail(eventId: number) {
