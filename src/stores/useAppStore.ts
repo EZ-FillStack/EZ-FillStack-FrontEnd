@@ -12,6 +12,7 @@ type User = {
   phone?: string;
   profileImageUrl?: string;
   loginType?: 'LOCAL' | 'GOOGLE' | 'KAKAO' | 'NAVER';
+  role: string;
 };
 
 // AppState type 정의
@@ -20,7 +21,8 @@ type AppState = {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
-
+  authLoading: boolean; //admin 인증에 따른 authLoading 추가
+  setAuthLoading: (v: boolean) => void;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -36,7 +38,8 @@ const useAppStore = create<AppState>()(
       isAuthenticated: false,
       loading: false,
       error: null,
-
+      authLoading: true,
+      setAuthLoading: (v) => set({ authLoading: v }),
       //!!으로 truthy / falsy를 boolean으로 반환
       setUser: (user) =>
         set({
