@@ -14,6 +14,7 @@ export type ProfileResponse = {
   phone?: string;
   profileImageUrl?: string;
   loginType?: 'LOCAL' | 'GOOGLE' | 'KAKAO' | 'NAVER';
+  role: string;
 };
 
 export type UpdateProfileResponse = ProfileResponse;
