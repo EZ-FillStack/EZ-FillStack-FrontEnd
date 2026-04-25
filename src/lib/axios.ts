@@ -12,16 +12,14 @@ const clientAPI = axios.create({
 });
 
 clientAPI.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-
+  const token =
+      localStorage.getItem('accessToken') ?? sessionStorage.getItem('accessToken');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-
   if (config.data instanceof FormData) {
     delete config.headers['Content-Type'];
   }
-
   return config;
 });
 

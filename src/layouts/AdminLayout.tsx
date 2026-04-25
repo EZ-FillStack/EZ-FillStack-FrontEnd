@@ -1,11 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { Link, Outlet } from 'react-router';
+import { Link, Outlet, Navigate } from 'react-router';
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import type { EventType } from '@/types/event';
 import type { Users } from '@/types/users';
 import { getEvents } from '@/api/events';
 import { getAdminUsers, type AdminUserResponse } from '@/api/admin';
 import { generateErrorMessage } from '@/lib/error';
+import useAppStore from '@/stores/useAppStore';
+import FullPageLoader from "@/components/feedback/FullPageLoader.tsx";
+
 
 export type AdminExperiencesOutletContext = {
   experiences: EventType[];
@@ -37,6 +40,7 @@ function mapAdminUser(u: AdminUserResponse): AdminUserListRow {
 }
 
 export default function AdminLayout() {
+  const { user, isAuthenticated, authLoading } = useAppStore();
   const eventsQuery = useQuery({
     queryKey: ['adminEvents'],
     queryFn: () => getEvents({ page: 0, size: 500 }),
@@ -54,6 +58,20 @@ export default function AdminLayout() {
   const users = usersQuery.data ?? [];
   const refetchExperiences = eventsQuery.refetch;
   const refetchUsers = usersQuery.refetch;
+
+
+
+  if (authLoading) {
+    return <FullPageLoader />;
+  }
+
+  if (!isAuthenticated) { //로그인하지 않았을 경우
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user?.role !== 'ROLE_ADMIN') {
+    return <Navigate to="/" replace />;
+  }
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 text-sm">
