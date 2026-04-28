@@ -7,10 +7,20 @@ import { MapPin } from 'lucide-react';
 
 type EventCardProps = Pick<
     EventType,
-    'id' | 'title' | 'thumbnailUrl' | 'placeName' | 'eventStartDateTime' | 'applyEndDateTime' | 'capacity' | 'currentParticipants' | 'status'
+    'id'
+    | 'title'
+    | 'thumbnailUrl'
+    | 'placeName'
+    | 'eventStartDateTime'
+    | 'applyStartDateTime'
+    | 'applyEndDateTime'
+    | 'capacity'
+    | 'currentParticipants'
+    | 'status'
 > & {
   thumbnailUrl: string;
   applyEndDateTime: string;
+  applyStartDateTime?: string;
   isBookmarked?: boolean;
   size?: 'sm' | 'md' | 'lg';
   badgeType?: 'default' | 'upcoming';
@@ -23,6 +33,7 @@ const EventCard = ({
   thumbnailUrl,
   placeName,
   eventStartDateTime,
+  applyStartDateTime,
   applyEndDateTime,
   status,
   capacity,
@@ -63,14 +74,16 @@ const EventCard = ({
             {badgeType === 'default' && (
               <EventStatusBadge
                 status={status}
+                applyStartDateTime={applyStartDateTime}
                 applyEndDateTime={applyEndDateTime}
               />
             )}
             {badgeType === 'upcoming' && (
               <EventStatusBadge
                 status={status}
+                applyStartDateTime={applyStartDateTime}
                 applyEndDateTime={applyEndDateTime}
-                eventStartDateTime={eventStartDateTime}
+                eventStartDateTime={eventStartDateTime} // fallback
               />
             )}
           </div>

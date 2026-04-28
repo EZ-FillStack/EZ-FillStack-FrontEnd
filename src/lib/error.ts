@@ -13,6 +13,7 @@ export type ErrorMessageContext =
   | 'adminInquiries'
   | 'inquiryAnswer'
   | 'adminEventCreate'
+  | 'adminEventUpdate'
   | 'adminEventDelete'
   | 'adminUserDelete'
   | 'supportInquiry';
@@ -24,6 +25,7 @@ const CONTEXT_FALLBACK: Record<ErrorMessageContext, string> = {
   adminInquiries: '문의 목록을 불러오지 못했습니다.',
   inquiryAnswer: '답변을 등록하지 못했습니다.',
   adminEventCreate: '행사를 등록하지 못했습니다.',
+  adminEventUpdate: '행사를 수정하지 못했습니다.',
   adminEventDelete: '행사를 삭제하지 못했습니다.',
   adminUserDelete: '회원 처리에 실패했습니다.',
   supportInquiry: '문의를 접수하지 못했습니다.',

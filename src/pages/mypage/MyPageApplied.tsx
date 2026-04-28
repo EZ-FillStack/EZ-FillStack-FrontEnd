@@ -59,7 +59,7 @@ export default function MyPageApplied() {
 
   const filteredItems = items.filter((x) => {
     const kw = normalizeKeyword(keyword);
-    const hay = `${x.title}`.toLowerCase();
+    const hay = `${x.eventTitle}`.toLowerCase();
     const keywordOk = kw ? hay.includes(kw) : true;
 
     const days = periodToDays(period);
@@ -145,7 +145,7 @@ export default function MyPageApplied() {
       <div className="mt-6 space-y-4">
         {paginatedItems.map((item) => (
           <article
-            key={item.id}
+            key={item.eventId}
             className="rounded-2xl border border-slate-200 bg-white px-4 py-4"
           >
             <div className="flex items-start justify-between gap-4">
@@ -157,7 +157,7 @@ export default function MyPageApplied() {
 
                 {/* 정보 */}
                 <div className="pt-1">
-                  <div className="text-lg font-medium">{item.title}</div>
+                  <div className="text-lg font-medium">{item.eventTitle}</div>
 
                   <div className="mt-3 space-y-2 text-sm text-slate-700">
                     <div className="flex items-center gap-2">
@@ -174,7 +174,7 @@ export default function MyPageApplied() {
                   <div className="mt-3 flex items-center gap-2">
                     <MyStatusBadge status={item.status} size="lg" />
 
-                    {item.status === 'COMPLETED' &&
+                    {item.status === 'APPROVED' &&
                       (item.hasReview ? (
                         <span className="text-xs text-slate-400">
                           리뷰 작성 완료
@@ -183,7 +183,7 @@ export default function MyPageApplied() {
                         <Button
                           size="sm"
                           onClick={() => {
-                            setSelectedEventId(item.id);
+                            setSelectedEventId(item.eventId);
                             setIsReviewModalOpen(true);
                           }}
                         >
@@ -197,7 +197,7 @@ export default function MyPageApplied() {
               {/* 우측 버튼 영역 */}
               <div className="flex items-start gap-2 pt-1">
                 <div className="flex flex-col gap-1">
-                  <Link to={`/events/${item.id}`}>
+                  <Link to={`/events/${item.eventId}`}>
                     <Button
                       type="button"
                       className="h-8 w-full px-3 text-xs bg-gray-600 hover:bg-gray-800 text-white"
@@ -205,11 +205,11 @@ export default function MyPageApplied() {
                       상세보기
                     </Button>
                   </Link>
-                  {item.status !== 'COMPLETED' && (
+                  {(item.status === 'PENDING' || item.status === 'APPROVED') && (
                     <Button
                       type="button"
                       className="h-8 w-full px-3 text-xs bg-slate-300 hover:bg-slate-400 text-slate-700"
-                      onClick={() => cancelApplicationMutate(item.id)}
+                      onClick={() => cancelApplicationMutate(item.eventId)}
                     >
                       신청 취소
                     </Button>
