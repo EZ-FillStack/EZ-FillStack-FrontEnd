@@ -8,6 +8,9 @@ type MyStatusBadgeProps = {
     | 'FAILED'
     /** 관리자 신청/예약 목록 등 */
     | 'CANCELLED'
+    /** 백엔드 ApplicationStatus */
+    | 'CANCELED'
+    | 'REJECTED'
     | 'UPCOMING'
     | 'OPEN'
     | 'CLOSED'
@@ -63,6 +66,18 @@ const MyStatusBadge = ({ status, size = 'default' }: MyStatusBadgeProps) => {
       return (
         <Badge variant="default" size={size}>
           취소
+        </Badge>
+      );
+    case 'CANCELED':
+      return (
+        <Badge variant="default" size={size}>
+          취소
+        </Badge>
+      );
+    case 'REJECTED':
+      return (
+        <Badge variant="fail" size={size}>
+          거절
         </Badge>
       );
     case 'PENDING':
