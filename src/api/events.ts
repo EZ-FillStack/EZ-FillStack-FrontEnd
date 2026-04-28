@@ -29,14 +29,15 @@ export async function getUpcomingEvents() {
 }
 
 export type ApplicationType = {
-  id: number;
-  title: string;
-  thumbnailUrl?: string;
+  applicationId: number;
+  eventId: number;
+  eventTitle: string;
+  status: 'PENDING' | 'APPROVED' | 'CANCELED' | 'REJECTED';
   appliedAt: string;
-  eventStartDateTime: string;
   placeName: string;
-  status: 'PENDING' | 'APPROVED' | 'COMPLETED' | 'FAILED';
   hasReview: boolean;
+  thumbnailUrl?: string;
+  eventStartDateTime?: string;
 };
 
 export async function getMyApplications() {

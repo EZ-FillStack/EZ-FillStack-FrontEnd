@@ -41,6 +41,7 @@ export default function CategoryPage() {
             thumbnailUrl={event.thumbnailUrl || ''}
             placeName={event.placeName || ''}
             eventStartDateTime={event.eventStartDateTime || ''}
+            applyStartDateTime={event.applyStartDateTime || ''}
             applyEndDateTime={event.applyEndDateTime || '1990-01-01'}
             status={event.status}
             capacity={event.capacity || 0}

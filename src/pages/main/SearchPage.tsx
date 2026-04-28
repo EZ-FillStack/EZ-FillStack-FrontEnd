@@ -54,6 +54,7 @@ export default function SearchPage() {
             thumbnailUrl={event.thumbnailUrl ?? '/placeholder.png'}
             placeName={event.placeName ?? '-'}
             eventStartDateTime={event.eventStartDateTime ?? ''}
+            applyStartDateTime={event.applyStartDateTime ?? ''}
             applyEndDateTime={event.applyEndDateTime ?? ''}
             status={event.status ?? 'OPEN'}
             capacity={event.capacity ?? 0}

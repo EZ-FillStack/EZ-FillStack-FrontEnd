@@ -39,6 +39,25 @@ export async function createAdminEvent(body: AdminEventCreateBody) {
   return response.data;
 }
 
+export type AdminEventUpdateBody = {
+  title?: string;
+  thumbnailUrl?: string;
+  description?: string;
+  address?: string;
+  placeName?: string;
+  eventStartDateTime?: string;
+  eventEndDateTime?: string;
+  applyStartDateTime?: string;
+  applyEndDateTime?: string;
+  capacity?: number;
+  categoryId?: number;
+};
+
+export async function updateAdminEvent(eventId: number, body: AdminEventUpdateBody) {
+  const response = await clientAPI.patch(`/admin/events/${eventId}`, body);
+  return response.data;
+}
+
 export async function deleteAdminEvent(eventId: number) {
   await clientAPI.delete(`/admin/events/${eventId}`);
 }
