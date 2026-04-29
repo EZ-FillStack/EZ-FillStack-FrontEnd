@@ -11,13 +11,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { uploadAdapterPlugin } from '@/lib/ckeditor/uploadAdapter';
 import {getExternalEventDetail, getExternalEvents, type KopisEventDto} from '@/api/kopis.ts';
-
-
-function localDateTimeToIso(value: string): string {
-  if (!value.trim()) return '';
-  const d = new Date(value);
-  return Number.isNaN(d.getTime()) ? '' : d.toISOString();
-}
+import { fromDatetimeLocalInput } from '@/lib/datetime';
 
 export default function AdminExperienceRegisterPage() {
   const { refetchExperiences } =
@@ -89,10 +83,10 @@ export default function AdminExperienceRegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const cap = Number(capacity);
-    const eventStart = localDateTimeToIso(eventStartDateTime);
-    const eventEnd = localDateTimeToIso(eventEndDateTime);
-    const applyStart = localDateTimeToIso(applyStartDateTime);
-    const applyEnd = localDateTimeToIso(applyEndDateTime);
+    const eventStart = fromDatetimeLocalInput(eventStartDateTime);
+    const eventEnd = fromDatetimeLocalInput(eventEndDateTime);
+    const applyStart = fromDatetimeLocalInput(applyStartDateTime);
+    const applyEnd = fromDatetimeLocalInput(applyEndDateTime);
 
     if (!title.trim()) {
       toast.error('제목을 입력해 주세요.');

@@ -1,6 +1,6 @@
 import clientAPI from '@/lib/axios';
 
-/** 백엔드 `UserResponse` */
+// UserResponse
 export type AdminUserResponse = {
   id: number;
   email: string;
@@ -10,7 +10,7 @@ export type AdminUserResponse = {
   role: string;
 };
 
-/** 백엔드 `EventCreateRequest` */
+// EventCreateRequest
 export type AdminEventCreateBody = {
   title: string;
   thumbnailUrl?: string;
@@ -60,4 +60,21 @@ export async function updateAdminEvent(eventId: number, body: AdminEventUpdateBo
 
 export async function deleteAdminEvent(eventId: number) {
   await clientAPI.delete(`/admin/events/${eventId}`);
+}
+
+export type AdminApplicationResponse = {
+  id: number;
+  eventId: number;
+  eventTitle: string;
+  userId: number;
+  userNickname: string;
+  userEmail: string;
+  status: 'PENDING' | 'APPROVED' | 'CANCELED' | 'REJECTED';
+  appliedAt: string;
+  message?: string;
+};
+
+export async function getAdminApplications(){
+  const response = await clientAPI.get<AdminApplicationResponse[]>('/admin/applications');
+  return response.data;
 }

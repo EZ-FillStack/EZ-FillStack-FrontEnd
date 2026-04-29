@@ -4,55 +4,22 @@ import { CalendarDays, User } from 'lucide-react';
 import Pagination from '@/components/nav/Pagination';
 import MyStatusBadge from '@/components/badge/MyStatusBadge';
 import { PAGE_SIZE } from '@/lib/pagination';
+import { getAdminApplications, type AdminApplicationResponse } from '@/api/admin';
+import { useQuery } from '@tanstack/react-query';
 
-type ApplicationStatus = 'PENDING' | 'APPROVED' | 'FAILED' | 'CANCELLED';
-
-type ApplicationRow = {
-  id: number;
-  experienceTitle: string;
-  applicantNickname: string;
-  eventStartDateTime: string;
-  status: ApplicationStatus;
-};
-
-const rows: ApplicationRow[] = [
-  {
-    id: 1,
-    experienceTitle: '도자기 만들기 체험',
-    applicantNickname: 'user01',
-    eventStartDateTime: '2026.03.15 14:00',
-    status: 'PENDING',
-  },
-  {
-    id: 2,
-    experienceTitle: '전통 한지 공예 체험',
-    applicantNickname: 'user02',
-    eventStartDateTime: '2026.03.20 10:00',
-    status: 'APPROVED',
-  },
-  {
-    id: 3,
-    experienceTitle: '가죽 공예 원데이',
-    applicantNickname: 'user03',
-    eventStartDateTime: '2026.03.25 15:00',
-    status: 'FAILED',
-  },
-  {
-    id: 4,
-    experienceTitle: '천연 염색 체험',
-    applicantNickname: 'user04',
-    eventStartDateTime: '2026.04.01 13:00',
-    status: 'CANCELLED',
-  },
-];
-
-const TOTAL_PAGES = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
 
 export default function AdminApplicationsPage() {
+    const { data: items = [] } = useQuery<AdminApplicationResponse[]>({
+        queryKey: ['adminApplications'],
+        queryFn: getAdminApplications,
+    });
+
+  const TOTAL_PAGES = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+
   const [searchParams, setSearchParams] = useSearchParams();
   const page = Math.max(1, Number(searchParams.get('page')) || 1);
 
-  const paginatedItems = rows.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const paginatedItems = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
     <div>
@@ -63,24 +30,24 @@ export default function AdminApplicationsPage() {
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white">
         <div className="divide-y divide-slate-200">
-          {paginatedItems.map((row) => (
+          {paginatedItems.map((item) => (
             <div
-              key={row.id}
+              key={item.id}
               className="flex flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="min-w-0 flex-1 space-y-2">
                 <div className="font-medium text-slate-900 flex gap-1">
-                  {row.experienceTitle}
-                  <MyStatusBadge status={row.status} />
+                  {item.eventTitle}
+                  <MyStatusBadge status={item.status} />
                 </div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-slate-700">
                   <span className="flex items-center gap-1.5">
                     <User size={15} className="text-slate-500" />
-                    {row.applicantNickname}
+                    {item.userNickname}
                   </span>
                   <span className="flex items-center gap-1.5">
                     <CalendarDays size={15} className="text-slate-500" />
-                    {row.eventStartDateTime}
+                    {item.appliedAt}
                   </span>
                 </div>
               </div>
