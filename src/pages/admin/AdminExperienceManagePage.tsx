@@ -15,6 +15,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { uploadAdapterPlugin } from '@/lib/ckeditor/uploadAdapter';
 import type { EventType } from '@/types/event';
+import { fromDatetimeLocalInput, toDatetimeLocalInput } from '@/lib/datetime';
 
 export default function AdminExperienceManagePage() {
   const { experiences, refetchExperiences } =
@@ -43,19 +44,7 @@ export default function AdminExperienceManagePage() {
     page * PAGE_SIZE,
   );
 
-  function isoToDatetimeLocal(value?: string): string {
-    if (!value) return '';
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return '';
-    const pad = (n: number) => String(n).padStart(2, '0');
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  }
 
-  function datetimeLocalToIso(value: string): string {
-    if (!value.trim()) return '';
-    const d = new Date(value);
-    return Number.isNaN(d.getTime()) ? '' : d.toISOString();
-  }
 
   const handleDelete = async (eventId: number) => {
     setDeletingId(eventId);
@@ -77,10 +66,10 @@ export default function AdminExperienceManagePage() {
     setAddress(row.address ?? '');
     setThumbnailUrl(row.thumbnailUrl ?? '');
     setCapacity(String(row.capacity ?? ''));
-    setEventStartDateTime(isoToDatetimeLocal(row.eventStartDateTime));
-    setEventEndDateTime(isoToDatetimeLocal(row.eventEndDateTime));
-    setApplyStartDateTime(isoToDatetimeLocal(row.applyStartDateTime));
-    setApplyEndDateTime(isoToDatetimeLocal(row.applyEndDateTime));
+    setEventStartDateTime(toDatetimeLocalInput(row.eventStartDateTime));
+    setEventEndDateTime(toDatetimeLocalInput(row.eventEndDateTime));
+    setApplyStartDateTime(toDatetimeLocalInput(row.applyStartDateTime));
+    setApplyEndDateTime(toDatetimeLocalInput(row.applyEndDateTime));
     setDescription(row.description ?? '');
     setEditOpen(true);
   };
@@ -99,10 +88,10 @@ export default function AdminExperienceManagePage() {
       return;
     }
 
-    const eventStart = datetimeLocalToIso(eventStartDateTime);
-    const eventEnd = datetimeLocalToIso(eventEndDateTime);
-    const applyStart = datetimeLocalToIso(applyStartDateTime);
-    const applyEnd = datetimeLocalToIso(applyEndDateTime);
+    const eventStart = fromDatetimeLocalInput(eventStartDateTime);
+    const eventEnd = fromDatetimeLocalInput(eventEndDateTime);
+    const applyStart = fromDatetimeLocalInput(applyStartDateTime);
+    const applyEnd = fromDatetimeLocalInput(applyEndDateTime);
 
     if (!eventStart || !eventEnd || !applyStart || !applyEnd) {
       toast.error('일시를 모두 올바르게 입력해 주세요.');
@@ -142,164 +131,167 @@ export default function AdminExperienceManagePage() {
       </p>
 
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
-        <DialogContent className="sm:max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>체험 수정</DialogTitle>
-            <DialogDescription>
-              등록 폼과 동일한 양식으로 체험 정보를 수정합니다.
-            </DialogDescription>
-          </DialogHeader>
+        <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-hidden p-0">
+          <div className="overflow-y-auto max-h-[85vh] p-6">
+            <DialogHeader>
+              <DialogTitle>체험 정보 수정</DialogTitle>
+              <DialogDescription>
+                체험 정보를 수정합니다.
+              </DialogDescription>
+            </DialogHeader>
 
-          <form onSubmit={handleUpdate} className="space-y-4">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-1.5 sm:col-span-2">
-                <label htmlFor="edit-title" className="text-sm font-medium text-slate-800">
-                  제목
-                </label>
-                <Input
-                  id="edit-title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  placeholder="체험 이름"
-                />
+            <form onSubmit={handleUpdate} className="space-y-4">
+
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="space-y-1.5 sm:col-span-2">
+                  <label htmlFor="edit-title" className="text-sm font-medium text-slate-800">
+                    제목
+                  </label>
+                  <Input
+                      id="edit-title"
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
+                      placeholder="체험 이름"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="edit-place" className="text-sm font-medium text-slate-800">
+                    장소
+                  </label>
+                  <Input
+                      id="edit-place"
+                      value={placeName}
+                      onChange={(e) => setPlaceName(e.target.value)}
+                      placeholder="예: 서울시 강남구"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="edit-cap" className="text-sm font-medium text-slate-800">
+                    정원 (명)
+                  </label>
+                  <Input
+                      id="edit-cap"
+                      type="number"
+                      min={1}
+                      value={capacity}
+                      onChange={(e) => setCapacity(e.target.value)}
+                      placeholder="30"
+                  />
+                </div>
+
+                <div className="space-y-1.5 sm:col-span-2">
+                  <label htmlFor="edit-address" className="text-sm font-medium text-slate-800">
+                    주소 (지도 표시용)
+                  </label>
+                  <Input
+                      id="edit-address"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      placeholder="예: 서울특별시 중구 세종대로 110"
+                  />
+                </div>
+
+                <div className="space-y-1.5 sm:col-span-2">
+                  <label htmlFor="edit-thumb" className="text-sm font-medium text-slate-800">
+                    썸네일 URL
+                  </label>
+                  <Input
+                      id="edit-thumb"
+                      value={thumbnailUrl}
+                      onChange={(e) => setThumbnailUrl(e.target.value)}
+                      placeholder="https://..."
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="edit-start" className="text-sm font-medium text-slate-800">
+                    체험 시작 일시
+                  </label>
+                  <Input
+                      id="edit-start"
+                      type="datetime-local"
+                      value={eventStartDateTime}
+                      onChange={(e) => setEventStartDateTime(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="edit-end" className="text-sm font-medium text-slate-800">
+                    체험 종료 일시
+                  </label>
+                  <Input
+                      id="edit-end"
+                      type="datetime-local"
+                      value={eventEndDateTime}
+                      onChange={(e) => setEventEndDateTime(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="edit-apply-start" className="text-sm font-medium text-slate-800">
+                    신청 시작 일시
+                  </label>
+                  <Input
+                      id="edit-apply-start"
+                      type="datetime-local"
+                      value={applyStartDateTime}
+                      onChange={(e) => setApplyStartDateTime(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label htmlFor="edit-apply-end" className="text-sm font-medium text-slate-800">
+                    신청 마감 일시
+                  </label>
+                  <Input
+                      id="edit-apply-end"
+                      type="datetime-local"
+                      value={applyEndDateTime}
+                      onChange={(e) => setApplyEndDateTime(e.target.value)}
+                  />
+                </div>
               </div>
 
               <div className="space-y-1.5">
-                <label htmlFor="edit-place" className="text-sm font-medium text-slate-800">
-                  장소
+                <label htmlFor="edit-desc" className="text-sm font-medium text-slate-800">
+                  설명
                 </label>
-                <Input
-                  id="edit-place"
-                  value={placeName}
-                  onChange={(e) => setPlaceName(e.target.value)}
-                  placeholder="예: 서울시 강남구"
+                <CKEditor
+                    editor={ClassicEditor as any}
+                    data={description}
+                    config={{
+                      extraPlugins: [uploadAdapterPlugin],
+                    }}
+                    onChange={(_, editor) => {
+                      const data = editor.getData();
+                      setDescription(data);
+                    }}
                 />
               </div>
 
-              <div className="space-y-1.5">
-                <label htmlFor="edit-cap" className="text-sm font-medium text-slate-800">
-                  정원 (명)
-                </label>
-                <Input
-                  id="edit-cap"
-                  type="number"
-                  min={1}
-                  value={capacity}
-                  onChange={(e) => setCapacity(e.target.value)}
-                  placeholder="30"
-                />
+              <div className="flex justify-end gap-2">
+                <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs"
+                    onClick={() => setEditOpen(false)}
+                >
+                  취소
+                </Button>
+                <Button
+                    type="submit"
+                    size="sm"
+                    className="h-8 text-xs bg-gray-600 text-white hover:bg-gray-800"
+                    disabled={submitting || !editing}
+                >
+                  {submitting ? '저장 중...' : '저장'}
+                </Button>
               </div>
-
-              <div className="space-y-1.5 sm:col-span-2">
-                <label htmlFor="edit-address" className="text-sm font-medium text-slate-800">
-                  주소 (지도 표시용)
-                </label>
-                <Input
-                  id="edit-address"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="예: 서울특별시 중구 세종대로 110"
-                />
-              </div>
-
-              <div className="space-y-1.5 sm:col-span-2">
-                <label htmlFor="edit-thumb" className="text-sm font-medium text-slate-800">
-                  썸네일 URL
-                </label>
-                <Input
-                  id="edit-thumb"
-                  value={thumbnailUrl}
-                  onChange={(e) => setThumbnailUrl(e.target.value)}
-                  placeholder="https://..."
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="edit-start" className="text-sm font-medium text-slate-800">
-                  체험 시작 일시
-                </label>
-                <Input
-                  id="edit-start"
-                  type="datetime-local"
-                  value={eventStartDateTime}
-                  onChange={(e) => setEventStartDateTime(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="edit-end" className="text-sm font-medium text-slate-800">
-                  체험 종료 일시
-                </label>
-                <Input
-                  id="edit-end"
-                  type="datetime-local"
-                  value={eventEndDateTime}
-                  onChange={(e) => setEventEndDateTime(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="edit-apply-start" className="text-sm font-medium text-slate-800">
-                  신청 시작 일시
-                </label>
-                <Input
-                  id="edit-apply-start"
-                  type="datetime-local"
-                  value={applyStartDateTime}
-                  onChange={(e) => setApplyStartDateTime(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label htmlFor="edit-apply-end" className="text-sm font-medium text-slate-800">
-                  신청 마감 일시
-                </label>
-                <Input
-                  id="edit-apply-end"
-                  type="datetime-local"
-                  value={applyEndDateTime}
-                  onChange={(e) => setApplyEndDateTime(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="edit-desc" className="text-sm font-medium text-slate-800">
-                설명
-              </label>
-              <CKEditor
-                editor={ClassicEditor as any}
-                data={description}
-                config={{
-                  extraPlugins: [uploadAdapterPlugin],
-                }}
-                onChange={(_, editor) => {
-                  const data = editor.getData();
-                  setDescription(data);
-                }}
-              />
-            </div>
-
-            <div className="flex justify-end gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                className="h-8 text-xs"
-                onClick={() => setEditOpen(false)}
-              >
-                취소
-              </Button>
-              <Button
-                type="submit"
-                size="sm"
-                className="h-8 text-xs bg-gray-600 text-white hover:bg-gray-800"
-                disabled={submitting || !editing}
-              >
-                {submitting ? '저장 중...' : '저장'}
-              </Button>
-            </div>
-          </form>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
 
