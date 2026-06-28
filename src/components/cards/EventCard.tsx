@@ -44,10 +44,10 @@ const EventCard = ({
   linkTo = 'events',
 }: EventCardProps) => {
   return (
-    <Link to={`/${linkTo}/${id}`} className="block">
+    <Link to={`/${linkTo}/${id}`} className="block h-full">
       <article
         className={cn(
-          'flex flex-col overflow-hidden rounded-lg border bg-background',
+          'flex h-full flex-col overflow-hidden rounded-lg border bg-background',
           size === 'sm',
           size === 'md',
           size === 'lg',
@@ -70,7 +70,7 @@ const EventCard = ({
         </div>
         <div className={cn(size === 'sm' && 'p-4', (size === 'md' || size === 'lg' || !size) && 'p-3')}>
           <div className="flex justify-between items-start gap-1">
-            <h3 className="text-foreground font-medium">{title}</h3>
+            <h3 className="text-foreground font-medium line-clamp-2 min-h-[3rem]">{title}</h3>
             {badgeType === 'default' && (
               <EventStatusBadge
                 status={status}
