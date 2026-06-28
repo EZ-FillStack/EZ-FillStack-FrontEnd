@@ -14,15 +14,19 @@ export default function ReviewCard({
 }: ReviewCardProps) {
   return (
     <button type="button" onClick={onClick} className="block w-full text-left">
-      <div className="h-36 rounded-xl border p-4 transition hover:brightness-95 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-        <div className="line-clamp-1 text-sm font-semibold text-slate-900">
-          {title}
-        </div>
+      <div className="flex h-36 flex-col rounded-xl border p-4 transition hover:brightness-95 bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+        {/* 상단: 제목/닉네임 + 별점 (별점은 우상단 고정) */}
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <div className="line-clamp-1 text-sm font-semibold text-slate-900">
+              {title}
+            </div>
+            <div className="mt-0.5 line-clamp-1 text-xs text-slate-500">
+              {nickname}
+            </div>
+          </div>
 
-        <div className="mt-1 flex items-center justify-between">
-          <span className="text-xs text-slate-500">{nickname}</span>
-
-          <div className="flex gap-1">
+          <div className="flex shrink-0 gap-0.5">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
@@ -36,7 +40,7 @@ export default function ReviewCard({
           </div>
         </div>
 
-        <p className="mt-2 line-clamp-2 text-sm leading-5 text-slate-600">
+        <p className="mt-7 line-clamp-2 text-sm leading-5 text-slate-600">
           {content}
         </p>
       </div>
