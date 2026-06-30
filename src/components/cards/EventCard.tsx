@@ -1,9 +1,14 @@
 import EventStatusBadge from '@/components/badge/EventStatusBadge.tsx';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import { toast } from 'sonner';
 import { cn } from '@/lib/utils.ts';
 import BookmarkButton from '@/components/actions/BookmarkButton';
 import type { EventType } from '@/types/event';
 import { MapPin } from 'lucide-react';
+import useAppStore from '@/stores/useAppStore';
+import { useMyBookmarks } from '@/hooks/queries/useMyBookmarks';
+import { useAddBookmark } from '@/hooks/mutations/bookmark/useAddBookmark';
+import { useRemoveBookmark } from '@/hooks/mutations/bookmark/useRemoveBookmark';
 
 type EventCardProps = Pick<
     EventType,
@@ -21,7 +26,6 @@ type EventCardProps = Pick<
   thumbnailUrl: string;
   applyEndDateTime: string;
   applyStartDateTime?: string;
-  isBookmarked?: boolean;
   size?: 'sm' | 'md' | 'lg';
   badgeType?: 'default' | 'upcoming';
   linkTo?: 'events';
@@ -38,11 +42,33 @@ const EventCard = ({
   status,
   capacity,
   currentParticipants,
-  isBookmarked,
   size,
   badgeType,
   linkTo = 'events',
 }: EventCardProps) => {
+  const navigate = useNavigate();
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
+  const { data: bookmarks = [] } = useMyBookmarks();
+  const { mutate: addBookmark } = useAddBookmark();
+  const { mutate: removeBookmark } = useRemoveBookmark();
+
+  // 서버 이벤트 응답에는 찜 여부가 없어 내 찜 목록(eventId)과 대조해 판단합니다.
+  const bookmarked = bookmarks.some((bookmark) => bookmark.eventId === id);
+
+  const handleToggleBookmark = () => {
+    if (!isAuthenticated) {
+      toast.error('로그인이 필요합니다.');
+      navigate('/login');
+      return;
+    }
+
+    if (bookmarked) {
+      removeBookmark(id);
+    } else {
+      addBookmark(id);
+    }
+  };
+
   return (
     <Link to={`/${linkTo}/${id}`} className="block h-full">
       <article
@@ -62,9 +88,9 @@ const EventCard = ({
           {/* 북마크 버튼 */}
           <div className="absolute top-2 right-2">
             <BookmarkButton
-              isBookmarked={!!isBookmarked}
+              isBookmarked={bookmarked}
+              onToggle={handleToggleBookmark}
               stopNavigation
-              // API 연결 전: 토글 로직은 추후 연결
             />
           </div>
         </div>
