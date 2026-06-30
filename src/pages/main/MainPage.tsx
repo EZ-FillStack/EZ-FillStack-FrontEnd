@@ -83,7 +83,6 @@ export default function MainPage() {
                       {...event}
                       thumbnailUrl={event.thumbnailUrl ?? '/placeholder.png'}
                       applyEndDateTime={event.applyEndDateTime ?? ''}
-                      isBookmarked={false}
                       badgeType="default"
                       size="md"
                     />
@@ -140,7 +139,6 @@ export default function MainPage() {
                       {...event}
                       thumbnailUrl={event.thumbnailUrl ?? '/placeholder.png'}
                       applyEndDateTime={event.applyEndDateTime ?? ''}
-                      isBookmarked={false}
                       badgeType="upcoming"
                       size="lg"
                     />
