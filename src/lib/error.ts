@@ -7,6 +7,7 @@ const ERROR_MESSAGE_MAP: Record<string, string> = {
 
 /** 서버에 message/code가 없을 때 쓰는 화면별 기본 문구 */
 export type ErrorMessageContext =
+  | 'login'
   | 'search'
   | 'adminEvents'
   | 'adminUsers'
@@ -19,6 +20,7 @@ export type ErrorMessageContext =
   | 'supportInquiry';
 
 const CONTEXT_FALLBACK: Record<ErrorMessageContext, string> = {
+  login: '로그인에 실패했습니다.',
   search: '검색 결과를 불러오지 못했습니다.',
   adminEvents: '행사 목록을 불러오지 못했습니다.',
   adminUsers: '회원 목록을 불러오지 못했습니다.',
@@ -29,6 +31,15 @@ const CONTEXT_FALLBACK: Record<ErrorMessageContext, string> = {
   adminEventDelete: '행사를 삭제하지 못했습니다.',
   adminUserDelete: '회원 처리에 실패했습니다.',
   supportInquiry: '문의를 접수하지 못했습니다.',
+};
+
+/** 특정 화면에서 서버 코드를 화면 전용 문구로 덮어쓸 때 사용 */
+const CONTEXT_CODE_OVERRIDE: Partial<
+  Record<ErrorMessageContext, Record<string, string>>
+> = {
+  login: {
+    BAD_REQUEST: '이메일 또는 비밀번호가 올바르지 않습니다.',
+  },
 };
 
 /**
@@ -44,6 +55,10 @@ export function generateErrorMessage(
       | undefined;
     const code = payload?.code;
     const message = payload?.message;
+
+    if (context && code && CONTEXT_CODE_OVERRIDE[context]?.[code]) {
+      return CONTEXT_CODE_OVERRIDE[context][code];
+    }
 
     if (code && ERROR_MESSAGE_MAP[code]) {
       return ERROR_MESSAGE_MAP[code];
