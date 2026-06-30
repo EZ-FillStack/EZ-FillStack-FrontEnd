@@ -1,5 +1,5 @@
 import clientAPI from '@/lib/axios';
-import type { EventType } from '@/types/event';
+import type { BookmarkItem } from '@/types/bookmark';
 
 export async function addBookmark(eventId: number) {
   const response = await clientAPI.post(`/events/${eventId}/bookmark`);
@@ -11,11 +11,11 @@ export async function removeBookmark(eventId: number) {
   return response.data;
 }
 
-type EventPage = { content: EventType[]; [key: string]: unknown };
+type BookmarkPage = { content: BookmarkItem[]; [key: string]: unknown };
 
-export async function getMyBookmarks() {
-  const response = await clientAPI.get<EventType[] | EventPage>('/users/me/bookmarks');
+export async function getMyBookmarks(): Promise<BookmarkItem[]> {
+  const response = await clientAPI.get<BookmarkItem[] | BookmarkPage>('/me/bookmarks');
   const data = response.data;
   if (Array.isArray(data)) return data;
-  return (data.content as EventType[]) ?? [];
+  return (data.content as BookmarkItem[]) ?? [];
 }

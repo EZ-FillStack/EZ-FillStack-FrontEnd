@@ -53,7 +53,7 @@ export default function LoginPage() {
           navigate('/', { replace: true });
         },
         onError: (error) => {
-          const message = generateErrorMessage(error);
+          const message = generateErrorMessage(error, 'login');
 
           toast.error(message, {
             position: 'top-center',
