@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import useAppStore from '@/stores/useAppStore';
 import defaultAvatar from '@/assets/default-avatar.png';
 import {
@@ -36,7 +36,15 @@ export default function HeaderAuthSection() {
                 <AvatarImage
                   src={user.profileImageUrl || defaultAvatar}
                   alt={user.nickname}
+                  referrerPolicy="no-referrer"
                 />
+                <AvatarFallback>
+                  <img
+                    src={defaultAvatar}
+                    alt={user.nickname}
+                    className="size-full object-cover"
+                  />
+                </AvatarFallback>
               </Avatar>
             </button>
           </DropdownMenuTrigger>
