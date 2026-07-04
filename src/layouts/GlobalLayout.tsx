@@ -66,7 +66,7 @@ export default function GlobalLayout() {
         </div>
       </header>
 
-      <main className="flex-1">
+      <main className="flex-1 overflow-x-hidden">
         <div className="mx-auto w-full max-w-6xl px-4 py-6">
           <Outlet />
         </div>
