@@ -36,17 +36,17 @@ export default function MainPage() {
       <MainBanner />
 
       {/* 카테고리 아이콘 */}
-      <section className="flex items-center justify-center gap-12">
+      <section className="flex flex-nowrap items-start justify-between gap-2 sm:justify-center sm:gap-12">
         {categories.map((c) => (
           <Link
             key={c.id}
             to={`/categories/${c.id}`}
-            className="flex flex-col items-center gap-2"
+            className="flex shrink-0 flex-col items-center gap-2"
           >
-            <div className="h-20 w-20 rounded-full bg-muted">
+            <div className="h-14 w-14 rounded-full bg-muted sm:h-20 sm:w-20">
               <img src={categoryIconByEng[c.eng]} alt={c.label} />
             </div>
-            <span className="text-sm text-foreground">{c.label}</span>
+            <span className="text-xs text-foreground sm:text-sm">{c.label}</span>
           </Link>
         ))}
       </section>
@@ -57,7 +57,7 @@ export default function MainPage() {
         <Carousel opts={{ slidesToScroll: 1, align: 'start', duration: 15 }}>
           <CarouselContent>
             {popularEvents.slice(0, 10).map((event) => (
-              <CarouselItem key={event.id} className="basis-1/4">
+              <CarouselItem key={event.id} className="basis-1/2 md:basis-1/4">
                 <EventCard
                   {...event}
                   thumbnailUrl={event.thumbnailUrl ?? '/placeholder.png'}
@@ -88,7 +88,7 @@ export default function MainPage() {
         <Carousel opts={{ slidesToScroll: 1, align: 'start', duration: 15 }}>
           <CarouselContent>
             {bestReviews.slice(0, 10).map((review) => (
-              <CarouselItem key={review.id} className="basis-1/4">
+              <CarouselItem key={review.id} className="basis-1/2 md:basis-1/4">
                 <ReviewCard
                   {...review}
                   onClick={() => handleReviewClick(review)}
@@ -109,7 +109,7 @@ export default function MainPage() {
         <Carousel opts={{ slidesToScroll: 1, align: 'start', duration: 15 }}>
           <CarouselContent>
             {upcomingEvents.slice(0, 10).map((event) => (
-              <CarouselItem key={event.id} className="basis-1/3">
+              <CarouselItem key={event.id} className="basis-1/2 md:basis-1/3">
                 <EventCard
                   {...event}
                   thumbnailUrl={event.thumbnailUrl ?? '/placeholder.png'}
