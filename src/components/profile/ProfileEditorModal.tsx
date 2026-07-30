@@ -22,17 +22,14 @@ type SelectedImage = {
   previewUrl: string;
 };
 
-// 임시 확인용
-type User = {
-  username: string;
-  nickname: string;
-  email?: string;
-  phone?: string;
-  profileImageUrl?: string;
-};
+// 프로필 수정 폼에서 실제로 쓰는 필드만 ProfileResponse에서 추려 사용
+type ProfileEditorUser = Pick<
+  ProfileResponse,
+  'username' | 'nickname' | 'email' | 'phone' | 'profileImageUrl'
+>;
 
 type ProfileEditorFormProps = {
-  user: User;
+  user: ProfileEditorUser;
   onClose: () => void;
 };
 
@@ -218,7 +215,7 @@ function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
 }
 
 type ProfileEditorModalProps = {
-  user: User;
+  user: ProfileEditorUser;
 };
 
 export default function ProfileEditorModal({ user }: ProfileEditorModalProps) {

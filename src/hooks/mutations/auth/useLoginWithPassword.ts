@@ -10,7 +10,7 @@ export function useLoginWithPassword(callbacks?: UseMutationCallback, autoLogin 
   return useMutation({
     mutationFn: loginWithPassword,
     onSuccess: async (data) => {
-      // TODO: 백엔드 토큰 필드명 확정 후 수정 예정 (token 또는 accessToken)
+      // 로그인 응답의 토큰 필드명 호환 처리 (token / accessToken)
       const token = data?.token ?? data?.accessToken;
       if (token) {
         if (autoLogin) {
