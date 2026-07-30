@@ -1,4 +1,4 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import Logo from '@/components/assets/Logo';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -8,15 +8,53 @@ import { toast } from 'sonner';
 import { useSignUp } from '@/hooks/mutations/auth/useSignUp';
 import { generateErrorMessage } from '@/lib/error';
 
+function validateSignUpForm(email: string, password: string, passwordConfirm: string) {
+  const trimmedEmail = email.trim();
+
+  if (trimmedEmail === '') {
+    return '이메일을 입력해주세요.';
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(trimmedEmail)) {
+    return '올바른 이메일 형식을 입력해주세요.';
+  }
+
+  if (password.trim() === '') {
+    return '비밀번호를 입력해주세요.';
+  }
+
+  if (password.length < 8) {
+    return '비밀번호는 8자 이상 입력해주세요.';
+  }
+
+  if (password.length > 72) {
+    return '비밀번호가 너무 깁니다.';
+  }
+
+  if (passwordConfirm.trim() === '') {
+    return '비밀번호 확인을 입력해주세요.';
+  }
+
+  if (password !== passwordConfirm) {
+    return '비밀번호가 일치하지 않습니다.';
+  }
+
+  return null;
+}
+
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const navigate = useNavigate();
 
   const { mutate: signUp, isPending: isSignUpPending } = useSignUp({
     onSuccess: () => {
       toast.success('회원가입이 완료되었습니다.', {
         position: 'top-center',
       });
+      navigate('/login', { replace: true });
     },
 
     onError: (error) => {
@@ -30,22 +68,17 @@ export default function SignUpPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (email.trim() === '') {
-      toast.error('이메일을 입력해주세요.', {
-        position: 'top-center',
-      });
-      return;
-    }
+    const validationMessage = validateSignUpForm(email, password, passwordConfirm);
 
-    if (password.trim() === '') {
-      toast.error('비밀번호를 입력해주세요.', {
+    if (validationMessage) {
+      toast.error(validationMessage, {
         position: 'top-center',
       });
       return;
     }
 
     signUp({
-      email,
+      email: email.trim(),
       password,
     });
   };
@@ -80,6 +113,15 @@ export default function SignUpPage() {
               onChange={(e) => setPassword(e.target.value)}
               type="password"
               placeholder="password"
+              autoComplete="new-password"
+              className="h-11"
+            />
+            <Input
+              disabled={isSignUpPending}
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+              type="password"
+              placeholder="confirm password"
               autoComplete="new-password"
               className="h-11"
             />
