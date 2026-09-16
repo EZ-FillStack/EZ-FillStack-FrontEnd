@@ -4,7 +4,6 @@ import './index.css';
 import App from './App.tsx';
 import { BrowserRouter } from 'react-router'; // React Router 기능 활성화, 앱 전체에서 라우팅을 쓰기 위한 필수 설정
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'; // 앱 전체에서 TanStack Query 사용하기 위한 설정
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'; // 개발용 디버깅 도구
 import { Toaster } from './components/ui/sonner.tsx'; // 전역 Toast UI (성공/에러 등 사용자 피드백 표시)
 
 // 전역 QueryClient 설정
@@ -24,7 +23,6 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <ReactQueryDevtools />
         <Toaster />
         <App />
       </QueryClientProvider>

@@ -1,6 +1,6 @@
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import useAppStore from '@/stores/useAppStore';
 import defaultAvatar from '@/assets/default-avatar.png';
 import {
@@ -12,21 +12,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export default function HeaderAuthSection() {
-  // const user = useAppStore((state) => state.user);
-  // const isAuthenticated = useAppStore((state) => state.isAuthenticated);
-
-  // 프로필 작업하기 위해 임시로 넣어둠
-
+  const user = useAppStore((state) => state.user);
+  const isAuthenticated = useAppStore((state) => state.isAuthenticated);
   const logout = useAppStore((state) => state.logout);
+  const navigate = useNavigate();
 
-  const user = {
-    id: 1,
-    username: 'kang',
-    nickname: '강이',
-    profileImageUrl: '',
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
-
-  const isAuthenticated = true;
 
   if (isAuthenticated && user) {
     return (
@@ -42,7 +36,15 @@ export default function HeaderAuthSection() {
                 <AvatarImage
                   src={user.profileImageUrl || defaultAvatar}
                   alt={user.nickname}
+                  referrerPolicy="no-referrer"
                 />
+                <AvatarFallback>
+                  <img
+                    src={defaultAvatar}
+                    alt={user.nickname}
+                    className="size-full object-cover"
+                  />
+                </AvatarFallback>
               </Avatar>
             </button>
           </DropdownMenuTrigger>
@@ -65,7 +67,7 @@ export default function HeaderAuthSection() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem
-              onClick={logout}
+              onClick={handleLogout}
               className="cursor-pointer rounded-md text-red-600 focus:text-red-600"
             >
               로그아웃
