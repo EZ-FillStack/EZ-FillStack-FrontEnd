@@ -1,232 +1,225 @@
-import { useEffect, useRef, useState, type ChangeEvent } from 'react';
-import { toast } from 'sonner';
+import {type ChangeEvent, useEffect, useRef, useState} from 'react';
+import {toast} from 'sonner';
 
 import useAppStore from '@/stores/useAppStore';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import {Dialog, DialogContent, DialogHeader, DialogTitle,} from '@/components/ui/dialog';
+import {Input} from '@/components/ui/input';
+import {Button} from '@/components/ui/button';
+import {Avatar, AvatarImage} from '@/components/ui/avatar';
 import defaultAvatar from '@/assets/default-avatar.png';
-import { useProfileEditorModal } from '@/stores/useProfileEditorModalStore';
-import { useUpdateProfileMutation } from '@/hooks/mutations/profile/useUpdateProfile';
-import type { ProfileResponse } from '@/api/profile';
-import { patchProfileImage, uploadProfileImage } from '@/api/profile';
+import {useProfileEditorModal} from '@/stores/useProfileEditorModalStore';
+import {useUpdateProfileMutation} from '@/hooks/mutations/profile/useUpdateProfile';
+import {getMyProfile, patchProfileImage, type ProfileResponse} from '@/api/profile';
 
 type SelectedImage = {
-  file: File;
-  previewUrl: string;
+    file: File;
+    previewUrl: string;
 };
 
 // 프로필 수정 폼에서 실제로 쓰는 필드만 ProfileResponse에서 추려 사용
 type ProfileEditorUser = Pick<
-  ProfileResponse,
-  'username' | 'nickname' | 'email' | 'phone' | 'profileImageUrl'
+    ProfileResponse,
+    'username' | 'nickname' | 'email' | 'phone' | 'profileImageUrl'
 >;
 
 type ProfileEditorFormProps = {
-  user: ProfileEditorUser;
-  onClose: () => void;
+    user: ProfileEditorUser;
+    onClose: () => void;
 };
 
-function ProfileEditorForm({ user, onClose }: ProfileEditorFormProps) {
-  const setUser = useAppStore((state) => state.setUser);
+function ProfileEditorForm({user, onClose}: ProfileEditorFormProps) {
+    const setUser = useAppStore((state) => state.setUser);
 
-  const [nickname, setNickname] = useState(user.nickname || '');
-  const [phone, setPhone] = useState(user.phone || '');
-  const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(
-    null,
-  );
+    const [nickname, setNickname] = useState(user.nickname || '');
+    const [phone, setPhone] = useState(user.phone || '');
+    const [selectedImage, setSelectedImage] = useState<SelectedImage | null>(
+        null,
+    );
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const { mutateAsync: updateProfileAsync, isPending } =
-    useUpdateProfileMutation();
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const {mutateAsync: updateProfileAsync, isPending} =
+        useUpdateProfileMutation();
 
-  useEffect(() => {
-    return () => {
-      if (selectedImage) {
-        URL.revokeObjectURL(selectedImage.previewUrl);
-      }
+    useEffect(() => {
+        return () => {
+            if (selectedImage) {
+                URL.revokeObjectURL(selectedImage.previewUrl);
+            }
+        };
+    }, [selectedImage]);
+
+    const handleSelectImage = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        if (selectedImage) {
+            URL.revokeObjectURL(selectedImage.previewUrl);
+        }
+
+        setSelectedImage({
+            file,
+            previewUrl: URL.createObjectURL(file),
+        });
     };
-  }, [selectedImage]);
 
-  const handleSelectImage = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const handleClickImage = () => {
+        fileInputRef.current?.click();
+    };
 
-    if (selectedImage) {
-      URL.revokeObjectURL(selectedImage.previewUrl);
-    }
+    const handleUpdateClick = async () => {
+        if (nickname.trim() === '') {
+            toast.error('닉네임을 입력해주세요.', {
+                position: 'top-center',
+            });
+            return;
+        }
 
-    setSelectedImage({
-      file,
-      previewUrl: URL.createObjectURL(file),
-    });
-  };
+        const trimmedNickname = nickname.trim();
+        const trimmedPhone = phone.trim() || undefined;
 
-  const handleClickImage = () => {
-    fileInputRef.current?.click();
-  };
+        const isUnchanged =
+            trimmedNickname === user.nickname &&
+            trimmedPhone === user.phone &&
+            !selectedImage;
 
-  const handleUpdateClick = async () => {
-    if (nickname.trim() === '') {
-      toast.error('닉네임을 입력해주세요.', {
-        position: 'top-center',
-      });
-      return;
-    }
+        if (isUnchanged) {
+            toast.error('변경된 내용이 없습니다.', {
+                position: 'top-center',
+            });
+            return;
+        }
 
-    const trimmedNickname = nickname.trim();
-    const trimmedPhone = phone.trim() || undefined;
+        // PATCH가 달라서 분리: 이미지는 /users/me/profile-image, 닉네임·전화는 /users/me/profile
+        // 260916 백엔드쪽에서 response가 없어 수정하였습니다.
+        const metaChanged =
+            trimmedNickname !== user.nickname || trimmedPhone !== user.phone;
 
-    const isUnchanged =
-      trimmedNickname === user.nickname &&
-      trimmedPhone === user.phone &&
-      !selectedImage;
+        try {
+            if (selectedImage) {
+                await patchProfileImage(selectedImage.file);
+            }
 
-    if (isUnchanged) {
-      toast.error('변경된 내용이 없습니다.', {
-        position: 'top-center',
-      });
-      return;
-    }
+            if (metaChanged) {
+                await updateProfileAsync({
+                    nickname: trimmedNickname,
+                    phone: trimmedPhone,
+                });
+            }
 
-    // PATCH가 달라서 분리: 이미지는 /users/me/profile-image, 닉네임·전화는 /users/me/profile
-    const metaChanged =
-      trimmedNickname !== user.nickname || trimmedPhone !== user.phone;
+            const latestUser = await getMyProfile();
 
-    try {
-      let latestUser: ProfileResponse | undefined;
+            setUser(latestUser);
+            toast.success('프로필이 수정되었습니다.', {
+                position: 'top-center',
+            });
+            onClose();
 
-      if (selectedImage) {
-        const url = await uploadProfileImage(selectedImage.file);
-        latestUser = await patchProfileImage(url);
-      }
+        } catch (error) {
+            console.error(error);
+            toast.error('프로필 수정에 실패했습니다.', {
+                position: 'top-center',
+            });
+        }
+    };
 
-      if (metaChanged) {
-        latestUser = await updateProfileAsync({
-          nickname: trimmedNickname,
-          phone: trimmedPhone,
-        });
-      }
+    return (
+        <>
+            <DialogHeader>
+                <DialogTitle>프로필 수정</DialogTitle>
+            </DialogHeader>
 
-      if (latestUser) {
-        setUser(latestUser);
-        toast.success('프로필이 수정되었습니다.', {
-          position: 'top-center',
-        });
-        onClose();
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('프로필 수정에 실패했습니다.', {
-        position: 'top-center',
-      });
-    }
-  };
+            <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-2">
+                    <p className="text-sm text-muted-foreground">프로필 이미지</p>
 
-  return (
-    <>
-      <DialogHeader>
-        <DialogTitle>프로필 수정</DialogTitle>
-      </DialogHeader>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleSelectImage}
+                        disabled={isPending}
+                        className="hidden"
+                    />
 
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <p className="text-sm text-muted-foreground">프로필 이미지</p>
+                    <button
+                        type="button"
+                        onClick={handleClickImage}
+                        disabled={isPending}
+                        className="w-fit"
+                    >
+                        <Avatar className="h-24 w-24">
+                            <AvatarImage
+                                src={
+                                    selectedImage?.previewUrl ||
+                                    user.profileImageUrl ||
+                                    defaultAvatar
+                                }
+                                alt={user.nickname || user.username || 'user'}
+                                className="object-cover"
+                            />
+                        </Avatar>
+                    </button>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleSelectImage}
-            disabled={isPending}
-            className="hidden"
-          />
+                    <p className="text-xs text-muted-foreground">
+                        이미지를 클릭해서 변경할 수 있어요.
+                    </p>
+                </div>
 
-          <button
-            type="button"
-            onClick={handleClickImage}
-            disabled={isPending}
-            className="w-fit"
-          >
-            <Avatar className="h-24 w-24">
-              <AvatarImage
-                src={
-                  selectedImage?.previewUrl ||
-                  user.profileImageUrl ||
-                  defaultAvatar
-                }
-                alt={user.nickname || user.username || 'user'}
-                className="object-cover"
-              />
-            </Avatar>
-          </button>
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm text-muted-foreground">닉네임</label>
+                    <Input
+                        value={nickname}
+                        onChange={(e) => setNickname(e.target.value)}
+                        disabled={isPending}
+                        placeholder="닉네임을 입력해주세요"
+                    />
+                </div>
 
-          <p className="text-xs text-muted-foreground">
-            이미지를 클릭해서 변경할 수 있어요.
-          </p>
-        </div>
+                <div className="flex flex-col gap-2">
+                    <label className="text-sm text-muted-foreground">전화번호</label>
+                    <Input
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        disabled={isPending}
+                        placeholder="전화번호를 입력해주세요"
+                    />
+                </div>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-sm text-muted-foreground">닉네임</label>
-          <Input
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            disabled={isPending}
-            placeholder="닉네임을 입력해주세요"
-          />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="text-sm text-muted-foreground">전화번호</label>
-          <Input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            disabled={isPending}
-            placeholder="전화번호를 입력해주세요"
-          />
-        </div>
-
-        <div className="flex justify-end gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onClose}
-            disabled={isPending}
-          >
-            취소
-          </Button>
-          <Button
-            type="button"
-            onClick={handleUpdateClick}
-            disabled={isPending}
-          >
-            저장
-          </Button>
-        </div>
-      </div>
-    </>
-  );
+                <div className="flex justify-end gap-2">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={onClose}
+                        disabled={isPending}
+                    >
+                        취소
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={handleUpdateClick}
+                        disabled={isPending}
+                    >
+                        저장
+                    </Button>
+                </div>
+            </div>
+        </>
+    );
 }
 
 type ProfileEditorModalProps = {
-  user: ProfileEditorUser;
+    user: ProfileEditorUser;
 };
 
-export default function ProfileEditorModal({ user }: ProfileEditorModalProps) {
-  const { isOpen, actions } = useProfileEditorModal();
-  const { close } = actions;
+export default function ProfileEditorModal({user}: ProfileEditorModalProps) {
+    const {isOpen, actions} = useProfileEditorModal();
+    const {close} = actions;
 
-  return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="sm:max-w-md">
-        {isOpen ? <ProfileEditorForm user={user} onClose={close} /> : null}
-      </DialogContent>
-    </Dialog>
-  );
+    return (
+        <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
+            <DialogContent className="sm:max-w-md">
+                {isOpen ? <ProfileEditorForm user={user} onClose={close}/> : null}
+            </DialogContent>
+        </Dialog>
+    );
 }
