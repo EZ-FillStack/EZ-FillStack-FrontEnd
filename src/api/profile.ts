@@ -25,9 +25,10 @@ export async function getMyProfile() {
 }
 
 // PATCH /users/me/profile — 닉네임·전화만 (이미지와는 PATCH가 달라 분리)
+// 20260916 백엔드쪽 API 엔드포인트가 달라 수정했습니다(문서 합의는 /profile이 맞음)
 export async function updateProfile({ nickname, phone }: UpdateProfileParams) {
   const response = await clientAPI.patch<UpdateProfileResponse>(
-    '/users/me/profile',
+    '/users/me',
     {
       nickname,
       phone,
@@ -38,12 +39,14 @@ export async function updateProfile({ nickname, phone }: UpdateProfileParams) {
 }
 
 // PATCH /users/me/profile-image : 업로드 이후 반환된 이미지 URL 반영
-export async function patchProfileImage(profileImageUrl: string) {
-  const response = await clientAPI.patch<UpdateProfileResponse>(
-    '/users/me/profile-image',
-    {
-      profile_image_url: profileImageUrl,
-    },
+// 260916 이미지 업로드가 되지 않는 현상 수정
+export async function patchProfileImage(file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const response = await clientAPI.patch(
+      '/users/me/profile-image',
+      formData,
   );
 
   return response.data;
@@ -54,7 +57,7 @@ export type UploadProfileImageResponse = Record<string, unknown>;
 // POST /api/images/upload : 파일만 보내고 응답에서 URL 추출 후 profile-image PATCH로 연결
 export async function uploadProfileImage(file: File) {
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('upload', file);
 
   const response = await clientAPI.post<UploadProfileImageResponse>(
     '/api/images/upload',
